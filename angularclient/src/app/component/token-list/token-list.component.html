@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="card bg-light">
+        <div class="card-body">
+            <div class="card-title h5">
+                {{title}}
+            </div>
+            <div class="list-group overflow-auto" cdkDropList [(cdkDropListData)]="tokens" (cdkDropListDropped)="onTokenDropped($event)">
+                <div class="list-group-item text-truncate text-left mt-1" *ngFor="let token of tokens" cdkDrag [(cdkDragData)]="token" (mouseup)="onTokenMouseUp(token, $event)">
+                    <div class="list-group-item bg-dark text-left text-light mt-1 rounded" *cdkDragPlaceholder>
+                        Drop here...
+                    </div>
+                    {{token.name}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-group w-100">
+        <button type="button" class="btn btn-secondary" (click)="addNewToken()">Add</button>
+        <button type="button" class="btn btn-secondary" (click)="removeTokens()">Remove ({{selectedTotal}})</button>
+    </div>
+</div>
