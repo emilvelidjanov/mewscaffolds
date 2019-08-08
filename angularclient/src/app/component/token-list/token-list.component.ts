@@ -8,36 +8,72 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
   styleUrls: ['./token-list.component.scss']
 })
 export class TokenListComponent {
-
-  @Input('listTitle')
-  title: string;
+  
   tokens: Token[];
+  selectedTotal: number;
 
-  private selectedTotal: number;
+  @Input('label')
+  label: string;
+  @Input('tokenLabel')
+  tokenLabel: string;
+
+  cdkDragPlaceholderText: string;
+  addButtonText: string;
+  selectAllButtonText: string;
+  selectNoneButtonText: string;
+  removeButtonText: string;
 
   constructor() {
-    this.title = undefined;
     this.tokens = [];
     this.selectedTotal = 0;
+    this.label = undefined;
+    this.tokenLabel = undefined;
+    this.cdkDragPlaceholderText = "Drop here...";
+    this.addButtonText = "Add";
+    this.selectAllButtonText = "Select all";
+    this.selectNoneButtonText = "Select none";
+    this.removeButtonText = "Remove";
   }
 
   onTokenMouseUp(token: Token, event: MouseEvent): void {
-    let clickedElement = event.currentTarget as HTMLDivElement;
-    clickedElement.classList.toggle('active');
-    token.isSelected = clickedElement.classList.contains('active');
+    token.isSelected = !token.isSelected;
     token.isSelected ? this.selectedTotal++ : this.selectedTotal--;
   }
 
   onTokenDropped(event: CdkDragDrop<string[]>): void {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } 
-    else {
-      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+      moveItemInArray(this.tokens.reverse(), event.previousIndex, event.currentIndex);
     }
+    this.tokens.reverse();
   }
 
-  addNewToken(): void {
+  addNew(): void {
+    let newId = this.getLowestUnusedId();
+    this.tokens.push(new Token(newId, this.tokenLabel + " " + newId));
+  }
+
+  removeSelected(): void {
+    this.tokens = this.tokens.filter(token => {
+      return !token.isSelected;
+    });
+    this.selectedTotal = 0;
+  }
+
+  selectAll(): void {
+    this.tokens.forEach(token => {
+      token.isSelected = true;
+    });
+    this.selectedTotal = this.tokens.length;
+  }
+
+  selectNone(): void {
+    this.tokens.forEach(token => {
+      token.isSelected = false;
+    });
+    this.selectedTotal = 0;
+  }
+
+  private getLowestUnusedId(): number {
     let newId: number = 0;
     let sortedTokens: Token[] = this.tokens.slice();
     sortedTokens.sort((a, b) => (a.id > b.id) ? 1 : -1)
@@ -45,14 +81,6 @@ export class TokenListComponent {
       const usedId = sortedTokens[newId].id;
       if (newId != usedId) break;
     }
-    this.tokens.push(new Token(newId, "New " + newId));
+    return newId;
   }
-
-  removeTokens(): void {
-    this.tokens = this.tokens.filter(token => {
-      return !token.isSelected;
-    });
-    this.selectedTotal = 0;
-  }
-
 }
