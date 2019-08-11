@@ -5,7 +5,7 @@
         </div>
         <div class="list-group overflow-auto" cdkDropList (cdkDropListDropped)="onTokenDropped($event)">
             <div class="list-group-item text-truncate text-left mt-1" [ngClass]="{'active': token.isSelected==true}"
-                *ngFor="let token of tokens.slice().reverse()" cdkDrag (mouseup)="onTokenMouseUp(token, $event)">
+                *ngFor="let token of tokens.slice().reverse()" cdkDrag (mouseup)="onTokenMouseUp(token)">
                 <div class="list-group-item bg-dark text-light mt-1 rounded" *cdkDragPlaceholder>
                     {{cdkDragPlaceholderText}}
                 </div>

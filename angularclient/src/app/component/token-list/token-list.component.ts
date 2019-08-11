@@ -1,33 +1,35 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, Injector } from '@angular/core';
 import { Token } from 'src/app/model/token/token';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { TokenListData } from 'src/app/interface/token-list-data/token-list-data';
 
 @Component({
   selector: 'app-token-list',
   templateUrl: './token-list.component.html',
   styleUrls: ['./token-list.component.scss']
 })
-export class TokenListComponent {
+export class TokenListComponent implements OnInit {
   
-  tokens: Token[];
-  selectedTotal: number;
-
+  @Input('data')
+  data: TokenListData[];
   @Input('label')
   label: string;
   @Input('tokenLabel')
   tokenLabel: string;
-
+  
+  tokens: Token[];
+  selectedTotal: number;
   cdkDragPlaceholderText: string;
   addButtonText: string;
   selectAllButtonText: string;
   selectNoneButtonText: string;
   removeButtonText: string;
-
-  constructor() {
+  
+  constructor() { }
+  
+  ngOnInit(): void {
     this.tokens = [];
     this.selectedTotal = 0;
-    this.label = undefined;
-    this.tokenLabel = undefined;
     this.cdkDragPlaceholderText = "Drop here...";
     this.addButtonText = "Add";
     this.selectAllButtonText = "Select all";
@@ -35,7 +37,16 @@ export class TokenListComponent {
     this.removeButtonText = "Remove";
   }
 
-  onTokenMouseUp(token: Token, event: MouseEvent): void {
+  ngOnChanges() {
+    this.tokens = [];
+    if (this.data != undefined) {
+      this.data.forEach(item => {
+        this.tokens.push(new Token(item.id, item.name));
+      });
+    }
+  }
+
+  onTokenMouseUp(token: Token): void {
     token.isSelected = !token.isSelected;
     token.isSelected ? this.selectedTotal++ : this.selectedTotal--;
   }
@@ -75,10 +86,10 @@ export class TokenListComponent {
 
   private getLowestUnusedId(): number {
     let newId: number = 0;
-    let sortedTokens: Token[] = this.tokens.slice();
-    sortedTokens.sort((a, b) => (a.id > b.id) ? 1 : -1)
-    for (newId; newId < sortedTokens.length; newId++) {
-      const usedId = sortedTokens[newId].id;
+    let sortedData: TokenListData[] = this.tokens.slice();
+    sortedData.sort((a, b) => (a.id > b.id) ? 1 : -1)
+    for (newId; newId < sortedData.length; newId++) {
+      const usedId = sortedData[newId].id;
       if (newId != usedId) break;
     }
     return newId;
