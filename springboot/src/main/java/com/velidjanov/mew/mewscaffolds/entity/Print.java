@@ -1,7 +1,6 @@
 package com.velidjanov.mew.mewscaffolds.entity;
 
 import lombok.*;
-import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,7 +18,7 @@ public class Print {
     @NonNull
     private String name;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<Scaffold> scaffolds;
+    private List<Scaffold> children;
 }

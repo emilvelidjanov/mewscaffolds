@@ -1,16 +1,10 @@
 import { Fiber } from '../fiber/fiber';
-import { TokenListData } from 'src/app/interface/token-list-data/token-list-data';
+import { TokenListData } from '../abstract/token-list-data';
 
-export class Layer implements TokenListData {
+export class Layer extends TokenListData {
     
-    id: number;
-    name: string;
-    
-    fibers: Fiber[];
-    
-    constructor(id: number, name: string, fibers: Fiber[]) {
-        this.id = id;
-        this.name = name;
-        this.fibers = fibers;
+    constructor(id: number, name: string, children: Fiber[]) {
+        super(id, name);
+        this.children = children;
     }
 }

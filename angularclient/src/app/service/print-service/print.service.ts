@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Print } from 'src/app/model/print/print';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Scaffold } from 'src/app/model/scaffold/scaffold';
 
 @Injectable({
   providedIn: 'root'

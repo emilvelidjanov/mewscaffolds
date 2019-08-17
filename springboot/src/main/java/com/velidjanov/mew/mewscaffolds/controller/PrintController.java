@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +19,6 @@ public class PrintController {
 
     @Autowired
     private PrintRepository printRepository;
-
-    @Autowired
-    private ScaffoldRepository scaffoldRepository;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Print getById(@PathVariable("id") final Long id) {
