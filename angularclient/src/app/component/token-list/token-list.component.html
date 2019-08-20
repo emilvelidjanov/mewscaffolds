@@ -1,26 +1,29 @@
 <div class="card bg-light">
     <div class="card-body">
-        <div class="card-title h5">
+        <div class="card-title h5 d-flex">
             {{label}}
-            <button type="button" class="btn btn-secondary" (click)="collapse()">{{collapseButtonText}}</button>
+            <button type="button" class="btn btn-secondary ml-auto" (click)="collapse()">{{collapseButtonText}}</button>
         </div>
         <div *ngIf="!isCollapsed">
             <div class="list-group overflow-auto" cdkDropList (cdkDropListDropped)="onTokenDropped($event)">
                 <div class="list-group-item text-truncate text-left mb-1" [ngClass]="{'active': token.isSelected}"
                     *ngFor="let token of data.slice().reverse()" cdkDrag (mouseup)="onTokenMouseUp(token)">
-                    <div class="list-group-item bg-dark text-light mt-b rounded" *cdkDragPlaceholder>
-                        {{cdkDragPlaceholderText}}
+                    <div class="list-group-item bg-dark text-light mb-1 rounded" *cdkDragPlaceholder>
+                        {{textConfig.cdkDragPlaceholderText}}
+                    </div>
+                    <div class="d-inline-block token-path">
+                        {{token.path}}
                     </div>
                     {{token.name}}
                 </div>
             </div>
             <div class="btn-group w-100 mt-1">
-                <button type="button" class="btn btn-secondary" (click)="addNew()">{{addButtonText}}</button>
-                <button type="button" class="btn btn-secondary" (click)="selectAll()">{{selectAllButtonText}}</button>
-                <button type="button" class="btn btn-secondary" (click)="selectNone()">{{selectNoneButtonText}}</button>
-                <button type="button" class="btn btn-secondary" (click)="deleteSelected()">{{removeButtonText}}
+                <button type="button" class="btn btn-secondary" (click)="addNew()">{{textConfig.addButtonText}}</button>
+                <button type="button" class="btn btn-secondary" (click)="selectAll()">{{textConfig.selectAllButtonText}}</button>
+                <button type="button" class="btn btn-secondary" (click)="selectNone()">{{textConfig.selectNoneButtonText}}</button>
+                <button type="button" class="btn btn-secondary" (click)="deleteSelected()">{{textConfig.removeButtonText}}
                     ({{selectedTotal}})</button>
             </div>
         </div>
     </div>
-</div>  
+</div>

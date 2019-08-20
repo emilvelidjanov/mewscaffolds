@@ -16,4 +16,9 @@
 .list-group .list-group-item {
     height: 50px;
     min-height: 50px;
+    cursor: pointer;
+}
+
+.token-path {
+    opacity: 0.6;
 }

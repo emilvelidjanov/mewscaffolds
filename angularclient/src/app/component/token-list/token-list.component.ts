@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { TokenListData } from 'src/app/model/abstract/token-list-data';
-import { $ } from 'protractor';
+import { MEWData } from 'src/app/model/abstract/mew-data';
+import { TextConfig } from 'src/app/config/text-config/text-config';
 
 @Component({
   selector: 'app-token-list',
@@ -11,76 +11,75 @@ import { $ } from 'protractor';
 export class TokenListComponent implements OnInit {
   
   @Input('data')
-  data: TokenListData[];
+  data: MEWData[];
   @Input('label')
   label: string;
   @Input('tokenLabel')
   tokenLabel: string;
+  @Input('selectedTotal')
+  selectedTotal: number;
+  @Input('isCollapsed')
+  isCollapsed: boolean;
 
   @Output()
-  tokenListDataSelect = new EventEmitter<TokenListData[]>();
+  tokenListDataSelect = new EventEmitter<MEWData[]>();
   @Output()
-  tokenListDataChange = new EventEmitter<TokenListData[]>();
+  tokenListDataChange = new EventEmitter<MEWData[]>();
   @Output()
   tokenListDataAdd = new EventEmitter();
   
-  selectedTotal: number;
-  cdkDragPlaceholderText: string;
-  addButtonText: string;
-  selectAllButtonText: string;
-  selectNoneButtonText: string;
-  removeButtonText: string;
   collapseButtonText: string;
-  readonly collapseButtonTextClose = "Close";
-  readonly collapseButtonTextOpen = "Open";
 
-  isCollapsed: boolean;
+  constructor(private textConfig: TextConfig) { }
   
-  constructor() { }
-  
+  // TODO: button tooltips
   ngOnInit(): void {
     this.data = [];
-    this.selectedTotal = 0;
-    this.cdkDragPlaceholderText = "Drop here...";
-    this.addButtonText = "Add";
-    this.selectAllButtonText = "Select all";
-    this.selectNoneButtonText = "Select none";
-    this.removeButtonText = "Remove";
-    this.collapseButtonText = this.collapseButtonTextOpen;
-    this.isCollapsed = true;
+    this.checkCollapseButtonText();
   }
 
-  onTokenMouseUp(token: TokenListData): void {
+  ngOnChanges() {
+    this.checkCollapseButtonText();
+  }
+
+  onTokenMouseUp(token: MEWData): void {
     token.isSelected = !token.isSelected;
-    token.isSelected ? this.selectedTotal++ : this.selectedTotal--;
     this.tokenListDataSelect.emit(this.data);
   }
 
-  // TODO: fix drag and dropping between parents
+  // TODO: think about drag drop -> swap data or move data?
   onTokenDropped(event: CdkDragDrop<string[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(this.data.reverse(), event.previousIndex, event.currentIndex);
+      let firstChild: MEWData = this.data[event.currentIndex];
+      let secondChild: MEWData = this.data[event.previousIndex];
+      let parent: MEWData = firstChild.parent;
+      let path: string = firstChild.path;
+      firstChild.parent = secondChild.parent;
+      secondChild.parent = parent;
+      firstChild.path = secondChild.path;
+      secondChild.path = path;
+      this.data.reverse();
+      this.tokenListDataChange.emit(this.data);
     }
-    this.data.reverse();
-    this.tokenListDataChange.emit(this.data);
   }
 
+  // TODO: implement
   addNew(): void {
     this.tokenListDataAdd.emit(this.data);
   }
 
   deleteSelected(): void {
-    // this.tokens = this.tokens.filter(token => {
-    //   return !token.isSelected;
-    // });
-    // this.selectedTotal = 0;
+    this.data.filter(token => token.isSelected).forEach(item => {
+      item.markedForDeletion = true;
+    });
+    this.tokenListDataChange.emit(this.data);
   }
 
   selectAll(): void {
     this.data.forEach(token => {
       token.isSelected = true;
     });
-    this.selectedTotal = this.data.filter(token => token.isSelected).length;
     this.tokenListDataSelect.emit(this.data);
   }
 
@@ -88,18 +87,21 @@ export class TokenListComponent implements OnInit {
     this.data.forEach(token => {
       token.isSelected = false;
     });
-    this.selectedTotal = this.data.filter(token => token.isSelected).length;
     this.tokenListDataSelect.emit(this.data);
   }
 
   collapse(): void {
     this.isCollapsed = !this.isCollapsed;
-    this.collapseButtonText = (this.isCollapsed ? this.collapseButtonTextOpen : this.collapseButtonTextClose);
+    this.checkCollapseButtonText();
+  }
+
+  private checkCollapseButtonText() {
+    this.collapseButtonText = (this.isCollapsed ? this.textConfig.collapseButtonTextOpen : this.textConfig.collapseButtonTextClose);
   }
 
   private getLowestUnusedId(): number {
     let newId: number = 0;
-    let sortedData: TokenListData[] = this.data.slice();
+    let sortedData: MEWData[] = this.data.slice();
     sortedData.sort((a, b) => (a.id > b.id) ? 1 : -1)
     for (newId; newId < sortedData.length; newId++) {
       const usedId = sortedData[newId].id;

@@ -1,8 +1,8 @@
-import { TokenListData } from '../abstract/token-list-data';
+import { MEWData } from '../abstract/mew-data';
 
-export class Fiber extends TokenListData {
+export class Fiber extends MEWData {
     
-    constructor(id: number, name: string) {
-        super(id, name);
+    constructor(id: number, name: string, parent: MEWData) {
+        super(id, name, null, parent);
     }
 }

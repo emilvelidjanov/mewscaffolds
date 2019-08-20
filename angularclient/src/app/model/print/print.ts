@@ -1,10 +1,9 @@
 import { Scaffold } from '../scaffold/scaffold';
-import { TokenListData } from '../abstract/token-list-data';
+import { MEWData } from '../abstract/mew-data';
 
-export class Print extends TokenListData {
+export class Print extends MEWData {
 
-    constructor(id: number, name: string, children: Scaffold[]) {
-        super(id, name);
-        this.children = children;
+    constructor(id: number, name: string) {
+        super(id, name, [], null);
     }
 }

@@ -1,10 +1,9 @@
 import { Fiber } from '../fiber/fiber';
-import { TokenListData } from '../abstract/token-list-data';
+import { MEWData } from '../abstract/mew-data';
 
-export class Layer extends TokenListData {
+export class Layer extends MEWData {
     
-    constructor(id: number, name: string, children: Fiber[]) {
-        super(id, name);
-        this.children = children;
+    constructor(id: number, name: string, parent: MEWData) {
+        super(id, name, [], parent);
     }
 }

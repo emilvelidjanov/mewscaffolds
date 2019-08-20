@@ -1,10 +1,9 @@
 import { Layer } from '../layer/layer';
-import { TokenListData } from '../abstract/token-list-data';
+import { MEWData } from '../abstract/mew-data';
 
-export class Scaffold extends TokenListData {
+export class Scaffold extends MEWData {
 
-    constructor(id: number, name: string, children: Layer[]) {
-        super(id, name);
-        this.children = children;
+    constructor(id: number, name: string, parent: MEWData) {
+        super(id, name, [], parent);
     }
 }
