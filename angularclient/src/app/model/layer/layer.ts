@@ -1,9 +1,9 @@
 import { Fiber } from '../fiber/fiber';
-import { MEWData } from '../abstract/mew-data';
+import { MewData } from '../abstract/mew-data';
 
-export class Layer extends MEWData {
+export class Layer extends MewData {
     
-    constructor(id: number, name: string, parent: MEWData) {
+    constructor(id: number, name: string, parent: MewData) {
         super(id, name, [], parent);
     }
 }

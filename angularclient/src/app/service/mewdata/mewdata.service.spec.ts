@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PrintService } from './print.service';
+import { MewDataService } from './mewdata.service';
 
 describe('PrintService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: PrintService = TestBed.get(PrintService);
+    const service: MewDataService = TestBed.get(MewDataService);
     expect(service).toBeTruthy();
   });
 });

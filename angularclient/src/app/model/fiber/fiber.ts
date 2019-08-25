@@ -1,8 +1,8 @@
-import { MEWData } from '../abstract/mew-data';
+import { MewData } from '../abstract/mew-data';
 
-export class Fiber extends MEWData {
+export class Fiber extends MewData {
     
-    constructor(id: number, name: string, parent: MEWData) {
+    constructor(id: number, name: string, parent: MewData) {
         super(id, name, null, parent);
     }
 }

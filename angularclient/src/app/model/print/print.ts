@@ -1,7 +1,7 @@
 import { Scaffold } from '../scaffold/scaffold';
-import { MEWData } from '../abstract/mew-data';
+import { MewData } from '../abstract/mew-data';
 
-export class Print extends MEWData {
+export class Print extends MewData {
 
     constructor(id: number, name: string) {
         super(id, name, [], null);

@@ -8,17 +8,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/print") @CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/print")
+@CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 public class PrintController {
 
     @Autowired
     private PrintRepository printRepository;
+
+    @Autowired
+    private ScaffoldRepository scaffoldRepository;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Print getById(@PathVariable("id") final Long id) {
@@ -48,5 +50,17 @@ public class PrintController {
     public void delete(@PathVariable("id") final Long id) {
         log.info("delete() <<< id: {}", id);
         printRepository.findById(id).ifPresent(print -> printRepository.delete(print));
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public Scaffold addScaffoldToPrint(@RequestBody final Long id) {
+        Print print = printRepository.findById(id).orElse(null);
+        Scaffold scaffold = null;
+        if (print != null) {
+            scaffold = scaffoldRepository.saveAndFlush(new Scaffold("Scaffold " + (print.getChildren().size() + 1)));
+            print.getChildren().add(scaffold);
+            printRepository.saveAndFlush(print);
+        }
+        return scaffold;
     }
 }

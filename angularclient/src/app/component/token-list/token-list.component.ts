@@ -1,93 +1,121 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { MEWData } from 'src/app/model/abstract/mew-data';
+import { Component, Input, OnInit } from '@angular/core';
+import { MewData } from 'src/app/model/abstract/mew-data';
 import { TextConfig } from 'src/app/config/text-config/text-config';
+import { MewDataService } from 'src/app/service/mewdata/mewdata.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
+// TODO: token colors
+// TODO: symbols instead of text
 @Component({
   selector: 'app-token-list',
   templateUrl: './token-list.component.html',
   styleUrls: ['./token-list.component.scss']
 })
 export class TokenListComponent implements OnInit {
-  
-  @Input('data')
-  data: MEWData[];
-  @Input('label')
-  label: string;
-  @Input('tokenLabel')
-  tokenLabel: string;
-  @Input('selectedTotal')
-  selectedTotal: number;
-  @Input('isCollapsed')
-  isCollapsed: boolean;
 
-  @Output()
-  tokenListDataSelect = new EventEmitter<MEWData[]>();
-  @Output()
-  tokenListDataChange = new EventEmitter<MEWData[]>();
-  @Output()
-  tokenListDataAdd = new EventEmitter();
-  
+  @Input() data: MewData[];
+  @Input() label: string;
+  @Input() tokenLabel: string;
+
+  // TODO: force collapse/uncollapse?
+  isCollapsed: boolean;
   collapseButtonText: string;
 
-  constructor(private textConfig: TextConfig) { }
-  
-  // TODO: button tooltips
-  ngOnInit(): void {
+  selectedTotal: number;
+
+  constructor(private mewDataService: MewDataService, private textConfig: TextConfig) {
     this.data = [];
+    this.label = "";
+    this.tokenLabel = "";
+    this.isCollapsed = false;
+    this.collapseButtonText = "";
+    this.selectedTotal = 0;
+  }
+
+  // TODO: button tooltips
+  ngOnInit() {
     this.checkCollapseButtonText();
   }
 
-  ngOnChanges() {
-    this.checkCollapseButtonText();
+  ngDoCheck() {
+    this.selectedTotal = this.data.filter(token => token.isSelected).length;
   }
 
-  onTokenMouseUp(token: MEWData): void {
+  onTokenMouseUp(token: MewData): void {
     token.isSelected = !token.isSelected;
-    this.tokenListDataSelect.emit(this.data);
+    if (!token.isSelected) this.mewDataService.setMewDataIsSelectedRecursive(token, false);
+    this.mewDataService.pushNextPrint(this.mewDataService.print);
   }
 
-  // TODO: think about drag drop -> swap data or move data?
+  // TODO: cleanup
+  // TODO: adjust "drop here..." text based on where it was dragged
+  // TODO: drag to other box to switch parent?
   onTokenDropped(event: CdkDragDrop<string[]>): void {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(this.data.reverse(), event.previousIndex, event.currentIndex);
-      let firstChild: MEWData = this.data[event.currentIndex];
-      let secondChild: MEWData = this.data[event.previousIndex];
-      let parent: MEWData = firstChild.parent;
-      let path: string = firstChild.path;
-      firstChild.parent = secondChild.parent;
-      secondChild.parent = parent;
-      firstChild.path = secondChild.path;
-      secondChild.path = path;
-      this.data.reverse();
-      this.tokenListDataChange.emit(this.data);
+    if (event.previousContainer === event.container && event.previousIndex !== event.currentIndex) {
+      let viewData: MewData[] = this.getViewData().reverse();
+      moveItemInArray(viewData, event.previousIndex, event.currentIndex);
+      let movedChild: MewData = viewData[event.currentIndex];
+      let below: MewData = viewData[event.currentIndex + 1] || null;
+      let above: MewData = viewData[event.currentIndex - 1] || null;
+      if (below && !above) {
+        this.mewDataService.addChildToParent(movedChild, below.parent);
+      }
+      else if (above && !below) {
+        this.mewDataService.attachChildToParent(movedChild, above.parent, 0);
+      }
+      else if (below.parent === above.parent) {
+        this.mewDataService.spliceChildToNeighbor(movedChild, above);
+      }
+      else if (below.parent !== above.parent) {
+        if (below.parent === movedChild.parent) {
+          this.mewDataService.addChildToParent(movedChild, below.parent);
+        }
+        else if (above.parent === movedChild.parent) {
+          this.mewDataService.attachChildToParent(movedChild, above.parent, 0);
+        }
+        else {
+          this.mewDataService.addChildToParent(movedChild, below.parent);
+        }
+      }
+      movedChild.path = this.mewDataService.createPathOfMewData(movedChild);
+      this.mewDataService.pushNextPrint(this.mewDataService.print);
     }
   }
 
-  // TODO: implement
+  // TODO: fix add on empty list
   addNew(): void {
-    this.tokenListDataAdd.emit(this.data);
+    new Set(this.getViewData().map(token => token.parent)).forEach(parent => {
+      this.mewDataService.addNewChildToParent(parent);
+    });
+    this.mewDataService.pushNextPrint(this.mewDataService.print);
+  }
+
+  // TODO: cleanup
+  cloneSelected(): void {
+    this.getViewData().filter(token => token.isSelected).forEach(token => {
+      token.parent.children.push(this.mewDataService.deepCopy(token, token.parent));
+    });
+    this.mewDataService.pushNextPrint(this.mewDataService.print);
   }
 
   deleteSelected(): void {
-    this.data.filter(token => token.isSelected).forEach(item => {
-      item.markedForDeletion = true;
+    this.getViewData().filter(token => token.isSelected).forEach(token => {
+      this.mewDataService.detachChildFromParent(token);
     });
-    this.tokenListDataChange.emit(this.data);
+    this.mewDataService.pushNextPrint(this.mewDataService.print);
   }
 
   selectAll(): void {
-    this.data.forEach(token => {
+    this.getViewData().forEach(token => {
       token.isSelected = true;
     });
-    this.tokenListDataSelect.emit(this.data);
   }
 
   selectNone(): void {
-    this.data.forEach(token => {
+    this.getViewData().forEach(token => {
       token.isSelected = false;
+      this.mewDataService.setMewDataIsSelectedRecursive(token, false);
     });
-    this.tokenListDataSelect.emit(this.data);
   }
 
   collapse(): void {
@@ -95,18 +123,11 @@ export class TokenListComponent implements OnInit {
     this.checkCollapseButtonText();
   }
 
-  private checkCollapseButtonText() {
-    this.collapseButtonText = (this.isCollapsed ? this.textConfig.collapseButtonTextOpen : this.textConfig.collapseButtonTextClose);
+  getViewData(): MewData[] {
+    return this.data.filter(token => token.parent.isSelected);
   }
 
-  private getLowestUnusedId(): number {
-    let newId: number = 0;
-    let sortedData: MEWData[] = this.data.slice();
-    sortedData.sort((a, b) => (a.id > b.id) ? 1 : -1)
-    for (newId; newId < sortedData.length; newId++) {
-      const usedId = sortedData[newId].id;
-      if (newId != usedId) break;
-    }
-    return newId;
+  private checkCollapseButtonText(): void {
+    this.collapseButtonText = (this.isCollapsed ? this.textConfig.collapseButtonTextOpen : this.textConfig.collapseButtonTextClose);
   }
 }

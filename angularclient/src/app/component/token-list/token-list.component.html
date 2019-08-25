@@ -1,13 +1,13 @@
 <div class="card bg-light">
     <div class="card-body">
         <div class="card-title h5 d-flex">
-            {{label}}
+            {{tokenLabel}} {{textConfig.controlLabel}}
             <button type="button" class="btn btn-secondary ml-auto" (click)="collapse()">{{collapseButtonText}}</button>
         </div>
         <div *ngIf="!isCollapsed">
             <div class="list-group overflow-auto" cdkDropList (cdkDropListDropped)="onTokenDropped($event)">
                 <div class="list-group-item text-truncate text-left mb-1" [ngClass]="{'active': token.isSelected}"
-                    *ngFor="let token of data.slice().reverse()" cdkDrag (mouseup)="onTokenMouseUp(token)">
+                    *ngFor="let token of getViewData().reverse()" cdkDrag (mouseup)="onTokenMouseUp(token)">
                     <div class="list-group-item bg-dark text-light mb-1 rounded" *cdkDragPlaceholder>
                         {{textConfig.cdkDragPlaceholderText}}
                     </div>
@@ -17,13 +17,19 @@
                     {{token.name}}
                 </div>
             </div>
-            <div class="btn-group w-100 mt-1">
-                <button type="button" class="btn btn-secondary" (click)="addNew()">{{textConfig.addButtonText}}</button>
-                <button type="button" class="btn btn-secondary" (click)="selectAll()">{{textConfig.selectAllButtonText}}</button>
-                <button type="button" class="btn btn-secondary" (click)="selectNone()">{{textConfig.selectNoneButtonText}}</button>
-                <button type="button" class="btn btn-secondary" (click)="deleteSelected()">{{textConfig.removeButtonText}}
-                    ({{selectedTotal}})</button>
-            </div>
+        </div>
+        <div class="btn-group w-100 mt-1">
+            <!-- TODO: disable when not usable -->
+            <button type="button" class="btn btn-secondary" (click)="addNew()">{{textConfig.addButtonText}}</button>
+            <button type="button" class="btn btn-secondary" [disabled]="selectedTotal == 0"
+                (click)="cloneSelected()">{{textConfig.cloneButtonText}} ({{selectedTotal}})</button>
+            <button type="button" class="btn btn-secondary"
+                (click)="selectAll()">{{textConfig.selectAllButtonText}}</button>
+            <button type="button" class="btn btn-secondary"
+                (click)="selectNone()">{{textConfig.selectNoneButtonText}}</button>
+            <button type="button" class="btn btn-secondary" [disabled]="selectedTotal == 0"
+                (click)="deleteSelected()">{{textConfig.removeButtonText}}
+                ({{selectedTotal}})</button>
         </div>
     </div>
 </div>

@@ -8,12 +8,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { TokenListComponent } from './component/token-list/token-list.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TextConfig } from './config/text-config/text-config';
-import { PrintService } from './service/print-service/print.service';
+import { MewDataService } from './service/mewdata/mewdata.service';
+import { TokenFormComponent } from './component/token-form/token-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TokenListComponent,
+    TokenFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,7 +24,7 @@ import { PrintService } from './service/print-service/print.service';
     HttpClientModule,
     DragDropModule,
   ],
-  providers: [PrintService, TextConfig],
+  providers: [MewDataService, TextConfig],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

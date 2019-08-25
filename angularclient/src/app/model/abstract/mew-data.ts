@@ -1,27 +1,27 @@
 import { TextConfig } from 'src/app/config/text-config/text-config';
 
-export abstract class MEWData {
+export abstract class MewData {
 
     id: number;
     name: string;
     path: string;
-    children: MEWData[];
-    parent: MEWData;
+    children: MewData[];
+    parent: MewData;
     isSelected: boolean;
-    markedForDeletion: boolean;
+    isPersisted: boolean;
     
-    constructor(id: number, name: string, children: MEWData[], parent: MEWData) {
+    constructor(id: number, name: string, children: MewData[], parent: MewData) {
         this.id = id;
         this.name = name;
         this.children = children;
         this.parent = parent;
         this.isSelected = false;
-        this.markedForDeletion = false;
+        this.isPersisted = false;
         this.path = "";
-        if (this.parent != null) {
-            this.path = this.parent.name + TextConfig.instance.pathSeperator;
-            if (this.parent.path !== "") {
-                this.path = this.parent.path + this.path;
+        if (parent != null) {
+            this.path = parent.name + TextConfig.instance.pathSeperator;
+            if (parent.path !== "") {
+              this.path = parent.path + this.path;
             }
         }
     }

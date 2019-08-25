@@ -1,9 +1,9 @@
 import { Layer } from '../layer/layer';
-import { MEWData } from '../abstract/mew-data';
+import { MewData } from '../abstract/mew-data';
 
-export class Scaffold extends MEWData {
+export class Scaffold extends MewData {
 
-    constructor(id: number, name: string, parent: MEWData) {
+    constructor(id: number, name: string, parent: MewData) {
         super(id, name, [], parent);
     }
 }
