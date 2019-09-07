@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MewDataService } from './mewdata.service';
+import { MewDataService } from './mew-data.service';
 
 describe('PrintService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

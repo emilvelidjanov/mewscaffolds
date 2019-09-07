@@ -27,6 +27,7 @@ export class TextConfig {
     readonly formLabel: string = "parameters";
     readonly nameInputLabel: string = "Name";
     readonly nameInputPlaceholder: string = "Name";
+    readonly nameInputName: string = "name";
     readonly multiplePlaceholder: string = "Multiple..."
 
     // Buttons

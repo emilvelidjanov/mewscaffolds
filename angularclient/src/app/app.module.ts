@@ -5,17 +5,19 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { TokenListComponent } from './component/token-list/token-list.component';
+import { MewDataListComponent } from './component/mew-data-list/mew-data-list.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TextConfig } from './config/text-config/text-config';
-import { MewDataService } from './service/mewdata/mewdata.service';
-import { TokenFormComponent } from './component/token-form/token-form.component';
+import { MewDataService } from './service/mew-data/mew-data.service';
+import { MewDataFormComponent } from './component/mew-data-form/mew-data-form.component';
+import { MewDataChartComponent } from './component/mew-data-chart/mew-data-chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TokenListComponent,
-    TokenFormComponent,
+    MewDataListComponent,
+    MewDataFormComponent,
+    MewDataChartComponent,
   ],
   imports: [
     BrowserModule,

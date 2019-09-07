@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TokenFormComponent } from './token-form.component';
+import { MewDataFormComponent } from './mew-data-form.component';
 
 describe('TokenFormComponent', () => {
-  let component: TokenFormComponent;
-  let fixture: ComponentFixture<TokenFormComponent>;
+  let component: MewDataFormComponent;
+  let fixture: ComponentFixture<MewDataFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TokenFormComponent ]
+      declarations: [ MewDataFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TokenFormComponent);
+    fixture = TestBed.createComponent(MewDataFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

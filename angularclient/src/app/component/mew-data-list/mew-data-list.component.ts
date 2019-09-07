@@ -1,19 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MewData } from 'src/app/model/abstract/mew-data';
 import { TextConfig } from 'src/app/config/text-config/text-config';
-import { MewDataService } from 'src/app/service/mewdata/mewdata.service';
+import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 // TODO: token colors
 // TODO: symbols instead of text
 @Component({
-  selector: 'app-token-list',
-  templateUrl: './token-list.component.html',
-  styleUrls: ['./token-list.component.scss']
+  selector: 'app-mew-data-list',
+  templateUrl: './mew-data-list.component.html',
+  styleUrls: ['./mew-data-list.component.scss']
 })
-export class TokenListComponent implements OnInit {
+export class MewDataListComponent implements OnInit {
 
   @Input() data: MewData[];
+  @Input() parentData: MewData[];
   @Input() label: string;
   @Input() tokenLabel: string;
 
@@ -21,10 +22,13 @@ export class TokenListComponent implements OnInit {
   isCollapsed: boolean;
   collapseButtonText: string;
 
+  isAddDisabled: boolean;
+
   selectedTotal: number;
 
   constructor(private mewDataService: MewDataService, private textConfig: TextConfig) {
     this.data = [];
+    this.parentData = [];
     this.label = "";
     this.tokenLabel = "";
     this.isCollapsed = false;
@@ -37,8 +41,9 @@ export class TokenListComponent implements OnInit {
     this.checkCollapseButtonText();
   }
 
-  ngDoCheck() {
-    this.selectedTotal = this.data.filter(token => token.isSelected).length;
+  ngOnChanges() {
+    this.isAddDisabled = this.parentData.filter(parent => parent.isSelected).length == 0;
+    this.selectedTotal = this.data.filter(item => item.isSelected).length;
   }
 
   onTokenMouseUp(token: MewData): void {
@@ -82,9 +87,8 @@ export class TokenListComponent implements OnInit {
     }
   }
 
-  // TODO: fix add on empty list
   addNew(): void {
-    new Set(this.getViewData().map(token => token.parent)).forEach(parent => {
+    this.parentData.filter(parent => parent.isSelected).forEach(parent => {
       this.mewDataService.addNewChildToParent(parent);
     });
     this.mewDataService.pushNextPrint(this.mewDataService.print);
@@ -109,6 +113,7 @@ export class TokenListComponent implements OnInit {
     this.getViewData().forEach(token => {
       token.isSelected = true;
     });
+    this.mewDataService.pushNextPrint(this.mewDataService.print);
   }
 
   selectNone(): void {
@@ -116,6 +121,7 @@ export class TokenListComponent implements OnInit {
       token.isSelected = false;
       this.mewDataService.setMewDataIsSelectedRecursive(token, false);
     });
+    this.mewDataService.pushNextPrint(this.mewDataService.print);
   }
 
   collapse(): void {

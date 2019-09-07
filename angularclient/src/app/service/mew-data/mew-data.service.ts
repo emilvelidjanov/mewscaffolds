@@ -9,7 +9,6 @@ import { MewData } from 'src/app/model/abstract/mew-data';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { takeUntil } from 'rxjs/operators';
 
-
 // TODO: cleanup
 @Injectable({
   providedIn: 'root'
@@ -35,8 +34,14 @@ export class MewDataService {
     this.httpClient.get<Print>(this.baseUrl + id).pipe(takeUntil(this.unsubscribe)).subscribe(print => {
       if (print) {
         this.print = this.initializeFetchedPrint(print);
-        this.pushNextPrint(this.print);
       }
+      else {
+        this.print = null;
+      }
+      this.pushNextPrint(this.print);
+    }, error => {
+      this.print = null;
+      this.pushNextPrint(this.print);
     });
     return this.print$;
   }
@@ -46,15 +51,15 @@ export class MewDataService {
   }
 
   getScaffoldsOfPrint(print: Print): Scaffold[] {
-    return print.children;
+    let scaffolds: Scaffold[] = [];
+    scaffolds.push.apply(scaffolds, print.children);
+    return scaffolds;
   }
 
   getLayersOfPrint(print: Print): Layer[] {
     let layers: Layer[] = [];
     this.getScaffoldsOfPrint(print).forEach(scaffold => {
-      scaffold.children.forEach(layer => {
-        layers.push(layer);
-      });
+      layers.push.apply(layers, scaffold.children);
     });
     return layers;
   }
@@ -76,6 +81,15 @@ export class MewDataService {
       }
     }
     return path;
+  }
+
+  recalculatePathsRecursive(data: MewData): void {
+    data.path = this.createPathOfMewData(data);
+    if (data.children != null) {
+      data.children.forEach(child => {
+        this.recalculatePathsRecursive(child);
+      });
+    }
   }
 
   setMewDataIsSelectedRecursive(data: MewData, isSelected: boolean): void {

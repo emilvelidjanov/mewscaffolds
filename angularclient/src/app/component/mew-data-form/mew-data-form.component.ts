@@ -1,14 +1,16 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { MewData } from 'src/app/model/abstract/mew-data';
-import { MewDataService } from 'src/app/service/mewdata/mewdata.service';
+import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 
+// TODO: sanitize input and error messages
+// TODO: add missing data
 @Component({
-  selector: 'app-token-form',
-  templateUrl: './token-form.component.html',
-  styleUrls: ['./token-form.component.scss']
+  selector: 'app-mew-data-form',
+  templateUrl: './mew-data-form.component.html',
+  styleUrls: ['./mew-data-form.component.scss']
 })
-export class TokenFormComponent implements OnInit {
+export class MewDataFormComponent implements OnInit {
 
   @Input() data: MewData[];
   @Input() label: string;
@@ -28,7 +30,6 @@ export class TokenFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  // TODO: fix scaffolds not showing
   ngOnChanges() {
     let viewData: MewData = this.getViewData();
     if (viewData != null) {
@@ -36,7 +37,7 @@ export class TokenFormComponent implements OnInit {
       this.nameInputPlaceholder = this.textConfig.nameInputPlaceholder;
     }
     else {
-      this.name = "";
+      this.name = null;
       this.nameInputPlaceholder = this.textConfig.multiplePlaceholder;
     }
   }
@@ -45,7 +46,7 @@ export class TokenFormComponent implements OnInit {
     let selected: MewData[] = this.getSelectedData();
     let viewData: MewData = null;
     if (selected.length == 1) {
-      viewData = selected[0];
+      viewData = selected.pop();
     }
     return viewData;
   }
@@ -54,4 +55,15 @@ export class TokenFormComponent implements OnInit {
     return this.data.filter(token => token.isSelected);
   }
 
+  onInput(name: string, value: string) {
+    this.getSelectedData().forEach(item => {
+      if (name === this.textConfig.nameInputName) item.name = value;
+    });
+  }
+
+  recalculatePaths() {
+    this.getSelectedData().forEach(item => {
+      this.mewDataService.recalculatePathsRecursive(item);
+    });
+  }
 }

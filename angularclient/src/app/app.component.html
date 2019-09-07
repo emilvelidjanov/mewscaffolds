@@ -16,32 +16,45 @@
 
   <!-- TODO: make component -->
   <div class="row mb-1">
-    <div class="col-sm">
-      <app-token-list label="{{textConfig.scaffoldControlLabel}}" tokenLabel="{{textConfig.scaffold}}"
-        [data]="scaffolds"></app-token-list>
-    </div>
-    <div class="col-sm">
-      <app-token-form label="{{textConfig.scaffoldFormLabel}}" dataLabel="{{textConfig.scaffold}}" [data]="scaffolds"></app-token-form>
-    </div>
-  </div>
+    <div class="col-sm-5">
+      <div class="row mb-1">
+        <div class="col-sm">
+          <app-mew-data-list [label]="textConfig.scaffoldControlLabel" [tokenLabel]="textConfig.scaffold" [data]="scaffolds"
+            [parentData]="print"></app-mew-data-list>
+        </div>
+        <div class="col-sm">
+          <app-mew-data-form [label]="textConfig.scaffoldFormLabel" [dataLabel]="textConfig.scaffold" [data]="scaffolds">
+          </app-mew-data-form>
+        </div>
+      </div>
 
-  <div class="row mb-1">
-    <div class="col-sm">
-      <app-token-list label="{{textConfig.layerControlLabel}}" tokenLabel="{{textConfig.layer}}" [data]="layers">
-      </app-token-list>
-    </div>
-    <div class="col-sm">
-      <app-token-form label="{{textConfig.layerFormLabel}}" dataLabel="{{textConfig.layer}}" [data]="layers"></app-token-form>
-    </div>
-  </div>
+      <div class="row mb-1">
+        <div class="col-sm">
+          <app-mew-data-list [label]="textConfig.layerControlLabel" [tokenLabel]="textConfig.layer" [data]="layers"
+            [parentData]="scaffolds">
+          </app-mew-data-list>
+        </div>
+        <div class="col-sm">
+          <app-mew-data-form [label]="textConfig.layerFormLabel" [dataLabel]="textConfig.layer" [data]="layers">
+          </app-mew-data-form>
+        </div>
+      </div>
 
-  <div class="row mb-1">
-    <div class="col-sm">
-      <app-token-list label="{{textConfig.fiberControlLabel}}" tokenLabel="{{textConfig.fiber}}" [data]="fibers">
-      </app-token-list>
+      <div class="row mb-1">
+        <div class="col-sm">
+          <app-mew-data-list [label]="textConfig.fiberControlLabel" [tokenLabel]="textConfig.fiber" [data]="fibers"
+            [parentData]="layers">
+          </app-mew-data-list>
+        </div>
+        <div class="col-sm">
+          <app-mew-data-form [label]="textConfig.fiberFormLabel" [dataLabel]="textConfig.fiber" [data]="fibers">
+          </app-mew-data-form>
+        </div>
+      </div>
     </div>
-    <div class="col-sm">
-      <app-token-form label="{{textConfig.fiberFormLabel}}" dataLabel="{{textConfig.fiber}}" [data]="fibers"></app-token-form>
+
+    <div class="col-md">
+      <app-mew-data-chart></app-mew-data-chart>
     </div>
   </div>
 </div>

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TokenListComponent } from './token-list.component';
+import { MewDataListComponent } from './mew-data-list.component';
 
 describe('TokenListComponent', () => {
-  let component: TokenListComponent;
-  let fixture: ComponentFixture<TokenListComponent>;
+  let component: MewDataListComponent;
+  let fixture: ComponentFixture<MewDataListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TokenListComponent ]
+      declarations: [ MewDataListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TokenListComponent);
+    fixture = TestBed.createComponent(MewDataListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,17 @@
+<div class="card bg-light">
+  <div class="card-body">
+    <div class="card-title h5">
+      {{dataLabel}} {{textConfig.formLabel}}
+    </div>
+    <form *ngIf="getSelectedData().length > 0">
+      <div class="form-row">
+        <div class="form-group col-sm">
+          <!-- TODO: naming number hint -->
+          <label>{{textConfig.nameInputLabel}}</label>
+          <input type="text" class="form-control" [value]="name" [name]="textConfig.nameInputName" [placeholder]="nameInputPlaceholder"
+            (input)="onInput($event.target.name, $event.target.value)" (focusout)="recalculatePaths()">
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

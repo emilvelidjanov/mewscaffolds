@@ -19,8 +19,7 @@
             </div>
         </div>
         <div class="btn-group w-100 mt-1">
-            <!-- TODO: disable when not usable -->
-            <button type="button" class="btn btn-secondary" (click)="addNew()">{{textConfig.addButtonText}}</button>
+            <button type="button" class="btn btn-secondary" [disabled]="isAddDisabled" (click)="addNew()">{{textConfig.addButtonText}}</button>
             <button type="button" class="btn btn-secondary" [disabled]="selectedTotal == 0"
                 (click)="cloneSelected()">{{textConfig.cloneButtonText}} ({{selectedTotal}})</button>
             <button type="button" class="btn btn-secondary"
