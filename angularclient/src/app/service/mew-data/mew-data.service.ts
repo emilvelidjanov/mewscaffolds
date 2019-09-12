@@ -8,12 +8,16 @@ import { Fiber } from 'src/app/model/fiber/fiber';
 import { MewData } from 'src/app/model/abstract/mew-data';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { takeUntil } from 'rxjs/operators';
+import { Vector } from 'src/app/model/vector/vector';
+import { create } from 'domain';
 
-// TODO: cleanup
+// TODO: seperate into one service for each model
 @Injectable({
   providedIn: 'root'
 })
 export class MewDataService {
+
+  static instance: MewDataService;
 
   readonly baseUrl: string = "http://localhost:8080/print/";
 
@@ -23,11 +27,15 @@ export class MewDataService {
   print$: Observable<Print>;
   print: Print;
 
+  private math;
+
   constructor(private httpClient: HttpClient, private textConfig: TextConfig) {
+    MewDataService.instance = this;
     this.unsubscribe = new Subject<any>();
     this.printSource = new Subject<Print>();
     this.print$ = this.printSource.asObservable();
     this.print = null;
+    this.math = require('mathjs');
   }
 
   fetchPrintById(id: number): Observable<Print> {
@@ -106,7 +114,7 @@ export class MewDataService {
     }
   }
 
-  addChildToParent(child: Scaffold | Layer | Fiber, parent: Print | Scaffold | Layer): Scaffold | Layer | Fiber {
+  addChildToParent(child: MewData, parent: MewData): MewData {
     let addedChild: MewData = null;
     if (parent.children != null) {
       addedChild = this.detachChildFromParent(child);
@@ -118,7 +126,7 @@ export class MewDataService {
     return addedChild;
   }
 
-  addNewChildToParent(parent: Print | Scaffold | Layer): Scaffold | Layer | Fiber {
+  addNewChildToParent(parent: MewData): MewData {
     let newChild: MewData = null;
     if (parent.children !== null) {
       let id: number = this.getNextChildId(parent);
@@ -140,7 +148,7 @@ export class MewDataService {
     return newChild;
   }
 
-  deepCopy(data: Scaffold | Layer | Fiber, parent: Print | Scaffold | Layer): Scaffold | Layer | Fiber {
+  deepCopy(data: MewData, parent: MewData): MewData {
     let copy: MewData = null;
     let id: number = this.getNextChildId(parent);
     if (data instanceof Scaffold) {
@@ -160,7 +168,7 @@ export class MewDataService {
     return copy;
   }
 
-  detachChildFromParent(child: Scaffold | Layer | Fiber): Scaffold | Layer | Fiber {
+  detachChildFromParent(child: MewData): MewData {
     let detachedChild: MewData = null;
     if (child.parent != null && child.parent.children != null) {
       let index: number = child.parent.children.findIndex(item => item.id == child.id);
@@ -170,7 +178,7 @@ export class MewDataService {
     return detachedChild;
   }
 
-  attachChildToParent(child: Scaffold | Layer | Fiber, parent: Print | Scaffold | Layer, index: number): Scaffold | Layer | Fiber {
+  attachChildToParent(child: MewData, parent: MewData, index: number): MewData {
     if (child.parent != null) {
       child = this.detachChildFromParent(child);
     }
@@ -181,7 +189,7 @@ export class MewDataService {
     return child;
   }
 
-  getChildIndex(child: Scaffold | Layer | Fiber): number {
+  getChildIndex(child: MewData): number {
     let index: number = null;
     if (child.parent != null && child.parent.children != null) {
       index = child.parent.children.findIndex(item => item.id == child.id);
@@ -189,7 +197,7 @@ export class MewDataService {
     return index;
   }
 
-  spliceChildToNeighbor(child: Scaffold | Layer | Fiber, neighbor: Scaffold | Layer | Fiber): Scaffold | Layer | Fiber {
+  spliceChildToNeighbor(child: MewData, neighbor: MewData): MewData {
     if (neighbor.parent == null) return null;
     child = this.detachChildFromParent(child);
     let index: number = this.getChildIndex(neighbor);
@@ -217,7 +225,7 @@ export class MewDataService {
     return newPrint;
   }
 
-  private getNextChildNameSuffix(parent: Print | Scaffold | Layer): string {
+  private getNextChildNameSuffix(parent: MewData): string {
     let smallestUnused: number = null;
     if (parent.children != null) {
       smallestUnused = 1;
@@ -231,7 +239,7 @@ export class MewDataService {
     return smallestUnused.toString();
   }
 
-  private getNextChildId(parent: Print | Scaffold | Layer): number {
+  private getNextChildId(parent: MewData): number {
     let smallestUnused: number = null;
     if (parent.children != null) {
       smallestUnused = 1;

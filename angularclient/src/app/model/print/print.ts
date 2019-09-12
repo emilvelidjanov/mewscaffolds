@@ -1,4 +1,3 @@
-import { Scaffold } from '../scaffold/scaffold';
 import { MewData } from '../abstract/mew-data';
 
 export class Print extends MewData {

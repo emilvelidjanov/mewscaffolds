@@ -4,13 +4,39 @@
       {{dataLabel}} {{textConfig.formLabel}}
     </div>
     <form *ngIf="getSelectedData().length > 0">
-      <div class="form-row">
-        <div class="form-group col-sm">
-          <!-- TODO: naming number hint -->
-          <label>{{textConfig.nameInputLabel}}</label>
-          <input type="text" class="form-control" [value]="name" [name]="textConfig.nameInputName" [placeholder]="nameInputPlaceholder"
-            (input)="onInput($event.target.name, $event.target.value)" (focusout)="recalculatePaths()">
+      <div *ngIf="name !== null" class="form-group">
+        <!-- TODO: naming number hint -->
+        <label>{{textConfig.nameInputLabel}}</label>
+        <input type="text" class="form-control" [value]="name" [name]="nameInputName" [placeholder]="nameInputPlaceholder"
+          (input)="onInput($event.target.name, $event.target.value)" (focusout)="recalculatePaths()">
+      </div>
+      <div *ngIf="position !== null" class="form-group form-row">
+        <div class="col">
+          <label>{{textConfig.positionXInputLabel}}</label>
+          <input type="number" class="form-control" [value]="position.x" [name]="positionXInputName"
+            [placeholder]="positionXInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
+        <div class="col">
+          <label>{{textConfig.positionYInputLabel}}</label>
+          <input type="number" class="form-control" [value]="position.y" [name]="positionYInputName"
+            [placeholder]="positionYInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
+        </div>
+      </div>
+      <div *ngIf="angle !== null" class="form-group">
+        <label>{{textConfig.angleInputLabel}}</label>
+        <input type="number" class="form-control" [value]="angle" [name]="angleInputName" [placeholder]="angleInputPlaceholder"
+          (input)="onInput($event.target.name, $event.target.value)">
+      </div>
+      <div *ngIf="length !== null" class="form-group">
+        <label>{{textConfig.lengthInputLabel}}</label>
+        <input type="number" class="form-control" [value]="length" [name]="lengthInputName" [placeholder]="lengthInputPlaceholder"
+          (input)="onInput($event.target.name, $event.target.value)">
+      </div>
+      <div *ngIf="distanceToNextFiber !== null" class="form-group">
+        <label>{{textConfig.distanceToNextFiberInputLabel}}</label>
+        <input type="number" class="form-control" [value]="distanceToNextFiber" [name]="distanceToNextFiberInputName"
+          [placeholder]="distanceToNextFiberInputPlaceholder"
+          (input)="onInput($event.target.name, $event.target.value)">
       </div>
     </form>
   </div>

@@ -16,7 +16,7 @@
 
   <!-- TODO: make component -->
   <div class="row mb-1">
-    <div class="col-sm-5">
+    <div class="col-sm">
       <div class="row mb-1">
         <div class="col-sm">
           <app-mew-data-list [label]="textConfig.scaffoldControlLabel" [tokenLabel]="textConfig.scaffold" [data]="scaffolds"
@@ -53,8 +53,8 @@
       </div>
     </div>
 
-    <div class="col-md">
-      <app-mew-data-chart></app-mew-data-chart>
+    <div class="col-sm">
+      <app-mew-data-chart [data]="layers"></app-mew-data-chart>
     </div>
   </div>
 </div>

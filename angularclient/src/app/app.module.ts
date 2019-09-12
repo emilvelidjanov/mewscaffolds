@@ -11,6 +11,7 @@ import { TextConfig } from './config/text-config/text-config';
 import { MewDataService } from './service/mew-data/mew-data.service';
 import { MewDataFormComponent } from './component/mew-data-form/mew-data-form.component';
 import { MewDataChartComponent } from './component/mew-data-chart/mew-data-chart.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { MewDataChartComponent } from './component/mew-data-chart/mew-data-chart
     FormsModule,
     HttpClientModule,
     DragDropModule,
+    ChartsModule,
   ],
   providers: [MewDataService, TextConfig],
   bootstrap: [AppComponent]
