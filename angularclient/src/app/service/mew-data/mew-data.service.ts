@@ -27,15 +27,12 @@ export class MewDataService {
   print$: Observable<Print>;
   print: Print;
 
-  private math;
-
   constructor(private httpClient: HttpClient, private textConfig: TextConfig) {
     MewDataService.instance = this;
     this.unsubscribe = new Subject<any>();
     this.printSource = new Subject<Print>();
     this.print$ = this.printSource.asObservable();
     this.print = null;
-    this.math = require('mathjs');
   }
 
   fetchPrintById(id: number): Observable<Print> {

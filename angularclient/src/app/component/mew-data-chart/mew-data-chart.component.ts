@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewContainerRef } from '@angular/core';
 import { ChartOptions, ChartDataSets, ChartType, ChartPoint, ChartData } from 'chart.js';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { Layer } from 'src/app/model/layer/layer';
-import { Fiber } from 'src/app/model/fiber/fiber';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 
 @Component({
