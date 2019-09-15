@@ -3,9 +3,11 @@ import { MewData } from 'src/app/model/abstract/mew-data';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
 
 // TODO: token colors
 // TODO: symbols instead of text
+// TODO: style when multi select off
 @Component({
   selector: 'app-mew-data-list',
   templateUrl: './mew-data-list.component.html',
@@ -18,7 +20,7 @@ export class MewDataListComponent implements OnInit {
   @Input() label: string;
   @Input() tokenLabel: string;
 
-  // TODO: force collapse/uncollapse?
+  // TODO: auto-collapse and force collapse/uncollapse?
   isCollapsed: boolean;
   collapseButtonText: string;
 
@@ -26,7 +28,7 @@ export class MewDataListComponent implements OnInit {
 
   selectedTotal: number;
 
-  constructor(private mewDataService: MewDataService, private textConfig: TextConfig) {
+  constructor(private mewDataService: MewDataService, private textConfig: TextConfig, private settingsConfig: SettingsConfig) {
     this.data = [];
     this.parentData = [];
     this.label = "";
@@ -47,6 +49,11 @@ export class MewDataListComponent implements OnInit {
   }
 
   onTokenMouseUp(token: MewData): void {
+    if (!this.settingsConfig.multiSelectOn && !token.isSelected) {
+      this.getViewData().filter(token => token.isSelected).forEach(token => {
+        this.mewDataService.setMewDataIsSelectedRecursive(token, false);
+      });
+    }
     token.isSelected = !token.isSelected;
     if (!token.isSelected) this.mewDataService.setMewDataIsSelectedRecursive(token, false);
     this.mewDataService.pushNextPrint(this.mewDataService.print);
@@ -110,18 +117,22 @@ export class MewDataListComponent implements OnInit {
   }
 
   selectAll(): void {
-    this.getViewData().forEach(token => {
-      token.isSelected = true;
-    });
-    this.mewDataService.pushNextPrint(this.mewDataService.print);
+    if (this.settingsConfig.multiSelectOn) {
+      this.getViewData().forEach(token => {
+        token.isSelected = true;
+      });
+      this.mewDataService.pushNextPrint(this.mewDataService.print);
+    }
   }
 
   selectNone(): void {
-    this.getViewData().forEach(token => {
-      token.isSelected = false;
-      this.mewDataService.setMewDataIsSelectedRecursive(token, false);
-    });
-    this.mewDataService.pushNextPrint(this.mewDataService.print);
+    if (this.settingsConfig.multiSelectOn) {
+      this.getViewData().forEach(token => {
+        token.isSelected = false;
+        this.mewDataService.setMewDataIsSelectedRecursive(token, false);
+      });
+      this.mewDataService.pushNextPrint(this.mewDataService.print);
+    }
   }
 
   collapse(): void {

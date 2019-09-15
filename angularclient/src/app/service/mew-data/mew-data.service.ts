@@ -8,8 +8,6 @@ import { Fiber } from 'src/app/model/fiber/fiber';
 import { MewData } from 'src/app/model/abstract/mew-data';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { takeUntil } from 'rxjs/operators';
-import { Vector } from 'src/app/model/vector/vector';
-import { create } from 'domain';
 
 // TODO: seperate into one service for each model
 @Injectable({

@@ -8,6 +8,6 @@ export class Fiber extends MewData {
     constructor(id: number, name: string, parent: MewData) {
         super(id, name, null, parent);
         this.length = 15;
-        this.distanceToNextFiber = 1;
+        this.distanceToNextFiber = 0.5;
     }
 }

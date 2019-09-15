@@ -5,7 +5,7 @@ import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 import { Vector } from 'src/app/model/vector/vector';
 
 // TODO: cleanup
-// TODO: sanitize input and error messages
+// TODO: sanitize input and error messages (error checking, too)
 // TODO: add missing data
 @Component({
   selector: 'app-mew-data-form',

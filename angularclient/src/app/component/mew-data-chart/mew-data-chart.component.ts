@@ -43,6 +43,7 @@ export class MewDataChartComponent implements OnInit {
   ngOnInit() {
   }
 
+  // TODO: backend calculation
   // TODO: implement angle and size
   // TODO: cleanup into service
   // TODO: fix .000000001 stuff

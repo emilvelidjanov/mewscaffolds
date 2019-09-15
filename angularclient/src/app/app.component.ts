@@ -7,7 +7,6 @@ import { Print } from './model/print/print';
 import { TextConfig } from './config/text-config/text-config';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ChartPoint, ChartDataSets } from 'chart.js';
 
 @Component({
   selector: 'app-root',
@@ -46,9 +45,6 @@ export class AppComponent implements OnInit {
       this.print.push(defaultPrint);
       this.print[0].isSelected = true;
     });
-  }
-
-  ngDoCheck() {
   }
 
   ngOnDestroy() {

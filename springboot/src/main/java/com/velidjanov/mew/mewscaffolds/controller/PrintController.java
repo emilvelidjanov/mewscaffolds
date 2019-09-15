@@ -51,16 +51,4 @@ public class PrintController {
         log.info("delete() <<< id: {}", id);
         printRepository.findById(id).ifPresent(print -> printRepository.delete(print));
     }
-
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Scaffold addScaffoldToPrint(@RequestBody final Long id) {
-        Print print = printRepository.findById(id).orElse(null);
-        Scaffold scaffold = null;
-        if (print != null) {
-            scaffold = scaffoldRepository.saveAndFlush(new Scaffold("Scaffold " + (print.getChildren().size() + 1)));
-            print.getChildren().add(scaffold);
-            printRepository.saveAndFlush(print);
-        }
-        return scaffold;
-    }
 }

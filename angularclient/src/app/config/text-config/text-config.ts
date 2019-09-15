@@ -52,6 +52,7 @@ export class TextConfig {
     readonly removeButtonText: string = "Remove";
     readonly saveButtonText: string = "Save";
     readonly cancelButtonText: string = "Cancel";
+    readonly settingsButtonText: string = "Settings";
 
     // Drag & Drop
     readonly cdkDragPlaceholderText: string = "Move here...";
