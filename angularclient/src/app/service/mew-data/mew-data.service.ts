@@ -8,6 +8,7 @@ import { Fiber } from 'src/app/model/fiber/fiber';
 import { MewData } from 'src/app/model/abstract/mew-data';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { takeUntil } from 'rxjs/operators';
+import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
 
 // TODO: seperate into one service for each model
 @Injectable({
@@ -25,7 +26,7 @@ export class MewDataService {
   print$: Observable<Print>;
   print: Print;
 
-  constructor(private httpClient: HttpClient, private textConfig: TextConfig) {
+  constructor(private httpClient: HttpClient, private textConfig: TextConfig, private settingsConfig: SettingsConfig) {
     MewDataService.instance = this;
     this.unsubscribe = new Subject<any>();
     this.printSource = new Subject<Print>();
@@ -127,15 +128,15 @@ export class MewDataService {
       let id: number = this.getNextChildId(parent);
       let name: string = this.textConfig.suffixSeperator + this.getNextChildNameSuffix(parent);
       if (parent instanceof Print) {
-        name = this.textConfig.scaffold + name;
+        name = this.settingsConfig.defaultScaffoldName + name;
         newChild = new Scaffold(id, name, parent);
       }
       else if (parent instanceof Scaffold) {
-        name = this.textConfig.layer + name;
+        name = this.settingsConfig.defaultLayerName + name;
         newChild = new Layer(id, name, parent);
       }
       else if (parent instanceof Layer) {
-        name = this.textConfig.fiber + name;
+        name = this.settingsConfig.defaultFiberName + name;
         newChild = new Fiber(id, name, parent);
       }
       parent.children.push(newChild);

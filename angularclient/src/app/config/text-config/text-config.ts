@@ -34,7 +34,7 @@ export class TextConfig {
     readonly angleInputLabel: string = "Angle";
     readonly angleInputPlaceholder: string = "Angle";
     readonly lengthInputLabel: string = "Length";
-    readonly lengthInputPlaceholder: string = "Lenght";
+    readonly lengthInputPlaceholder: string = "Length";
     readonly distanceToNextFiberInputLabel: string = "Distance to next fiber";
     readonly distanceToNextFiberInputPlaceholder: string = "Distance";
     readonly multiplePlaceholder: string = "Multiple..."
@@ -53,6 +53,7 @@ export class TextConfig {
     readonly saveButtonText: string = "Save";
     readonly cancelButtonText: string = "Cancel";
     readonly settingsButtonText: string = "Settings";
+    readonly refreshButtonText: string = "Refresh";
 
     // Drag & Drop
     readonly cdkDragPlaceholderText: string = "Move here...";

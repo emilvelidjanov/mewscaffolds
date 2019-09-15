@@ -3,36 +3,36 @@
     <div class="card-title h5">
       {{dataLabel}} {{textConfig.formLabel}}
     </div>
-    <form *ngIf="getSelectedData().length > 0">
-      <div *ngIf="name !== null" class="form-group">
+    <form *ngIf="isFormVisible">
+      <div *ngIf="hasPropertyMap.get(mewDataProperties.NAME)" class="form-group">
         <!-- TODO: naming number hint -->
         <label>{{textConfig.nameInputLabel}}</label>
         <input type="text" class="form-control" [value]="name" [name]="nameInputName" [placeholder]="nameInputPlaceholder"
           (input)="onInput($event.target.name, $event.target.value)" (focusout)="recalculatePaths()">
       </div>
-      <div *ngIf="position !== null" class="form-group form-row">
+      <div *ngIf="hasPropertyMap.get(mewDataProperties.POSITION)" class="form-group form-row">
         <div class="col">
           <label>{{textConfig.positionXInputLabel}}</label>
-          <input type="number" class="form-control" [value]="position.x" [name]="positionXInputName"
+          <input type="number" class="form-control" [value]="position?.x" [name]="positionXInputName"
             [placeholder]="positionXInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
         <div class="col">
           <label>{{textConfig.positionYInputLabel}}</label>
-          <input type="number" class="form-control" [value]="position.y" [name]="positionYInputName"
+          <input type="number" class="form-control" [value]="position?.y" [name]="positionYInputName"
             [placeholder]="positionYInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
       </div>
-      <div *ngIf="angle !== null" class="form-group">
+      <div *ngIf="hasPropertyMap.get(mewDataProperties.ANGLE)" class="form-group">
         <label>{{textConfig.angleInputLabel}}</label>
         <input type="number" class="form-control" [value]="angle" [name]="angleInputName" [placeholder]="angleInputPlaceholder"
           (input)="onInput($event.target.name, $event.target.value)">
       </div>
-      <div *ngIf="length !== null" class="form-group">
+      <div *ngIf="hasPropertyMap.get(mewDataProperties.LENGTH)" class="form-group">
         <label>{{textConfig.lengthInputLabel}}</label>
         <input type="number" class="form-control" [value]="length" [name]="lengthInputName" [placeholder]="lengthInputPlaceholder"
           (input)="onInput($event.target.name, $event.target.value)">
       </div>
-      <div *ngIf="distanceToNextFiber !== null" class="form-group">
+      <div *ngIf="hasPropertyMap.get(mewDataProperties.DISTANCE_TO_NEXT_FIBER)" class="form-group">
         <label>{{textConfig.distanceToNextFiberInputLabel}}</label>
         <input type="number" class="form-control" [value]="distanceToNextFiber" [name]="distanceToNextFiberInputName"
           [placeholder]="distanceToNextFiberInputPlaceholder"

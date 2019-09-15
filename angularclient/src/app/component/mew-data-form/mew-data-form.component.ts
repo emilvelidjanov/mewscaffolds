@@ -3,6 +3,7 @@ import { TextConfig } from 'src/app/config/text-config/text-config';
 import { MewData } from 'src/app/model/abstract/mew-data';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 import { Vector } from 'src/app/model/vector/vector';
+import { MewDataProperties } from 'src/app/enum/mew-data-properties';
 
 // TODO: cleanup
 // TODO: sanitize input and error messages (error checking, too)
@@ -18,118 +19,131 @@ export class MewDataFormComponent implements OnInit {
   @Input() label: string;
   @Input() dataLabel: string;
 
-  // TODO: cleanup
+  isFormVisible: boolean;
+  readonly mewDataProperties: any;
+  hasPropertyMap: Map<string, boolean>;
+  private hasPropertyMapIsPopulated: boolean;
+
   name: string;
   nameInputPlaceholder: string;
-  nameInputName: string;
   position: Vector;
   positionXInputPlaceholder: string;
   positionYInputPlaceholder: string;
-  positionXInputName: string;
-  positionYInputName: string;
   angle: number;
   angleInputPlaceholder: string;
-  angleInputName: string;
   length: number;
   lengthInputPlaceholder: string;
-  lengthInputName: string;
   distanceToNextFiber: number;
   distanceToNextFiberInputPlaceholder: string;
-  distanceToNextFiberInputName: string;
+
+  readonly nameInputName: string;
+  readonly positionXInputName: string;
+  readonly positionYInputName: string;
+  readonly angleInputName: string;
+  readonly lengthInputName: string;
+  readonly distanceToNextFiberInputName: string;
 
   constructor(private textConfig: TextConfig, private mewDataService: MewDataService) {
     this.data = [];
     this.label = "";
     this.dataLabel = "";
-    this.name = null;
-    this.nameInputPlaceholder = "";
-    this.nameInputName = "name";
-    this.position = null;
-    this.positionXInputPlaceholder = "";
-    this.positionYInputPlaceholder = "";
-    this.positionXInputName = "positionX";
-    this.positionYInputName = "positionY";
-    this.angle = null;
-    this.angleInputPlaceholder = "";
-    this.angleInputName = "angle";
-    this.length = null;
-    this.lengthInputPlaceholder = "";
-    this.lengthInputName = "length";
-    this.distanceToNextFiber = null;
-    this.distanceToNextFiberInputPlaceholder = "";
-    this.distanceToNextFiberInputName = "distanceToNextFiber";
+
+    this.isFormVisible = false;
+    this.mewDataProperties = MewDataProperties;
+    this.hasPropertyMap = new Map<string, boolean>([
+      [MewDataProperties.NAME, false],
+      [MewDataProperties.POSITION, false],
+      [MewDataProperties.ANGLE, false],
+      [MewDataProperties.LENGTH, false],
+      [MewDataProperties.DISTANCE_TO_NEXT_FIBER, false],
+    ]);
+    this.hasPropertyMapIsPopulated = false;
+    
+    this.initializeForm("");
+
+    this.nameInputName = MewDataProperties.NAME;
+    this.positionXInputName = MewDataProperties.POSITION + "X";
+    this.positionYInputName = MewDataProperties.POSITION + "Y";
+    this.angleInputName = MewDataProperties.ANGLE;
+    this.lengthInputName = MewDataProperties.LENGTH;
+    this.distanceToNextFiberInputName = MewDataProperties.DISTANCE_TO_NEXT_FIBER;
   }
 
   ngOnInit() {
   }
 
-  // TODO: fix multiple placeholder
   ngOnChanges() {
-    let viewData: MewData = this.getViewData();
-    if (viewData != null) {
-      let properties: [string, any][]  = Object.entries(viewData);
+    if (!this.hasPropertyMapIsPopulated && this.data.length > 0) {
+      Object.keys(this.data[0]).forEach(key => {
+        if (this.hasPropertyMap.get(key) === false) {
+          this.hasPropertyMap.set(key, true);
+        }
+      });
+      this.hasPropertyMapIsPopulated = true;
+    }
+
+    let viewData: MewData[] = this.getSelectedData();
+    this.isFormVisible = true;
+    if (viewData.length === 1) {
+      let properties: [string, any][] = Object.entries(viewData[0]);
       properties.forEach(property => {
         switch (property[0]) {
-          case "name":
+          case MewDataProperties.NAME:
             this.name = property[1];
             this.nameInputPlaceholder = this.textConfig.nameInputPlaceholder;
             break;
-          case "position":
+          case MewDataProperties.POSITION:
             this.position = property[1];
             this.positionXInputPlaceholder = this.textConfig.positionXInputPlaceholder;
             this.positionYInputPlaceholder = this.textConfig.positionYInputPlaceholder;
             break;
-          case "angle":
+          case MewDataProperties.ANGLE:
             this.angle = property[1];
             this.angleInputPlaceholder = this.textConfig.angleInputPlaceholder;
             break;
-          case "length":
+          case MewDataProperties.LENGTH:
             this.length = property[1];
             this.lengthInputPlaceholder = this.textConfig.lengthInputPlaceholder;
             break;
-          case "distanceToNextFiber":
+          case MewDataProperties.DISTANCE_TO_NEXT_FIBER:
             this.distanceToNextFiber = property[1];
             this.distanceToNextFiberInputPlaceholder = this.textConfig.distanceToNextFiberInputPlaceholder;
             break;
         }
       });
     }
-  }
-
-  getViewData(): MewData {
-    let selected: MewData[] = this.getSelectedData();
-    let viewData: MewData = null;
-    if (selected.length == 1) {
-      viewData = selected.pop();
+    else if (viewData.length > 1) {
+      this.initializeForm(this.textConfig.multiplePlaceholder);
     }
-    return viewData;
+    else {
+      this.isFormVisible = false;
+    }
   }
 
   getSelectedData(): MewData[] {
-    return this.data.filter(token => token.isSelected);
+    return this.data.filter(item => item.isSelected);
   }
 
-  // TODO: cleanup
   onInput(name: string, value: string) {
     this.getSelectedData().forEach(item => {
       switch (name) {
         case this.nameInputName:
-          item["name"] = value;
+          item[MewDataProperties.NAME] = value;
           break;
         case this.positionXInputName:
-          item["position"].x = parseFloat(value);
+          item[MewDataProperties.POSITION].x = parseFloat(value);
           break;
         case this.positionYInputName:
-          item["position"].y = parseFloat(value);
+          item[MewDataProperties.POSITION].y = parseFloat(value);
           break;
         case this.angleInputName:
-          item["angle"] = parseFloat(value);
+          item[MewDataProperties.ANGLE] = parseFloat(value);
           break;
         case this.lengthInputName:
-          item["length"] = parseFloat(value);
+          item[MewDataProperties.LENGTH] = parseFloat(value);
           break;
         case this.distanceToNextFiberInputName:
-          item["distanceToNextFiber"] = parseFloat(value);
+          item[MewDataProperties.DISTANCE_TO_NEXT_FIBER] = parseFloat(value);
           break;
       }
     });
@@ -140,5 +154,19 @@ export class MewDataFormComponent implements OnInit {
     this.getSelectedData().forEach(item => {
       this.mewDataService.recalculatePathsRecursive(item);
     });
+  }
+
+  private initializeForm(initString: string) {
+    this.name = null;
+    this.nameInputPlaceholder = initString;
+    this.position = null;
+    this.positionXInputPlaceholder = initString;
+    this.positionYInputPlaceholder = initString;
+    this.angle = null;
+    this.angleInputPlaceholder = initString;
+    this.length = null;
+    this.lengthInputPlaceholder = initString;
+    this.distanceToNextFiber = null;
+    this.distanceToNextFiberInputPlaceholder = initString;
   }
 }

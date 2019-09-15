@@ -1,4 +1,5 @@
 import { MewData } from '../abstract/mew-data';
+import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
 
 export class Fiber extends MewData {
     
@@ -7,7 +8,7 @@ export class Fiber extends MewData {
 
     constructor(id: number, name: string, parent: MewData) {
         super(id, name, null, parent);
-        this.length = 15;
-        this.distanceToNextFiber = 0.5;
+        this.length = SettingsConfig.instance.defaultFiberLength;
+        this.distanceToNextFiber = SettingsConfig.instance.defaultFiberDistanceToNextFiber;
     }
 }

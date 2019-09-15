@@ -1,13 +1,40 @@
 import { Injectable } from '@angular/core';
+import { TextConfig } from '../text-config/text-config';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class SettingsConfig {
 
-    multiSelectOn: boolean;
+  static instance: SettingsConfig;
 
-    constructor() {
-        this.multiSelectOn = false;
-    }
+  multiSelectOn: boolean;
+
+  defaultScaffoldName: string;
+  defaultScaffoldPositionX: number;
+  defaultScaffoldPositionY: number;
+
+  defaultLayerName: string;
+  defaultLayerAngle: number;
+
+  defaultFiberName: string;
+  defaultFiberLength: number;
+  defaultFiberDistanceToNextFiber: number;
+
+  constructor(private textConfig: TextConfig) {
+    SettingsConfig.instance = this;
+
+    this.multiSelectOn = false;
+
+    this.defaultScaffoldName = textConfig.scaffold;
+    this.defaultScaffoldPositionX = 0;
+    this.defaultScaffoldPositionY = 0;
+
+    this.defaultLayerName = textConfig.layer;
+    this.defaultLayerAngle = 0;
+
+    this.defaultFiberName = textConfig.fiber;
+    this.defaultFiberLength = 15;
+    this.defaultFiberDistanceToNextFiber = 0.5;
+  }
 }

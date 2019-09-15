@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/print")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://192.168.2.101:4200"})
 @Slf4j
 public class PrintController {
 
