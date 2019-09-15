@@ -16,4 +16,12 @@ public class Fiber {
     @NotNull
     @NonNull
     private String name;
+
+    @NotNull
+    @NonNull
+    private Double length = 15.0d;
+
+    @NotNull
+    @NonNull
+    private Double distanceToNextFiber = 0.5d;
 }

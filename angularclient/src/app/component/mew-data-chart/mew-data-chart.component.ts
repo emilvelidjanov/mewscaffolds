@@ -59,7 +59,7 @@ export class MewDataChartComponent implements OnInit {
 
   // TODO: evaluate? optimize?
   ngOnChanges() {
-    this.refresh();
+    // this.refresh();
   }
 
   // TODO: backend calculation
@@ -70,31 +70,32 @@ export class MewDataChartComponent implements OnInit {
     this.chartDataSets = [{
       data: [],
     }];
-    for (let index = 0; index < 3; index++) {
-      this.chartDataSets.push({
-        backgroundColor: this.defaultChartDataSet.backgroundColor,
-        borderColor: this.defaultChartDataSet.borderColor,
-        borderWidth: this.defaultChartDataSet.borderWidth,
-        lineTension: this.defaultChartDataSet.lineTension,
-        pointBackgroundColor: this.defaultChartDataSet.pointBackgroundColor,
-        pointBorderColor: this.defaultChartDataSet.pointBorderColor,
-        pointHoverBackgroundColor: this.defaultChartDataSet.pointHoverBackgroundColor,
-        pointHoverBorderColor: this.defaultChartDataSet.pointHoverBorderColor,
-        pointRadius: this.defaultChartDataSet.pointRadius,
-        pointRotation: this.defaultChartDataSet.pointRotation,
-        pointStyle: this.defaultChartDataSet.pointStyle,
-        data: [{
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-        }, {
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-        }, {
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-        },],
-      });
-    }
+    this.mewDataService.fetchChartData(this.getViewData());
+    // for (let index = 0; index < 3; index++) {
+    //   this.chartDataSets.push({
+    //     backgroundColor: this.defaultChartDataSet.backgroundColor,
+    //     borderColor: this.defaultChartDataSet.borderColor,
+    //     borderWidth: this.defaultChartDataSet.borderWidth,
+    //     lineTension: this.defaultChartDataSet.lineTension,
+    //     pointBackgroundColor: this.defaultChartDataSet.pointBackgroundColor,
+    //     pointBorderColor: this.defaultChartDataSet.pointBorderColor,
+    //     pointHoverBackgroundColor: this.defaultChartDataSet.pointHoverBackgroundColor,
+    //     pointHoverBorderColor: this.defaultChartDataSet.pointHoverBorderColor,
+    //     pointRadius: this.defaultChartDataSet.pointRadius,
+    //     pointRotation: this.defaultChartDataSet.pointRotation,
+    //     pointStyle: this.defaultChartDataSet.pointStyle,
+    //     data: [{
+    //       x: Math.random() * 100,
+    //       y: Math.random() * 100,
+    //     }, {
+    //       x: Math.random() * 100,
+    //       y: Math.random() * 100,
+    //     }, {
+    //       x: Math.random() * 100,
+    //       y: Math.random() * 100,
+    //     },],
+    //   });
+    // }
   }
 
   getViewData(): Layer[] {

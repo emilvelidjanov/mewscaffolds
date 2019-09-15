@@ -21,4 +21,8 @@ public class Layer {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Fiber> children;
+
+    @NotNull
+    @NonNull
+    private Double angle = 0.0d;
 }

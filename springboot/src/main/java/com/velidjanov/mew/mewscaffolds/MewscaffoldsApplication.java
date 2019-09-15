@@ -49,16 +49,16 @@ public class MewscaffoldsApplication {
 				layerRepository.saveAndFlush(item);
 			});
 			printRepository.findAll().forEach(item -> {
-				log.info("Print: {}", item);
+				log.debug("Print: {}", item);
 			});
 			scaffoldRepository.findAll().forEach(item -> {
-				log.info("Scaffold: {}", item);
+				log.debug("Scaffold: {}", item);
 			});
 			layerRepository.findAll().forEach(item -> {
-				log.info("Layer: {}", item);
+				log.debug("Layer: {}", item);
 			});
 			fiberRepository.findAll().forEach(item -> {
-				log.info("Fiber: {}", item);
+				log.debug("Fiber: {}", item);
 			});
 		};
 	}

@@ -24,31 +24,31 @@ public class PrintController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Print getById(@PathVariable("id") final Long id) {
-        log.info("getById() <<< id: {}", id);
+        log.debug("getById() <<< id: {}", id);
         Print print = printRepository.findById(id).orElse(null);
-        log.info("getById() >>> Print: {}", print);
+        log.debug("getById() >>> Print: {}", print);
         return print;
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public List<Print> getAll() {
-        log.info("getAll() <<<");
+        log.debug("getAll() <<<");
         List<Print> prints = printRepository.findAll();
-        log.info("getAll() >>> List<Print>: {}", prints);
+        log.debug("getAll() >>> List<Print>: {}", prints);
         return prints;
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Print save(@RequestBody final Print print) {
-        log.info("save() <<< print: {}", print);
+        log.debug("save() <<< print: {}", print);
         Print savedPrint = printRepository.saveAndFlush(print);
-        log.info("save() >>> Print: {}", savedPrint);
+        log.debug("save() >>> Print: {}", savedPrint);
         return savedPrint;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") final Long id) {
-        log.info("delete() <<< id: {}", id);
+        log.debug("delete() <<< id: {}", id);
         printRepository.findById(id).ifPresent(print -> printRepository.delete(print));
     }
 }

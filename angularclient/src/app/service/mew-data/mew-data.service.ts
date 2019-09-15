@@ -18,7 +18,9 @@ export class MewDataService {
 
   static instance: MewDataService;
 
-  readonly baseUrl: string = "http://localhost:8080/print/";
+  readonly printUrl: string = "http://localhost:8080/print/";
+  readonly chartUrl: string = "http://localhost:8080/chart/";
+  readonly chartCalculateEndpoint: string = "/calculate";
 
   private unsubscribe: Subject<any>;
   private printSource: Subject<Print>;
@@ -35,7 +37,7 @@ export class MewDataService {
   }
 
   fetchPrintById(id: number): Observable<Print> {
-    this.httpClient.get<Print>(this.baseUrl + id).pipe(takeUntil(this.unsubscribe)).subscribe(print => {
+    this.httpClient.get<Print>(this.printUrl + id).pipe(takeUntil(this.unsubscribe)).subscribe(print => {
       if (print) {
         this.print = this.initializeFetchedPrint(print);
       }
@@ -52,6 +54,13 @@ export class MewDataService {
 
   pushNextPrint(print: Print): void {
     this.printSource.next(print);
+  }
+
+  // TODO: deep copy etc.
+  fetchChartData(layers: Layer[]): any {
+    this.httpClient.post<Layer[]>(this.chartUrl + this.chartCalculateEndpoint, layers).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      console.log(data);
+    });
   }
 
   getScaffoldsOfPrint(print: Print): Scaffold[] {

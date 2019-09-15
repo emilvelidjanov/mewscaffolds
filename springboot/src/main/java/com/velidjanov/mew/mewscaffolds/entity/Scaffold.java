@@ -21,4 +21,12 @@ public class Scaffold {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Layer> children;
+
+    @NotNull
+    @NonNull
+    private Double positionX = 0.0d;
+
+    @NotNull
+    @NonNull
+    private Double positionY = 0.0d;
 }
