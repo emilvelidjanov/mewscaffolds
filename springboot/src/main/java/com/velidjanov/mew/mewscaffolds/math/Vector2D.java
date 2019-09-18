@@ -1,5 +1,6 @@
 package com.velidjanov.mew.mewscaffolds.math;
 
+// TODO: cleanup!
 public class Vector2D {
 
     public double x;

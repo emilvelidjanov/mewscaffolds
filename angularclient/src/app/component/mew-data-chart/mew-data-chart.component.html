@@ -4,7 +4,8 @@
       {{textConfig.layer}} {{textConfig.chartTitle}}
       <button type="button" class="btn btn-secondary ml-auto" (click)="refresh()">{{textConfig.refreshButtonText}}</button>
     </div>
-    <canvas baseChart [datasets]="chartDataSets" [options]="chartOptions" [chartType]="chartType">
+    <!-- TODO: zoom & pan -->
+    <canvas baseChart [datasets]="chartDataSets" [options]="chartOptions" [chartType]="chartType" [colors]="chartColors">
     </canvas>
   </div>
 </div>

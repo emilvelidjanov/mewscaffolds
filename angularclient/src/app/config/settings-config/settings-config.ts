@@ -24,7 +24,7 @@ export class SettingsConfig {
   constructor(private textConfig: TextConfig) {
     SettingsConfig.instance = this;
 
-    this.multiSelectOn = false;
+    this.multiSelectOn = true;
 
     this.defaultScaffoldName = textConfig.scaffold;
     this.defaultScaffoldPositionX = 0;

@@ -9,6 +9,7 @@ import { MewData } from 'src/app/model/abstract/mew-data';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
+import { Vector } from 'src/app/model/vector/vector';
 
 // TODO: seperate into one service for each model
 @Injectable({
@@ -18,8 +19,8 @@ export class MewDataService {
 
   static instance: MewDataService;
 
-  readonly printUrl: string = "http://localhost:8080/print/";
-  readonly chartUrl: string = "http://localhost:8080/chart/";
+  readonly printUrl: string = "http://localhost:8080/print";
+  readonly chartUrl: string = "http://localhost:8080/chart";
   readonly chartCalculateEndpoint: string = "/calculate";
 
   private unsubscribe: Subject<any>;
@@ -37,7 +38,7 @@ export class MewDataService {
   }
 
   fetchPrintById(id: number): Observable<Print> {
-    this.httpClient.get<Print>(this.printUrl + id).pipe(takeUntil(this.unsubscribe)).subscribe(print => {
+    this.httpClient.get<Print>(this.printUrl + "/" + id).pipe(takeUntil(this.unsubscribe)).subscribe(print => {
       if (print) {
         this.print = this.initializeFetchedPrint(print);
       }
@@ -56,11 +57,12 @@ export class MewDataService {
     this.printSource.next(print);
   }
 
-  // TODO: deep copy etc.
-  fetchChartData(layers: Layer[]): any {
-    this.httpClient.post<Layer[]>(this.chartUrl + this.chartCalculateEndpoint, layers).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      console.log(data);
+  fetchChartData(layers: Layer[]): Observable<[number, Vector[]]> {
+    let serializedLayers: Object[] = [];
+    layers.forEach(layer => {
+      serializedLayers.push(this.serializeLayer(layer));
     });
+    return this.httpClient.post<[number, Vector[]]>(this.chartUrl + this.chartCalculateEndpoint, serializedLayers).pipe(takeUntil(this.unsubscribe));
   }
 
   getScaffoldsOfPrint(print: Print): Scaffold[] {
@@ -158,12 +160,16 @@ export class MewDataService {
     let id: number = this.getNextChildId(parent);
     if (data instanceof Scaffold) {
       copy = new Scaffold(id, data.name, parent);
+      copy["position"] = data["position"];
     }
     else if (data instanceof Layer) {
       copy = new Layer(id, data.name, parent);
+      copy["angle"] = data["angle"];
     }
     else if (data instanceof Fiber) {
       copy = new Fiber(id, data.name, parent);
+      copy["length"] = data["length"];
+      copy["distanceToNextFiber"] = data["distanceToNextFiber"];
     }
     if (data.children != null) {
       data.children.forEach(child => {
@@ -171,6 +177,37 @@ export class MewDataService {
       });
     }
     return copy;
+  }
+
+  // Really... clean this up...
+  serializeLayer(layer: Layer): any {
+    let result = {
+      id: layer.id,
+      name: layer.name,
+      path: layer.path,
+      children: [],
+      isSelected: layer.isSelected,
+      isPersisted: layer.isPersisted,
+      angle: layer.angle,
+    }
+    layer.children.forEach(fiber => {
+      result.children.push(this.serializeFiber(fiber as Fiber));
+    });
+    return result;
+  }
+
+  serializeFiber(fiber: Fiber): any {
+    let result = {
+      id: fiber.id,
+      name: fiber.name,
+      path: fiber.path,
+      children: fiber.children,
+      isSelected: fiber.isSelected,
+      isPersisted: fiber.isPersisted,
+      length: fiber.length,
+      distanceToNextFiber: fiber.distanceToNextFiber,
+    }
+    return result;
   }
 
   detachChildFromParent(child: MewData): MewData {
