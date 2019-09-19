@@ -32,19 +32,26 @@ public class MewscaffoldsApplication {
 				printRepository.saveAndFlush(item);
 			});
 			scaffoldRepository.findAll().forEach(item -> {
+				Double baseAngle = 0.0d;
+				Double angleIncrement = 22.5d;
 				ArrayList<Layer> layers = new ArrayList<>();
-				layers.add(new Layer("Layer 1"));
-				layers.add(new Layer("Layer 2"));
-				layers.add(new Layer("Layer 3"));
+				for (int i = 1; i < 9; i++) {
+					Layer layer = new Layer("Layer " + i);
+					layer.setAngle(baseAngle);
+					baseAngle += angleIncrement;
+					layers.add(layer);
+				}
 				item.setChildren(layers);
 				scaffoldRepository.saveAndFlush(item);
 			});
 			layerRepository.findAll().forEach(item -> {
 				ArrayList<Fiber> fibers = new ArrayList<>();
-				fibers.add(new Fiber("Fiber 1"));
-				fibers.add(new Fiber("Fiber 2"));
-				fibers.add(new Fiber("Fiber 3"));
-				fibers.add(new Fiber("Fiber 4"));
+				for (int i = 1; i < 32; i++) {
+					Fiber fiber = new Fiber("Fiber " + i);
+					fiber.setLength(30.0d);
+					fiber.setDistanceToNextFiber(1.0d);
+					fibers.add(fiber);
+				}
 				item.setChildren(fibers);
 				layerRepository.saveAndFlush(item);
 			});
