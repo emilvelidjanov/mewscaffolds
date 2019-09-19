@@ -252,12 +252,16 @@ export class MewDataService {
     print.children.forEach(scaffold => {
       let newScaffold: Scaffold = new Scaffold(scaffold.id, scaffold.name, newPrint);
       newScaffold.isPersisted = true;
+      newScaffold.position = scaffold["position"];
       scaffold.children.forEach(layer => {
         let newLayer: Layer = new Layer(layer.id, layer.name, newScaffold);
         newLayer.isPersisted = true;
+        newLayer.angle = layer["angle"];
         layer.children.forEach(fiber => {
           let newFiber: Fiber = new Fiber(fiber.id, fiber.name, newLayer);
           newFiber.isPersisted = true;
+          newFiber.length = fiber["length"];
+          newFiber.distanceToNextFiber = fiber["distanceToNextFiber"];
           newLayer.children.push(newFiber);
         });
         newScaffold.children.push(newLayer);
