@@ -1,34 +1,60 @@
-; >>>>>>>>>>>>>>>>>>>> CONFIGURATION <<<<<<<<<<<<<<<<<<<<
-T=770
-P=40
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CONFIGURATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+; Temparature
+;T = 770
+; Pressure
+;P = 40
 
 ; Maximum width of the collector in X direction
 1 XMAX! = 230
 ; Minimum width of the collector in X direction
-1 XMIN! = 70
+1 XMIN! = 71
 ; Maximum height of the collector in Y direction
-1 YMAX! = 194
+1 YMAX! = 212
 ; Minimum height of the collector in Y direction
 1 YMIN! = 40
 ; Distance of print head from the collector in Z direction
 1 ZDIST! = 4
 ; Speed / feedrate of the print head
-1 SPEED! = 350 
+1 SPEED! = 300 
+
+; The height of a single slide
+1 SLIDE_HEIGHT! = 26
+; The width of a single slide
+1 SLIDE_WIDTH! = 76
+; Margin to keep some extra space from the slide edges
+1 SLIDE_MARGIN! = 2
+
+; Height of the stabilization area
+1 STAB_HEIGHT! = 15
+; Width of the stabilization area
+1 STAB_WIDTH! = 15
 
 LP moveAbsoluteZ(ZDIST!)
 LP moveAbsolute(XMIN!, YMAX!, SPEED!)
 LP initCoordinateSystem()
 
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CONFIGURATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-; >>>>>>>>>>>>>>>>>>>> VARIABLES <<<<<<<<<<<<<<<<<<<<
-; Margin to keep some extra space from the slide edges
-1 SLIDE_MARGIN! = 2
-; The height of a single slide
-1 SLIDE_HEIGHT! = 26
-; The width of a single slide
-1 SLIDE_WIDTH! = 76
 
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STABILIZATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+; Move in place so the stabilization is centered vertically on the slide
+LP moveRelative(SLIDE_MARGIN!, -SLIDE_MARGIN!, SPEED!)
+; Stabilize for about 10 minutes
+LP stabilize(1, 1, STAB_WIDTH!, STAB_HEIGHT!, 1, SPEED!)
+; Move to the slide above the stabilization slide
+LP moveAbsolute(0, -SLIDE_HEIGHT!, SPEED!)
+LP initCoordinateSystem()
+
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STABILIZATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> VARIABLES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+; TESTING VARIABLES
 ; Position of the scaffold in X
 1 X_SCAFFOLD_POSITION! = 0
 ; Position of the scaffold in Y
@@ -49,52 +75,168 @@ LP initCoordinateSystem()
 1 WAIT_IN! = 0.2
 ; Wait time out of the circular motion at the end of a fiber (in seconds)
 1 WAIT_OUT! = 0.06
-
-
-
-; >>>>>>>>>>>>>>>>>>>> STABILIZATION <<<<<<<<<<<<<<<<<<<<
-; Height of the stabilization area
-1 STAB_HEIGHT! = 15
-; Width of the stabilization area
-1 STAB_WIDTH! = 15
-; Move in place so the stabilization is centered vertically on the slide
-LP moveRelative(SLIDE_MARGIN!, SLIDE_HEIGHT! / 2, SPEED!)
-; Stabilize for about 10 minutes
-LP stabilize(1, 1, STAB_WIDTH!, STAB_HEIGHT!, 1, SPEED!)
-
-
-
-; >>>>>>>>>>>>>>>>>>>> MAIN PROGRAM <<<<<<<<<<<<<<<<<<<<
-; Move to the slide above the stabilization slide
-LP moveAbsolute(0, -SLIDE_HEIGHT! / 2, SPEED!)
-LP initCoordinateSystem()
-
-; Radius of the navigation from previous layer to next layer
+; Radius of the navigation from previous layer to next layer TEMPORARY
 1 ORBIT_RADIUS! = 10
-; Recalculate scaffold positions
-1 X_SCAFFOLD_POSITION! = SLIDE_MARGIN! + ORBIT_RADIUS! + LAYER_WIDTH! / 2
-1 Y_SCAFFOLD_POSITION! = -SLIDE_HEIGHT! / 2
-
-; Print
-; Layer at 0° angle
-LP navigateToNextLayer(X_SCAFFOLD_POSITION!, Y_SCAFFOLD_POSITION!, ORBIT_RADIUS!, FIBER_ANGLE!, FIBER_ANGLE!, LAYER_WIDTH!, LAYER_HEIGHT!)
-LP drawLayer(FIBER_NUMBER%, FIBER_LENGTH!, FIBER_DISTANCE!, FIBER_ANGLE!, WAIT_IN!, WAIT_OUT!, SPEED!)
-
-; Layer at 45° angle
-LP navigateToNextLayer(X_SCAFFOLD_POSITION!, Y_SCAFFOLD_POSITION!, ORBIT_RADIUS!, FIBER_ANGLE!, FIBER_ANGLE! + 45, LAYER_WIDTH!, LAYER_HEIGHT!)
-LP drawLayer(FIBER_NUMBER%, FIBER_LENGTH!, FIBER_DISTANCE!, FIBER_ANGLE! + 45, WAIT_IN!, WAIT_OUT!, SPEED!)
-
-; Layer at 90° angle
-LP navigateToNextLayer(X_SCAFFOLD_POSITION!, Y_SCAFFOLD_POSITION!, ORBIT_RADIUS!, FIBER_ANGLE! + 45, FIBER_ANGLE! + 90, LAYER_WIDTH!, LAYER_HEIGHT!)
-LP drawLayer(FIBER_NUMBER%, FIBER_LENGTH!, FIBER_DISTANCE!, FIBER_ANGLE! + 90, WAIT_IN!, WAIT_OUT!, SPEED!)
-
-; Layer at 135° angle
-LP navigateToNextLayer(X_SCAFFOLD_POSITION!, Y_SCAFFOLD_POSITION!, ORBIT_RADIUS!, FIBER_ANGLE! + 90, FIBER_ANGLE! + 135, LAYER_WIDTH!, LAYER_HEIGHT!)
-LP drawLayer(FIBER_NUMBER%, FIBER_LENGTH!, FIBER_DISTANCE!, FIBER_ANGLE! + 135, WAIT_IN!, WAIT_OUT!, SPEED!)
 
 
+; ACTUALLY USED VARIABLES
+; Number of scaffolds
+1 SCF_NUMBER% = 2
 
-; >>>>>>>>>>>>>>>>>>>> SUBROUTINES <<<<<<<<<<<<<<<<<<<<
+; Number of layers of each scaffold
+1 DIM LAY_NUMBERS% (2)
+1 LAY_NUMBERS%(1) = 4
+1 LAY_NUMBERS%(2) = 4
+
+; Maximum amount of layers
+1 MAX_LAY_NUMBER% = 0
+1 FOR I% = 1 TO SCF_NUMBER%
+1	IF LAY_NUMBERS%(I%) > MAX_LAY_NUMBER% THEN
+1		MAX_LAY_NUMBER% = LAY_NUMBERS%(I%)
+1	ENDIF
+1 NEXT I%
+
+; X coordinates of scaffolds
+; For now just for testing purposes
+1 DIM X_SCF_POSITIONS! (2)
+1 X_SCF_POSITIONS!(1) = SLIDE_MARGIN! + ORBIT_RADIUS! + 5
+1 X_SCF_POSITIONS!(2) = X_SCF_POSITIONS!(1) + 3 * ORBIT_RADIUS!
+
+; Y coordinates of scaffolds
+1 DIM Y_SCF_POSITIONS! (2)
+1 Y_SCF_POSITIONS!(1) = -SLIDE_HEIGHT! / 2
+1 Y_SCF_POSITIONS!(2) = -SLIDE_HEIGHT! / 2
+
+; Widths of each scaffolds layers
+1 DIM LAY_WIDTHS! (2, 4)
+1 FOR I% = 1 TO SCF_NUMBER%
+1	FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_WIDTHS!(I%, J%) = 15
+1	NEXT J%
+1 NEXT I%
+
+; Heights of each scaffolds layers
+1 DIM LAY_HEIGHTS! (2, 4)
+1 FOR I% = 1 TO SCF_NUMBER%
+1	FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_HEIGHTS!(I%, J%) = 15
+1 	NEXT J%
+1 NEXT I%
+
+; Orbit radii of each scaffold
+1 DIM SCF_ORBITS! (2)
+1 FOR I% = 1 TO SCF_NUMBER%
+1	SCF_ORBITS!(I%) = 0
+1 NEXT I%
+; Calculate all orbit radii 
+1 FOR I% = 1 TO SCF_NUMBER%
+1	FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		TMP_RADIUS! = SQRT(EXP(2, LAY_HEIGHTS!(I%, J%)) + EXP(2, LAY_WIDTHS!(I%, J%))) / 2
+1		IF TMP_RADIUS! > SCF_ORBITS!(I%) THEN
+			; Found the biggest radius of the scaffold, save it and add a safety margin to avoid errors
+1			SCF_ORBITS!(I%) = TMP_RADIUS! + 2
+1		ENDIF
+1	NEXT J%
+1 NEXT I%
+
+; Angles of each scaffolds layers
+1 DIM LAY_ANGLES! (2, 4)
+1 FOR I% = 1 TO SCF_NUMBER%
+1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_ANGLES!(I%, J%) = 0
+1	 NEXT J%
+1 NEXT I%
+1 LAY_ANGLES!(1, 1) = 0
+1 LAY_ANGLES!(1, 2) = 45
+1 LAY_ANGLES!(1, 3) = 90
+1 LAY_ANGLES!(1, 4) = 135
+1 LAY_ANGLES!(2, 1) = 0
+1 LAY_ANGLES!(2, 2) = 45
+1 LAY_ANGLES!(2, 3) = 90
+1 LAY_ANGLES!(2, 4) = 135
+
+; Distances between each fiber of each scaffolds layers
+1 DIM FIB_DISTANCES! (2, 4)
+1 FOR I% = 1 TO SCF_NUMBER%
+1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		FIB_DISTANCES!(I%, J%) = 0.2
+1	 NEXT J%
+1 NEXT I%
+
+; Number of fibers of each scaffolds layers
+1 DIM FIB_NUMBERS% (2, 4)
+1 FOR I% = 1 TO SCF_NUMBER%
+1	FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		TMP_DIST! = FIB_DISTANCES!(I%, J%)
+1		TMP_HEIGHT! = LAY_HEIGHTS!(I%, J%)
+		; Off by one, so 1 is added
+1		FIB_NUMBERS%(I%, J%) = INT(TMP_HEIGHT! / TMP_DIST!) + 1
+1	NEXT J%
+1 NEXT I%
+
+; Wait in times in seconds of each scaffolds layers
+1 DIM LAY_IN_WAITS! (2, 4)
+1 FOR I% = 1 TO SCF_NUMBER%
+1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_IN_WAITS!(I%, J%) = 0.2
+1	 NEXT J%
+1 NEXT I%
+
+; Wait out times in seconds of each scaffolds layers
+1 DIM LAY_OUT_WAITS! (2, 4)
+1 FOR I% = 1 TO SCF_NUMBER%
+1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_OUT_WAITS!(I%, J%) = 0.06
+1	 NEXT J%
+1 NEXT I%
+
+; Feedrates of each scaffolds layers
+1 DIM LAY_SPEEDS! (2, 4)
+1 FOR I% = 1 TO SCF_NUMBER%
+1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_SPEEDS!(I%, J%) = 300
+1	 NEXT J%
+1 NEXT I%
+
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> VARIABLES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MAIN PROGRAM <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+; Iterate all scaffolds
+1 FOR S% = 1 TO SCF_NUMBER%
+	; Set variables for next scaffold
+1 	RX_SCF_POSITION! = X_SCF_POSITIONS!(S%)
+1 	RY_SCF_POSITION! = Y_SCF_POSITIONS!(S%)
+1	RSCF_ORBIT! = SCF_ORBITS!(S%)
+	; Iterate all layers
+1 	FOR L% = 1 TO LAY_NUMBERS%(S%)
+		; Set variables for next layer
+1		RLAY_ANGLE! = LAY_ANGLES!(S%, L%)
+1		RPREV_LAY_ANGLE! = RLAY_ANGLE!
+1		IF L% > 1 THEN
+1			RPREV_LAY_ANGLE! = LAY_ANGLES!(S%, L% - 1)
+1		ENDIF
+1		RLAY_WIDTH! = LAY_WIDTHS!(S%, L%)
+1		RLAY_HEIGHT! = LAY_HEIGHTS!(S%, L%)
+1		RFIB_NUMBER% = FIB_NUMBERS%(S%, L%)
+1		RFIB_DISTANCE! = FIB_DISTANCES!(S%, L%)
+1		RLAY_IN_WAIT! = LAY_IN_WAITS!(S%, L%)
+1		RLAY_OUT_WAIT! = LAY_OUT_WAITS!(S%, L%)
+1		RLAY_SPEED! = LAY_SPEEDS!(S%, L%)
+		; Print
+		LP navigateToNextLayer(RX_SCF_POSITION!, RY_SCF_POSITION!, RSCF_ORBIT!, RPREV_LAY_ANGLE!, RLAY_ANGLE!, RLAY_WIDTH!, RLAY_HEIGHT!)
+		LP drawLayer(RFIB_NUMBER%, RLAY_WIDTH!, RFIB_DISTANCE!, RLAY_ANGLE!, RLAY_IN_WAIT!, RLAY_OUT_WAIT!, RLAY_SPEED!)
+1 	NEXT L%
+1 NEXT S%
+
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MAIN PROGRAM <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SUBROUTINES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 ; Moves in absolute coordinates.
 ; P1 - X coordinate
 ; P2 - Y coordinate
@@ -353,13 +495,27 @@ LPS navigateToNextLayer
 1	Y_START_POINT! = Y_CENTER! + (ORBIT_RADIUS! * SIN(INTO_ORBIT_ANGLE!))
 1	X_END_POINT! = X_CENTER! + (ORBIT_RADIUS! * COS(ORBIT_END_POINT_ANGLE!))
 1	Y_END_POINT! = Y_CENTER! + (ORBIT_RADIUS! * SIN(ORBIT_END_POINT_ANGLE!))
-1	DEF_SPEED! = 350
+1	DEF_SPEED! = 300
 1	DEF_WAIT! = 0.2
 LP moveAbsolute(X_START_POINT!, Y_START_POINT!, DEF_SPEED!)
 LP moveClockwiseAbsolute(X_END_POINT!, Y_END_POINT!, X_CENTER! - X_START_POINT!, Y_CENTER! - Y_START_POINT!, DEF_SPEED!)
 LP waitForSeconds(DEF_WAIT!)
 LP movePolarRelativeX(CORR_HEIGHT_LENGTH!, CORR_ANGLE!, DEF_SPEED!)
 LP movePolarRelativeX(CORR_WIDTH_LENGTH!, NEXT_LAYER_ANGLE!, DEF_SPEED!)
+PEND
+
+; Draws a scaffold. DEPRECATED!!!
+; P1 - X and Y coordinates of the scaffold on the workarea (center of scaffold) as array (i.e. [X, Y])
+; P2 - Number of layers
+; P3 - Number of fibers of each layer as array (Array length should equal P2)
+; P4 - Length of all fibers of each layer as array (Array length should equal P2)
+; P5 - Distance between all fibers of each layer as array (Array length should equal P2)
+; P6 - Mathematical angle of all fibers of each layer as array (Array length should equal P2)
+; P7 - Wait time into the circle motion in seconds of all fibers of each layer as array (Array length should equal P2)
+; P8 - Wait time out of the circle motion in seconds of all fibers of each layer as array (Array length should equal P2)
+; P9 - Feedrate for every layer as array (Array length should equal P2)
+LPS drawScaffold
+
 PEND
 
 LPS stabilize
@@ -414,3 +570,4 @@ G3 	X[CRAD]	Y[-CRAD]	R[CRAD]	F[FEEDL]
 1 NEXT I%
 PEND
 
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SUBROUTINES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
