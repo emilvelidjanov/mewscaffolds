@@ -43,7 +43,7 @@ LP initCoordinateSystem()
 ; Move in place so the stabilization is centered vertically on the slide
 LP moveRelative(SLIDE_MARGIN!, -SLIDE_MARGIN!, SPEED!)
 ; Stabilize for about 10 minutes
-LP stabilize(1, 1, STAB_WIDTH!, STAB_HEIGHT!, 1, SPEED!)
+;LP stabilize(1, 1, STAB_WIDTH!, STAB_HEIGHT!, 1, SPEED!)
 ; Move to the slide above the stabilization slide
 LP moveAbsolute(0, -SLIDE_HEIGHT!, SPEED!)
 LP initCoordinateSystem()
@@ -81,12 +81,13 @@ LP initCoordinateSystem()
 
 ; ACTUALLY USED VARIABLES
 ; Number of scaffolds
-1 SCF_NUMBER% = 2
+1 SCF_NUMBER% = 3
 
 ; Number of layers of each scaffold
-1 DIM LAY_NUMBERS% (2)
+1 DIM LAY_NUMBERS% (3)
 1 LAY_NUMBERS%(1) = 4
 1 LAY_NUMBERS%(2) = 4
+1 LAY_NUMBERS%(3) = 4
 
 ; Maximum amount of layers
 1 MAX_LAY_NUMBER% = 0
@@ -98,17 +99,19 @@ LP initCoordinateSystem()
 
 ; X coordinates of scaffolds
 ; For now just for testing purposes
-1 DIM X_SCF_POSITIONS! (2)
+1 DIM X_SCF_POSITIONS! (3)
 1 X_SCF_POSITIONS!(1) = SLIDE_MARGIN! + ORBIT_RADIUS! + 5
 1 X_SCF_POSITIONS!(2) = X_SCF_POSITIONS!(1) + 3 * ORBIT_RADIUS!
+1 X_SCF_POSITIONS!(3) = X_SCF_POSITIONS!(2) + 3 * ORBIT_RADIUS!
 
 ; Y coordinates of scaffolds
-1 DIM Y_SCF_POSITIONS! (2)
-1 Y_SCF_POSITIONS!(1) = -SLIDE_HEIGHT! / 2
-1 Y_SCF_POSITIONS!(2) = -SLIDE_HEIGHT! / 2
+1 DIM Y_SCF_POSITIONS! (3)
+1 Y_SCF_POSITIONS!(3) = -SLIDE_HEIGHT! / 2
+1 Y_SCF_POSITIONS!(2) = -SLIDE_HEIGHT! - (SLIDE_HEIGHT! / 2)
+1 Y_SCF_POSITIONS!(1) = -2 * SLIDE_HEIGHT! - (SLIDE_HEIGHT! / 2)
 
 ; Widths of each scaffolds layers
-1 DIM LAY_WIDTHS! (2, 4)
+1 DIM LAY_WIDTHS! (3, 4)
 1 FOR I% = 1 TO SCF_NUMBER%
 1	FOR J% = 1 TO LAY_NUMBERS%(I%)
 1		LAY_WIDTHS!(I%, J%) = 15
@@ -116,7 +119,7 @@ LP initCoordinateSystem()
 1 NEXT I%
 
 ; Heights of each scaffolds layers
-1 DIM LAY_HEIGHTS! (2, 4)
+1 DIM LAY_HEIGHTS! (3, 4)
 1 FOR I% = 1 TO SCF_NUMBER%
 1	FOR J% = 1 TO LAY_NUMBERS%(I%)
 1		LAY_HEIGHTS!(I%, J%) = 15
@@ -124,7 +127,7 @@ LP initCoordinateSystem()
 1 NEXT I%
 
 ; Orbit radii of each scaffold
-1 DIM SCF_ORBITS! (2)
+1 DIM SCF_ORBITS! (3)
 1 FOR I% = 1 TO SCF_NUMBER%
 1	SCF_ORBITS!(I%) = 0
 1 NEXT I%
@@ -140,31 +143,35 @@ LP initCoordinateSystem()
 1 NEXT I%
 
 ; Angles of each scaffolds layers
-1 DIM LAY_ANGLES! (2, 4)
+1 DIM LAY_ANGLES! (3, 4)
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
 1		LAY_ANGLES!(I%, J%) = 0
 1	 NEXT J%
 1 NEXT I%
 1 LAY_ANGLES!(1, 1) = 0
-1 LAY_ANGLES!(1, 2) = 45
-1 LAY_ANGLES!(1, 3) = 90
-1 LAY_ANGLES!(1, 4) = 135
+1 LAY_ANGLES!(1, 2) = 22.5
+1 LAY_ANGLES!(1, 3) = 45
+1 LAY_ANGLES!(1, 4) = 67.5
 1 LAY_ANGLES!(2, 1) = 0
 1 LAY_ANGLES!(2, 2) = 45
 1 LAY_ANGLES!(2, 3) = 90
 1 LAY_ANGLES!(2, 4) = 135
+1 LAY_ANGLES!(3, 1) = 10
+1 LAY_ANGLES!(3, 2) = 20
+1 LAY_ANGLES!(3, 3) = 30
+1 LAY_ANGLES!(3, 4) = 40
 
 ; Distances between each fiber of each scaffolds layers
-1 DIM FIB_DISTANCES! (2, 4)
+1 DIM FIB_DISTANCES! (3, 4)
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		FIB_DISTANCES!(I%, J%) = 0.2
+1		FIB_DISTANCES!(I%, J%) = 1
 1	 NEXT J%
 1 NEXT I%
 
 ; Number of fibers of each scaffolds layers
-1 DIM FIB_NUMBERS% (2, 4)
+1 DIM FIB_NUMBERS% (3, 4)
 1 FOR I% = 1 TO SCF_NUMBER%
 1	FOR J% = 1 TO LAY_NUMBERS%(I%)
 1		TMP_DIST! = FIB_DISTANCES!(I%, J%)
@@ -175,7 +182,7 @@ LP initCoordinateSystem()
 1 NEXT I%
 
 ; Wait in times in seconds of each scaffolds layers
-1 DIM LAY_IN_WAITS! (2, 4)
+1 DIM LAY_IN_WAITS! (3, 4)
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
 1		LAY_IN_WAITS!(I%, J%) = 0.2
@@ -183,7 +190,7 @@ LP initCoordinateSystem()
 1 NEXT I%
 
 ; Wait out times in seconds of each scaffolds layers
-1 DIM LAY_OUT_WAITS! (2, 4)
+1 DIM LAY_OUT_WAITS! (3, 4)
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
 1		LAY_OUT_WAITS!(I%, J%) = 0.06
@@ -191,11 +198,41 @@ LP initCoordinateSystem()
 1 NEXT I%
 
 ; Feedrates of each scaffolds layers
-1 DIM LAY_SPEEDS! (2, 4)
+1 DIM LAY_SPEEDS! (3, 4)
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
 1		LAY_SPEEDS!(I%, J%) = 300
 1	 NEXT J%
+1 NEXT I%
+
+; PATHFINDING
+; Number of nodes in total
+1 NODE_NUMBER% = SCF_NUMBER% * 4
+
+; Directions of the pathfinding nodes from the center of a scaffold
+1 DIM NODE_TO_CENTER_ANGLES! (4)
+1 NODE_TO_CENTER_ANGLES!(1) = 135
+1 NODE_TO_CENTER_ANGLES!(2) = 45
+1 NODE_TO_CENTER_ANGLES!(3) = -135
+1 NODE_TO_CENTER_ANGLES!(4) = -45
+
+; X and Y coordinates of all pathfinding nodes
+1 DIM NODE_X_COORDINATES! (12)
+1 DIM NODE_Y_COORDINATES! (12)
+1 N_COUNT% = 1
+1 FOR I% = 1 TO SCF_NUMBER%
+1	PATHF_RADIUS! = SQRT(2 * EXP(2, SCF_ORBITS!(I%) * 2)) / 2
+1	FOR A% = 1 TO 4
+1		NODE_X_COORDINATES!(N_COUNT%) = X_SCF_POSITIONS!(I%) + (PATHF_RADIUS! * COS(NODE_TO_CENTER_ANGLES!(A%)))
+1		NODE_Y_COORDINATES!(N_COUNT%) = Y_SCF_POSITIONS!(I%) + (PATHF_RADIUS! * SIN(NODE_TO_CENTER_ANGLES!(A%)))
+1		N_COUNT% = N_COUNT% + 1
+1	NEXT A%
+1 NEXT I%
+
+; Helper array to mark already "excluded" nodes
+1 DIM NODE_IS_EXCLUDED? (12)
+1 FOR I% = 1 TO NODE_NUMBER%
+1	NODE_IS_EXCLUDED?(I%) = FALSE
 1 NEXT I%
 
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> VARIABLES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -206,10 +243,61 @@ LP initCoordinateSystem()
 
 ; Iterate all scaffolds
 1 FOR S% = 1 TO SCF_NUMBER%
-	; Set variables for next scaffold
+	; Copy variables for next scaffold
 1 	RX_SCF_POSITION! = X_SCF_POSITIONS!(S%)
 1 	RY_SCF_POSITION! = Y_SCF_POSITIONS!(S%)
 1	RSCF_ORBIT! = SCF_ORBITS!(S%)
+
+
+
+	; PATHFINDING
+1	NEXT_NODE% = 0
+1	TARG_NODE% = (S% - 1) * 4 + 1
+1	TARG_X_COORDINATE! = NODE_X_COORDINATES!(TARG_NODE%)
+1	TARG_Y_COORDINATE! = NODE_Y_COORDINATES!(TARG_NODE%)
+1	IS_FIRST_ITERATION? = TRUE
+
+1	WHILE NEXT_NODE% <> TARG_NODE% DO
+1		CURR_X_COORDINATE! = PCS("X")
+1		CURR_Y_COORDINATE! = PCS("Y")
+
+		; Find the closest, non-excluded node
+1		NEXT_NODE% = 0
+1		NODE_DISTANCE! = 999999999999
+1		FOR N% = 1 TO NODE_NUMBER%
+1			NEXT_X_COORDINATE! = NODE_X_COORDINATES!(N%)
+1			NEXT_Y_COORDINATE! = NODE_Y_COORDINATES!(N%)
+1			C_N_DIST! = SQRT(EXP(2, NEXT_X_COORDINATE! - CURR_X_COORDINATE!) + EXP(2, NEXT_Y_COORDINATE! - CURR_Y_COORDINATE!))
+1			IF (C_N_DIST! < NODE_DISTANCE!) AND (NODE_IS_EXCLUDED?(N%) = FALSE) THEN
+1				NODE_DISTANCE! = C_N_DIST!
+1				NEXT_NODE% = N%
+1			ENDIF
+1		NEXT N%
+
+1		IF IS_FIRST_ITERATION? = TRUE THEN
+			; Move onto the closest node to be "on track"
+			LP moveAbsolute(NODE_X_COORDINATES!(NEXT_NODE%), NODE_Y_COORDINATES!(NEXT_NODE%), SPEED!)
+			LP waitForSeconds(0.2)
+1		ENDIF
+
+		; Check if found node is actually closer to target or not, exclude the node in any case
+1		NODE_IS_EXCLUDED?(NEXT_NODE%) = TRUE
+1		C_T_DIST! = SQRT(EXP(2, TARG_X_COORDINATE! - CURR_X_COORDINATE!) + EXP(2, TARG_Y_COORDINATE! - CURR_Y_COORDINATE!))
+1		N_T_DIST! = SQRT(EXP(2, TARG_X_COORDINATE! - NODE_X_COORDINATES!(NEXT_NODE%)) + EXP(2, TARG_Y_COORDINATE! - NODE_Y_COORDINATES!(NEXT_NODE%)))
+1		IF N_T_DIST! < C_T_DIST! THEN
+			; Closer to target, move to the node
+			LP moveAbsolute(NODE_X_COORDINATES!(NEXT_NODE%), NODE_Y_COORDINATES!(NEXT_NODE%), SPEED!)
+			LP waitForSeconds(0.2)
+1		ENDIF
+1		IS_FIRST_ITERATION? = FALSE
+1	END
+	; Navigation finished, reset excluded nodes
+1 	FOR I% = 1 TO NODE_NUMBER%
+1		NODE_IS_EXCLUDED?(I%) = FALSE
+1 	NEXT I%
+
+
+
 	; Iterate all layers
 1 	FOR L% = 1 TO LAY_NUMBERS%(S%)
 		; Set variables for next layer
@@ -305,6 +393,23 @@ LPS moveClockwiseAbsolute
 1	Y_CENTER_OFFSET! = P4
 1	SPEED! = P5
 	G90 G02 X[X_TARGET!] Y[Y_TARGET!] I[X_CENTER_OFFSET!] J[Y_CENTER_OFFSET!] F[SPEED!]
+PEND
+
+; Moves in a clockwise circle in absolute coordinates.
+; P1 - Target point X
+; P2 - Target point Y
+; P3 - Circle center point X
+; P4 - Circle center point Y
+; P5 - Wait time into the circle motion in seconds
+; P6 - Wait time out of the circle motion in seconds
+; P7 - Feedrate
+LPS moveCounterClockwiseAbsolute
+1	X_TARGET! = P1
+1	Y_TARGET! = P2
+1	X_CENTER_OFFSET! = P3
+1	Y_CENTER_OFFSET! = P4
+1	SPEED! = P5
+	G90 G03 X[X_TARGET!] Y[Y_TARGET!] I[X_CENTER_OFFSET!] J[Y_CENTER_OFFSET!] F[SPEED!]
 PEND
 
 ; Moves in a clockwise circle relative to current position.
@@ -466,7 +571,11 @@ LPS drawLayer
 1			CLOCKWISE% = 1
 1			PARALLEL_ANGLE! = 180
 1		ENDIF
-		LP drawFiber(FIBER_LENGTH!, PARALLEL_ANGLE! + FIBER_ANGLE!, FIBER_DISTANCE!, CLOCKWISE%, WAIT_IN!, WAIT_OUT!, SPEED!)
+1		IF I% < FIBER_NUMBER% THEN
+			LP drawFiber(FIBER_LENGTH!, PARALLEL_ANGLE! + FIBER_ANGLE!, FIBER_DISTANCE!, CLOCKWISE%, WAIT_IN!, WAIT_OUT!, SPEED!)
+1		ELSE
+			LP movePolarRelativeX(FIBER_LENGTH!, PARALLEL_ANGLE! + FIBER_ANGLE!, SPEED!)
+1		ENDIF
 1 	NEXT I%
 PEND
 
@@ -486,7 +595,7 @@ LPS navigateToNextLayer
 1	NEXT_LAYER_ANGLE! = P5
 1	LAYER_WIDTH! = P6
 1	LAYER_HEIGHT! = P7
-1	INTO_ORBIT_ANGLE! = PREVIOUS_LAYER_ANGLE! + 90
+1	INTO_ORBIT_ANGLE! = PREVIOUS_LAYER_ANGLE! + 135
 1	ORBIT_END_POINT_ANGLE! = NEXT_LAYER_ANGLE! + 180
 1	CORR_ANGLE! = NEXT_LAYER_ANGLE! + 270
 1	CORR_HEIGHT_LENGTH! = LAYER_HEIGHT! / 2
@@ -497,25 +606,11 @@ LPS navigateToNextLayer
 1	Y_END_POINT! = Y_CENTER! + (ORBIT_RADIUS! * SIN(ORBIT_END_POINT_ANGLE!))
 1	DEF_SPEED! = 300
 1	DEF_WAIT! = 0.2
-LP moveAbsolute(X_START_POINT!, Y_START_POINT!, DEF_SPEED!)
-LP moveClockwiseAbsolute(X_END_POINT!, Y_END_POINT!, X_CENTER! - X_START_POINT!, Y_CENTER! - Y_START_POINT!, DEF_SPEED!)
-LP waitForSeconds(DEF_WAIT!)
-LP movePolarRelativeX(CORR_HEIGHT_LENGTH!, CORR_ANGLE!, DEF_SPEED!)
-LP movePolarRelativeX(CORR_WIDTH_LENGTH!, NEXT_LAYER_ANGLE!, DEF_SPEED!)
-PEND
-
-; Draws a scaffold. DEPRECATED!!!
-; P1 - X and Y coordinates of the scaffold on the workarea (center of scaffold) as array (i.e. [X, Y])
-; P2 - Number of layers
-; P3 - Number of fibers of each layer as array (Array length should equal P2)
-; P4 - Length of all fibers of each layer as array (Array length should equal P2)
-; P5 - Distance between all fibers of each layer as array (Array length should equal P2)
-; P6 - Mathematical angle of all fibers of each layer as array (Array length should equal P2)
-; P7 - Wait time into the circle motion in seconds of all fibers of each layer as array (Array length should equal P2)
-; P8 - Wait time out of the circle motion in seconds of all fibers of each layer as array (Array length should equal P2)
-; P9 - Feedrate for every layer as array (Array length should equal P2)
-LPS drawScaffold
-
+	LP moveAbsolute(X_START_POINT!, Y_START_POINT!, DEF_SPEED!)
+	LP moveClockwiseAbsolute(X_END_POINT!, Y_END_POINT!, X_CENTER! - X_START_POINT!, Y_CENTER! - Y_START_POINT!, DEF_SPEED!)
+	LP waitForSeconds(DEF_WAIT!)
+	LP movePolarRelativeX(CORR_HEIGHT_LENGTH!, CORR_ANGLE!, DEF_SPEED!)
+	LP movePolarRelativeX(CORR_WIDTH_LENGTH!, NEXT_LAYER_ANGLE!, DEF_SPEED!)
 PEND
 
 LPS stabilize
