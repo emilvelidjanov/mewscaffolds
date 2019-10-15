@@ -1,9 +1,9 @@
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CONFIGURATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 ; Temparature
-;T = 770
+T = 770
 ; Pressure
-;P = 40
+P = 40
 
 ; Maximum width of the collector in X direction
 1 XMAX! = 230
@@ -43,7 +43,7 @@ LP initCoordinateSystem()
 ; Move in place so the stabilization is centered vertically on the slide
 LP moveRelative(SLIDE_MARGIN!, -SLIDE_MARGIN!, SPEED!)
 ; Stabilize for about 10 minutes
-;LP stabilize(1, 1, STAB_WIDTH!, STAB_HEIGHT!, 1, SPEED!)
+LP stabilize(8, 1, STAB_WIDTH!, STAB_HEIGHT!, 1, SPEED!)
 ; Move to the slide above the stabilization slide
 LP moveAbsolute(0, -SLIDE_HEIGHT!, SPEED!)
 LP initCoordinateSystem()
@@ -100,7 +100,7 @@ LP initCoordinateSystem()
 ; X coordinates of scaffolds
 ; For now just for testing purposes
 1 DIM X_SCF_POSITIONS! (3)
-1 X_SCF_POSITIONS!(1) = SLIDE_MARGIN! + ORBIT_RADIUS! + 5
+1 X_SCF_POSITIONS!(1) = SLIDE_MARGIN! + ORBIT_RADIUS! + 2
 1 X_SCF_POSITIONS!(2) = X_SCF_POSITIONS!(1) + 3 * ORBIT_RADIUS!
 1 X_SCF_POSITIONS!(3) = X_SCF_POSITIONS!(2) + 3 * ORBIT_RADIUS!
 
@@ -150,17 +150,17 @@ LP initCoordinateSystem()
 1	 NEXT J%
 1 NEXT I%
 1 LAY_ANGLES!(1, 1) = 0
-1 LAY_ANGLES!(1, 2) = 22.5
-1 LAY_ANGLES!(1, 3) = 45
-1 LAY_ANGLES!(1, 4) = 67.5
-1 LAY_ANGLES!(2, 1) = 0
-1 LAY_ANGLES!(2, 2) = 45
-1 LAY_ANGLES!(2, 3) = 90
-1 LAY_ANGLES!(2, 4) = 135
-1 LAY_ANGLES!(3, 1) = 10
-1 LAY_ANGLES!(3, 2) = 20
-1 LAY_ANGLES!(3, 3) = 30
-1 LAY_ANGLES!(3, 4) = 40
+1 LAY_ANGLES!(1, 2) = 45
+1 LAY_ANGLES!(1, 3) = 90
+1 LAY_ANGLES!(1, 4) = 135
+1 LAY_ANGLES!(2, 1) = 45
+1 LAY_ANGLES!(2, 2) = 135
+1 LAY_ANGLES!(2, 3) = 225
+1 LAY_ANGLES!(2, 4) = 315
+1 LAY_ANGLES!(3, 1) = 22.5
+1 LAY_ANGLES!(3, 2) = 45
+1 LAY_ANGLES!(3, 3) = 67.5
+1 LAY_ANGLES!(3, 4) = 90
 
 ; Distances between each fiber of each scaffolds layers
 1 DIM FIB_DISTANCES! (3, 4)
@@ -207,32 +207,32 @@ LP initCoordinateSystem()
 
 ; PATHFINDING
 ; Number of nodes in total
-1 NODE_NUMBER% = SCF_NUMBER% * 4
+1 #NODE_NUMBER% = SCF_NUMBER% * 4
 
 ; Directions of the pathfinding nodes from the center of a scaffold
-1 DIM NODE_TO_CENTER_ANGLES! (4)
-1 NODE_TO_CENTER_ANGLES!(1) = 135
-1 NODE_TO_CENTER_ANGLES!(2) = 45
-1 NODE_TO_CENTER_ANGLES!(3) = -135
-1 NODE_TO_CENTER_ANGLES!(4) = -45
+1 DIM #NODE_TO_CENTER_ANGLES! (4)
+1 #NODE_TO_CENTER_ANGLES!(1) = 135
+1 #NODE_TO_CENTER_ANGLES!(2) = 45
+1 #NODE_TO_CENTER_ANGLES!(3) = 225
+1 #NODE_TO_CENTER_ANGLES!(4) = 315
 
 ; X and Y coordinates of all pathfinding nodes
-1 DIM NODE_X_COORDINATES! (12)
-1 DIM NODE_Y_COORDINATES! (12)
+1 DIM #NODE_X_COORDINATES! (12)
+1 DIM #NODE_Y_COORDINATES! (12)
 1 N_COUNT% = 1
 1 FOR I% = 1 TO SCF_NUMBER%
 1	PATHF_RADIUS! = SQRT(2 * EXP(2, SCF_ORBITS!(I%) * 2)) / 2
 1	FOR A% = 1 TO 4
-1		NODE_X_COORDINATES!(N_COUNT%) = X_SCF_POSITIONS!(I%) + (PATHF_RADIUS! * COS(NODE_TO_CENTER_ANGLES!(A%)))
-1		NODE_Y_COORDINATES!(N_COUNT%) = Y_SCF_POSITIONS!(I%) + (PATHF_RADIUS! * SIN(NODE_TO_CENTER_ANGLES!(A%)))
+1		#NODE_X_COORDINATES!(N_COUNT%) = X_SCF_POSITIONS!(I%) + (PATHF_RADIUS! * COS(#NODE_TO_CENTER_ANGLES!(A%)))
+1		#NODE_Y_COORDINATES!(N_COUNT%) = Y_SCF_POSITIONS!(I%) + (PATHF_RADIUS! * SIN(#NODE_TO_CENTER_ANGLES!(A%)))
 1		N_COUNT% = N_COUNT% + 1
 1	NEXT A%
 1 NEXT I%
 
 ; Helper array to mark already "excluded" nodes
-1 DIM NODE_IS_EXCLUDED? (12)
-1 FOR I% = 1 TO NODE_NUMBER%
-1	NODE_IS_EXCLUDED?(I%) = FALSE
+1 DIM #NODE_IS_EXCLUDED? (12)
+1 FOR I% = 1 TO #NODE_NUMBER%
+1	#NODE_IS_EXCLUDED?(I%) = FALSE
 1 NEXT I%
 
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> VARIABLES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -248,55 +248,8 @@ LP initCoordinateSystem()
 1 	RY_SCF_POSITION! = Y_SCF_POSITIONS!(S%)
 1	RSCF_ORBIT! = SCF_ORBITS!(S%)
 
-
-
-	; PATHFINDING
-1	NEXT_NODE% = 0
-1	TARG_NODE% = (S% - 1) * 4 + 1
-1	TARG_X_COORDINATE! = NODE_X_COORDINATES!(TARG_NODE%)
-1	TARG_Y_COORDINATE! = NODE_Y_COORDINATES!(TARG_NODE%)
-1	IS_FIRST_ITERATION? = TRUE
-
-1	WHILE NEXT_NODE% <> TARG_NODE% DO
-1		CURR_X_COORDINATE! = PCS("X")
-1		CURR_Y_COORDINATE! = PCS("Y")
-
-		; Find the closest, non-excluded node
-1		NEXT_NODE% = 0
-1		NODE_DISTANCE! = 999999999999
-1		FOR N% = 1 TO NODE_NUMBER%
-1			NEXT_X_COORDINATE! = NODE_X_COORDINATES!(N%)
-1			NEXT_Y_COORDINATE! = NODE_Y_COORDINATES!(N%)
-1			C_N_DIST! = SQRT(EXP(2, NEXT_X_COORDINATE! - CURR_X_COORDINATE!) + EXP(2, NEXT_Y_COORDINATE! - CURR_Y_COORDINATE!))
-1			IF (C_N_DIST! < NODE_DISTANCE!) AND (NODE_IS_EXCLUDED?(N%) = FALSE) THEN
-1				NODE_DISTANCE! = C_N_DIST!
-1				NEXT_NODE% = N%
-1			ENDIF
-1		NEXT N%
-
-1		IF IS_FIRST_ITERATION? = TRUE THEN
-			; Move onto the closest node to be "on track"
-			LP moveAbsolute(NODE_X_COORDINATES!(NEXT_NODE%), NODE_Y_COORDINATES!(NEXT_NODE%), SPEED!)
-			LP waitForSeconds(0.2)
-1		ENDIF
-
-		; Check if found node is actually closer to target or not, exclude the node in any case
-1		NODE_IS_EXCLUDED?(NEXT_NODE%) = TRUE
-1		C_T_DIST! = SQRT(EXP(2, TARG_X_COORDINATE! - CURR_X_COORDINATE!) + EXP(2, TARG_Y_COORDINATE! - CURR_Y_COORDINATE!))
-1		N_T_DIST! = SQRT(EXP(2, TARG_X_COORDINATE! - NODE_X_COORDINATES!(NEXT_NODE%)) + EXP(2, TARG_Y_COORDINATE! - NODE_Y_COORDINATES!(NEXT_NODE%)))
-1		IF N_T_DIST! < C_T_DIST! THEN
-			; Closer to target, move to the node
-			LP moveAbsolute(NODE_X_COORDINATES!(NEXT_NODE%), NODE_Y_COORDINATES!(NEXT_NODE%), SPEED!)
-			LP waitForSeconds(0.2)
-1		ENDIF
-1		IS_FIRST_ITERATION? = FALSE
-1	END
-	; Navigation finished, reset excluded nodes
-1 	FOR I% = 1 TO NODE_NUMBER%
-1		NODE_IS_EXCLUDED?(I%) = FALSE
-1 	NEXT I%
-
-
+	; Pathfinding algorithm
+	LP navigatePathToScaffold(S%, LAY_ANGLES!(S%, 1), SPEED!)
 
 	; Iterate all layers
 1 	FOR L% = 1 TO LAY_NUMBERS%(S%)
@@ -313,7 +266,8 @@ LP initCoordinateSystem()
 1		RLAY_IN_WAIT! = LAY_IN_WAITS!(S%, L%)
 1		RLAY_OUT_WAIT! = LAY_OUT_WAITS!(S%, L%)
 1		RLAY_SPEED! = LAY_SPEEDS!(S%, L%)
-		; Print
+
+		; Navigate to next layer and print the layer
 		LP navigateToNextLayer(RX_SCF_POSITION!, RY_SCF_POSITION!, RSCF_ORBIT!, RPREV_LAY_ANGLE!, RLAY_ANGLE!, RLAY_WIDTH!, RLAY_HEIGHT!)
 		LP drawLayer(RFIB_NUMBER%, RLAY_WIDTH!, RFIB_DISTANCE!, RLAY_ANGLE!, RLAY_IN_WAIT!, RLAY_OUT_WAIT!, RLAY_SPEED!)
 1 	NEXT L%
@@ -607,10 +561,84 @@ LPS navigateToNextLayer
 1	DEF_SPEED! = 300
 1	DEF_WAIT! = 0.2
 	LP moveAbsolute(X_START_POINT!, Y_START_POINT!, DEF_SPEED!)
+	LP waitForSeconds(DEF_WAIT!)
 	LP moveClockwiseAbsolute(X_END_POINT!, Y_END_POINT!, X_CENTER! - X_START_POINT!, Y_CENTER! - Y_START_POINT!, DEF_SPEED!)
 	LP waitForSeconds(DEF_WAIT!)
 	LP movePolarRelativeX(CORR_HEIGHT_LENGTH!, CORR_ANGLE!, DEF_SPEED!)
+	LP waitForSeconds(DEF_WAIT!)
 	LP movePolarRelativeX(CORR_WIDTH_LENGTH!, NEXT_LAYER_ANGLE!, DEF_SPEED!)
+PEND
+
+; TODO: select correct node depending on first layer angle
+; Uses a simple pathfinding algorithm to find and move the path to the specified scaffold.
+; Requires the global variables listed in the variables section under "pathfinding".
+; P1 - The index of the scaffold to navigate to (as defined by the global variables)
+; P2 - Angle of the first layer of the specified scaffold
+; P3 - Speed with which to navigate
+LPS navigatePathToScaffold
+1	S% = INT(P1)
+1	ANGLE! = P2 + 135
+1	SPEED! = P3
+1	WHILE ANGLE! < 0 DO
+1		ANGLE! = ANGLE! + 360
+1	END
+1	IF (ANGLE! > 360) THEN ANGLE! = ANGLE! - 360 ENDIF
+
+	; PATHFINDING
+	; First, find the correct target node of the scaffold based on the first layer angle
+1	NEXT_NODE% = 0
+1	TARG_NODE% = 1
+1	SMALLEST_ANGLE_DELTA! = 360
+1	FOR A% = 1 TO 4
+1		ANG_DELTA! = ABS(ANGLE! - #NODE_TO_CENTER_ANGLES!(A%))
+1		IF ANG_DELTA! < SMALLEST_ANGLE_DELTA! THEN
+1			SMALLEST_ANGLE_DELTA! = ANG_DELTA!
+1			TARG_NODE% = (S% - 1) * 4 + A%
+1		ENDIF
+1	NEXT A%
+1	TARG_X_COORDINATE! = #NODE_X_COORDINATES!(TARG_NODE%)
+1	TARG_Y_COORDINATE! = #NODE_Y_COORDINATES!(TARG_NODE%)
+1	IS_FIRST_ITERATION? = TRUE
+
+	; While target hasn't been reached yet do...
+1	WHILE NEXT_NODE% <> TARG_NODE% DO
+1		CURR_X_COORDINATE! = PCS("X")
+1		CURR_Y_COORDINATE! = PCS("Y")
+		; Find the closest, non-excluded node
+1		NEXT_NODE% = 0
+1		NODE_DISTANCE! = 999999999999
+1		FOR N% = 1 TO #NODE_NUMBER%
+1			NEXT_X_COORDINATE! = #NODE_X_COORDINATES!(N%)
+1			NEXT_Y_COORDINATE! = #NODE_Y_COORDINATES!(N%)
+1			C_N_DIST! = SQRT(EXP(2, NEXT_X_COORDINATE! - CURR_X_COORDINATE!) + EXP(2, NEXT_Y_COORDINATE! - CURR_Y_COORDINATE!))
+1			IF (C_N_DIST! < NODE_DISTANCE!) AND (#NODE_IS_EXCLUDED?(N%) = FALSE) THEN
+1				NODE_DISTANCE! = C_N_DIST!
+1				NEXT_NODE% = N%
+1			ENDIF
+1		NEXT N%
+
+1		IF IS_FIRST_ITERATION? = TRUE THEN
+			; Move onto the closest node to be "on track"
+			LP moveAbsolute(#NODE_X_COORDINATES!(NEXT_NODE%), #NODE_Y_COORDINATES!(NEXT_NODE%), SPEED!)
+			LP waitForSeconds(0.2)
+1		ENDIF
+
+		; Check if found node is actually closer to target or not, exclude the node in any case
+1		#NODE_IS_EXCLUDED?(NEXT_NODE%) = TRUE
+1		C_T_DIST! = SQRT(EXP(2, TARG_X_COORDINATE! - CURR_X_COORDINATE!) + EXP(2, TARG_Y_COORDINATE! - CURR_Y_COORDINATE!))
+1		N_T_DIST! = SQRT(EXP(2, TARG_X_COORDINATE! - #NODE_X_COORDINATES!(NEXT_NODE%)) + EXP(2, TARG_Y_COORDINATE! - #NODE_Y_COORDINATES!(NEXT_NODE%)))
+1		IF N_T_DIST! < C_T_DIST! THEN
+			; Closer to target, move to the node
+			LP moveAbsolute(#NODE_X_COORDINATES!(NEXT_NODE%), #NODE_Y_COORDINATES!(NEXT_NODE%), SPEED!)
+			LP waitForSeconds(0.2)
+1		ENDIF
+1		IS_FIRST_ITERATION? = FALSE
+1	END
+
+	; Navigation finished, reset global excluded nodes variable
+1 	FOR I% = 1 TO #NODE_NUMBER%
+1		#NODE_IS_EXCLUDED?(I%) = FALSE
+1 	NEXT I%
 PEND
 
 LPS stabilize
