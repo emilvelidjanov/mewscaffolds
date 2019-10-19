@@ -55,6 +55,12 @@ export class TextConfig {
     readonly settingsButtonText: string = "Settings";
     readonly refreshButtonText: string = "Refresh";
 
+    // Settings Modal
+    readonly settingsTitle: string = "Settings";
+    readonly settingsClose: string = "Close";
+    readonly settingsSave: string = "Save";
+    readonly settingsMultiSelectLabel: string = "Multi-select enabled"
+
     // Drag & Drop
     readonly cdkDragPlaceholderText: string = "Move here...";
 }

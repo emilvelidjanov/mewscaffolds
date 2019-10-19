@@ -9,7 +9,7 @@
           <!-- TODO: disable when no changes, loading icon, and save successful message -->
           <button type="button" class="btn btn-secondary">{{textConfig.saveButtonText}}</button>
           <button type="button" class="btn btn-secondary">{{textConfig.cancelButtonText}}</button>
-          <button type="button" class="btn btn-secondary">{{textConfig.settingsButtonText}}</button>
+          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#settingsModal">{{textConfig.settingsButtonText}}</button>
         </div>
       </div>
     </div>
@@ -20,11 +20,12 @@
     <div class="col-sm">
       <div class="row mb-1">
         <div class="col-sm">
-          <app-mew-data-list [label]="textConfig.scaffoldControlLabel" [tokenLabel]="textConfig.scaffold" [data]="scaffolds"
-            [parentData]="print"></app-mew-data-list>
+          <app-mew-data-list [label]="textConfig.scaffoldControlLabel" [tokenLabel]="textConfig.scaffold"
+            [data]="scaffolds" [parentData]="print"></app-mew-data-list>
         </div>
         <div class="col-sm">
-          <app-mew-data-form [label]="textConfig.scaffoldFormLabel" [dataLabel]="textConfig.scaffold" [data]="scaffolds">
+          <app-mew-data-form [label]="textConfig.scaffoldFormLabel" [dataLabel]="textConfig.scaffold"
+            [data]="scaffolds">
           </app-mew-data-form>
         </div>
       </div>
@@ -58,4 +59,6 @@
       <app-mew-data-chart [data]="layers"></app-mew-data-chart>
     </div>
   </div>
+
+  <app-settings-modal></app-settings-modal>
 </div>

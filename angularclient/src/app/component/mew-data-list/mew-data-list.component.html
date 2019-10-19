@@ -11,24 +11,28 @@
                     <div class="list-group-item bg-dark text-light mb-1 rounded" *cdkDragPlaceholder>
                         {{textConfig.cdkDragPlaceholderText}}
                     </div>
+                    <!-- TODO: icons -->
+                    <div cdkDragHandle class="d-inline-block mr-1">
+                        ⇅
+                    </div>
                     <div class="d-inline-block token-path">
                         {{token.path}}
                     </div>
                     {{token.name}}
                 </div>
             </div>
-        </div>
-        <div class="btn-group w-100 mt-1">
-            <button type="button" class="btn btn-secondary" [disabled]="isAddDisabled" (click)="addNew()">{{textConfig.addButtonText}}</button>
-            <button type="button" class="btn btn-secondary" [disabled]="selectedTotal == 0"
-                (click)="cloneSelected()">{{textConfig.cloneButtonText}} ({{selectedTotal}})</button>
-            <button type="button" class="btn btn-secondary" *ngIf="settingsConfig.multiSelectOn"
-                (click)="selectAll()">{{textConfig.selectAllButtonText}}</button>
-            <button type="button" class="btn btn-secondary" *ngIf="settingsConfig.multiSelectOn"
-                (click)="selectNone()">{{textConfig.selectNoneButtonText}}</button>
-            <button type="button" class="btn btn-secondary" [disabled]="selectedTotal == 0"
-                (click)="deleteSelected()">{{textConfig.removeButtonText}}
-                ({{selectedTotal}})</button>
+            <div class="btn-group w-100 mt-1">
+                <button type="button" class="btn btn-secondary" [disabled]="isAddDisabled" (click)="addNew()">{{textConfig.addButtonText}}</button>
+                <button type="button" class="btn btn-secondary" [disabled]="selectedTotal == 0"
+                    (click)="cloneSelected()">{{textConfig.cloneButtonText}} ({{selectedTotal}})</button>
+                <button type="button" class="btn btn-secondary" *ngIf="settingsConfig.multiSelectOn"
+                    (click)="selectAll()">{{textConfig.selectAllButtonText}}</button>
+                <button type="button" class="btn btn-secondary" *ngIf="settingsConfig.multiSelectOn"
+                    (click)="selectNone()">{{textConfig.selectNoneButtonText}}</button>
+                <button type="button" class="btn btn-secondary" [disabled]="selectedTotal == 0"
+                    (click)="deleteSelected()">{{textConfig.removeButtonText}}
+                    ({{selectedTotal}})</button>
+            </div>
         </div>
     </div>
 </div>
