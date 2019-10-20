@@ -12,6 +12,9 @@ import { MewDataService } from './service/mew-data/mew-data.service';
 import { MewDataFormComponent } from './component/mew-data-form/mew-data-form.component';
 import { MewDataChartComponent } from './component/mew-data-chart/mew-data-chart.component';
 import { ChartsModule } from 'ng2-charts';
+import { SettingsModalComponent } from './component/settings-modal/settings-modal.component';
+import { SettingsConfig } from './config/settings-config/settings-config';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -19,6 +22,7 @@ import { ChartsModule } from 'ng2-charts';
     MewDataListComponent,
     MewDataFormComponent,
     MewDataChartComponent,
+    SettingsModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,7 +32,7 @@ import { ChartsModule } from 'ng2-charts';
     DragDropModule,
     ChartsModule,
   ],
-  providers: [MewDataService, TextConfig],
+  providers: [MewDataService, TextConfig, SettingsConfig, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
