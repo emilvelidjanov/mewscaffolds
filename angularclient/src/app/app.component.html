@@ -9,52 +9,33 @@
           <!-- TODO: disable when no changes, loading icon, and save successful message -->
           <button type="button" class="btn btn-secondary">{{textConfig.saveButtonText}}</button>
           <button type="button" class="btn btn-secondary">{{textConfig.cancelButtonText}}</button>
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#settingsModal">{{textConfig.settingsButtonText}}</button>
+          <button type="button" class="btn btn-secondary" data-toggle="modal"
+            data-target="#settingsModal">{{textConfig.settingsButtonText}}</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TODO: make component -->
-  <div class="row mb-1">
+  <div class="row mb-3">
     <div class="col-sm">
-      <div class="row mb-1">
-        <div class="col-sm">
-          <app-mew-data-list [label]="textConfig.scaffoldControlLabel" [tokenLabel]="textConfig.scaffold"
-            [data]="scaffolds" [parentData]="print"></app-mew-data-list>
-        </div>
-        <div class="col-sm">
-          <app-mew-data-form [label]="textConfig.scaffoldFormLabel" [dataLabel]="textConfig.scaffold"
-            [data]="scaffolds">
-          </app-mew-data-form>
-        </div>
-      </div>
-
-      <div class="row mb-1">
-        <div class="col-sm">
-          <app-mew-data-list [label]="textConfig.layerControlLabel" [tokenLabel]="textConfig.layer" [data]="layers"
-            [parentData]="scaffolds">
-          </app-mew-data-list>
-        </div>
-        <div class="col-sm">
-          <app-mew-data-form [label]="textConfig.layerFormLabel" [dataLabel]="textConfig.layer" [data]="layers">
-          </app-mew-data-form>
-        </div>
-      </div>
-
-      <div class="row mb-1">
-        <div class="col-sm">
-          <app-mew-data-list [label]="textConfig.fiberControlLabel" [tokenLabel]="textConfig.fiber" [data]="fibers"
-            [parentData]="layers">
-          </app-mew-data-list>
-        </div>
-        <div class="col-sm">
-          <app-mew-data-form [label]="textConfig.fiberFormLabel" [dataLabel]="textConfig.fiber" [data]="fibers">
-          </app-mew-data-form>
-        </div>
-      </div>
+      <app-mew-data-list [label]="textConfig.scaffoldControlLabel" [tokenLabel]="textConfig.scaffold" [data]="scaffolds"
+        [parentData]="print"></app-mew-data-list>
+      <app-mew-data-form [label]="textConfig.scaffoldFormLabel" [dataLabel]="textConfig.scaffold" [data]="scaffolds">
+      </app-mew-data-form>
     </div>
+    <div class="col-sm">
+      <app-scaffold-positioning [data]="scaffolds"></app-scaffold-positioning>
+    </div>
+  </div>
 
+  <div class="row mb-3">
+    <div class="col-sm">
+      <app-mew-data-list [label]="textConfig.layerControlLabel" [tokenLabel]="textConfig.layer" [data]="layers"
+        [parentData]="scaffolds">
+      </app-mew-data-list>
+      <app-mew-data-form [label]="textConfig.layerFormLabel" [dataLabel]="textConfig.layer" [data]="layers">
+      </app-mew-data-form>
+    </div>
     <div class="col-sm">
       <app-mew-data-chart [data]="layers"></app-mew-data-chart>
     </div>

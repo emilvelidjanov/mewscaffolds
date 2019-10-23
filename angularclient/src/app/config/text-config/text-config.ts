@@ -37,10 +37,22 @@ export class TextConfig {
     readonly lengthInputPlaceholder: string = "Length";
     readonly distanceToNextFiberInputLabel: string = "Distance to next fiber";
     readonly distanceToNextFiberInputPlaceholder: string = "Distance";
+    readonly widthInputLabel: string = "Width";
+    readonly widthInputPlaceholder: string = "Width";
+    readonly heightInputLabel: string = "Height";
+    readonly heightInputPlaceholder: string = "Height";
+    readonly fibersInputLabel: string = "Number of fibers"
+    readonly fibersInputPlaceholder: string = "Number of fibers";
+    readonly distanceBetweenFibersInputLabel: string = "Distance between fibers";
+    readonly distanceBetweenFibersInputPlaceholder: string = "Distance between fibers";
     readonly multiplePlaceholder: string = "Multiple..."
+    readonly formPleaseSelectText: string = "Please select a";
 
     // Chart
     readonly chartTitle: string = "chart";
+
+    // Positioning component
+    readonly positioningTitle: string = "positioning"
 
     // Buttons
     readonly collapseButtonTextClose: string = "Close";
@@ -59,7 +71,22 @@ export class TextConfig {
     readonly settingsTitle: string = "Settings";
     readonly settingsClose: string = "Close";
     readonly settingsSave: string = "Save";
-    readonly settingsMultiSelectLabel: string = "Multi-select enabled"
+    readonly settingsUserInterfaceLabel: string = "User interface";
+    readonly settingsMultiSelectLabel: string = "Multi-select enabled";
+    readonly settingsPrintAreaLabel: string = "Print area coordinates";
+    readonly settingsPrintAreaBottomLeftXLabel: string = "Bottom-left corner X";
+    readonly settingsPrintAreaBottomLeftYLabel: string = "Bottom-left corner Y";
+    readonly settingsPrintAreaTopRightXLabel: string = "Top-right corner X";
+    readonly settingsPrintAreaTopRightYLabel: string = "Top-right corner Y";
+    readonly settingsDataDefaultsLabel: string = "Data defaults";
+    readonly settingsDefaultScaffoldNameLabel: string = "Name";
+    readonly settingsDefaultScaffoldPositionX: string = "Position X";
+    readonly settingsDefaultScaffoldPositionY: string = "Position Y";
+    readonly settingsDefaultLayerNameLabel: string = "Name";
+    readonly settingsDefaultLayerWidthLabel: string = "Width";
+    readonly settingsDefaultLayerHeightLabel: string = "Height";
+    readonly settingsDefaultDistanceBetweenFibersLabel: string = "Distance between fibers";
+    readonly settingsDefaultLayerAngleLabel: string = "Angle";
 
     // Drag & Drop
     readonly cdkDragPlaceholderText: string = "Move here...";

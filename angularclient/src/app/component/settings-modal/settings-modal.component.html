@@ -3,19 +3,117 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">{{textConfig.settingsTitle}}</h5>
+        <span class="modal-title h4">{{textConfig.settingsTitle}}</span>
         <button type="button" class="close" data-dismiss="modal">
           <span>&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form>
-            <div class="form-group form-check">
-              <input type="checkbox" class="form-check-input" [name]="nameMultiSelectOn" [checked]="settingsConfig.multiSelectOn"
-              (input)="onInput($event.target.name, $event.target.checked)">
-              <!-- TODO: label for -->
-              <label class="form-check-label">{{textConfig.settingsMultiSelectLabel}}</label>
+          <div class="h5">{{textConfig.settingsUserInterfaceLabel}}</div>
+          <div class="form-group form-check">
+            <input id="settingsMultiSelectOn" type="checkbox" class="form-check-input" [name]="nameMultiSelectOn"
+              [checked]="settingsConfig.multiSelectOn" (input)="onInput($event.target.name, $event.target.checked)">
+            <label for="settingsMultiSelectOn" class="form-check-label">{{textConfig.settingsMultiSelectLabel}}</label>
+          </div>
+          <hr class="my-4">
+
+          <div class="h5">{{textConfig.settingsPrintAreaLabel}}</div>
+          <div class="form-group form-row">
+            <div class="col">
+              <label for="settingsPrintAreaBottomLeftX">{{textConfig.settingsPrintAreaBottomLeftXLabel}}</label>
+              <input id="settingsPrintAreaBottomLeftX" type="number" class="form-control"
+                [name]="namePrintAreaBottomLeftX" [value]="settingsConfig.printAreaBottomLeftX"
+                (input)="onInput($event.target.name, $event.target.value)">
             </div>
+            <div class="col">
+              <label for="settingsPrintAreaBottomLeftY">{{textConfig.settingsPrintAreaBottomLeftYLabel}}</label>
+              <input id="settingsPrintAreaBottomLeftY" type="number" class="form-control"
+                [name]="namePrintAreaBottomLeftY" [value]="settingsConfig.printAreaBottomLeftY"
+                (input)="onInput($event.target.name, $event.target.value)">
+            </div>
+          </div>
+          <div class="form-group form-row">
+            <div class="col">
+              <label for="settingsPrintAreaTopRightX">{{textConfig.settingsPrintAreaTopRightXLabel}}</label>
+              <input id="settingsPrintAreaTopRightX" type="number" class="form-control" [name]="namePrintAreaTopRightX"
+                [value]="settingsConfig.printAreaTopRightX" (input)="onInput($event.target.name, $event.target.value)">
+            </div>
+            <div class="col">
+              <label for="settingsPrintAreaTopRightY">{{textConfig.settingsPrintAreaTopRightYLabel}}</label>
+              <input id="settingsPrintAreaTopRightY" type="number" class="form-control" [name]="namePrintAreaTopRightY"
+                [value]="settingsConfig.printAreaTopRightY" (input)="onInput($event.target.name, $event.target.value)">
+            </div>
+          </div>
+          <hr class="my-4">
+
+          <div class="h5">{{textConfig.settingsDataDefaultsLabel}}</div>
+          <div class="h6">{{textConfig.scaffold}}</div>
+          <div class="form-group form-row">
+            <div class="col">
+              <label for="settingsDefaultScaffoldName">{{textConfig.nameInputLabel}}</label>
+              <input id="settingsDefaultScaffoldName" type="text" class="form-control" [name]="nameDefaultScaffoldName"
+                [value]="settingsConfig.defaultScaffoldName" (input)="onInput($event.target.name, $event.target.value)"
+                [placeholder]="textConfig.nameInputPlaceholder">
+            </div>
+          </div>
+          <div class="form-group form-row">
+            <div class="col">
+              <label for="settingsDefaultScaffoldPositionX">{{textConfig.positionXInputLabel}}</label>
+              <input id="settingsDefaultScaffoldPositionX" type="number" class="form-control"
+                [name]="nameDefaultScaffoldPositionX" [value]="settingsConfig.defaultScaffoldPositionX"
+                (input)="onInput($event.target.name, $event.target.value)"
+                [placeholder]="textConfig.positionXInputPlaceholder">
+            </div>
+            <div class="col">
+              <label for="settingsDefaultScaffoldPositionY">{{textConfig.positionYInputLabel}}</label>
+              <input id="settingsDefaultScaffoldPositionY" type="number" class="form-control"
+                [name]="nameDefaultScaffoldPositionY" [value]="settingsConfig.defaultScaffoldPositionY"
+                (input)="onInput($event.target.name, $event.target.value)"
+                [placeholder]="textConfig.positionYInputPlaceholder">
+            </div>
+          </div>
+          <div class="h6">{{textConfig.layer}}</div>
+          <div class="form-group form-row">
+            <div class="col">
+              <label for="settingsDefaultLayerName">{{textConfig.nameInputLabel}}</label>
+              <input id="settingsDefaultLayerName" type="text" class="form-control" [name]="nameDefaultLayerName"
+                [value]="settingsConfig.defaultLayerName" (input)="onInput($event.target.name, $event.target.value)"
+                [placeholder]="textConfig.nameInputPlaceholder">
+            </div>
+          </div>
+          <div class="form-group form-row">
+            <div class="col">
+              <label for="settingsDefaultLayerWidth">{{textConfig.widthInputLabel}}</label>
+              <input id="settingsDefaultLayerWidth" type="number" class="form-control"
+                [value]="settingsConfig.defaultLayerWidth" [name]="nameDefaultLayerWidth"
+                (input)="onInput($event.target.name, $event.target.value)"
+                [placeholder]="textConfig.widthInputPlaceholder">
+            </div>
+            <div class="col">
+              <label for="settingsDefaultLayerHeight">{{textConfig.heightInputLabel}}</label>
+              <input id="settingsDefaultLayerHeight" type="number" class="form-control"
+                [value]="settingsConfig.defaultLayerHeight" [name]="nameDefaultLayerHeight"
+                (input)="onInput($event.target.name, $event.target.value)"
+                [placeholder]="textConfig.heightInputPlaceholder">
+            </div>
+          </div>
+          <div class="form-group form-row">
+            <div class="col">
+              <label for="settingsDefaultDistanceBetweenFibers">{{textConfig.distanceBetweenFibersInputLabel}}</label>
+              <input id="settingsDefaultDistanceBetweenFibers" type="number" class="form-control"
+                [value]="settingsConfig.defaultDistanceBetweenFibers" [name]="nameDefaultDistanceBetweenFibers"
+                (input)="onInput($event.target.name, $event.target.value)" step="0.1"
+                [placeholder]="textConfig.distanceBetweenFibersInputPlaceholder">
+            </div>
+            <div class="col">
+              <label for="settingsDefaultLayerAngle">{{textConfig.angleInputLabel}}</label>
+              <input id="settingsDefaultLayerAngle" type="number" class="form-control"
+                [value]="settingsConfig.defaultLayerAngle" [name]="nameDefaultLayerAngle"
+                (input)="onInput($event.target.name, $event.target.value)"
+                [placeholder]="textConfig.angleInputPlaceholder">
+            </div>
+          </div>
         </form>
       </div>
     </div>

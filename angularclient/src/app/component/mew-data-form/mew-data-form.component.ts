@@ -4,6 +4,7 @@ import { MewData } from 'src/app/model/abstract/mew-data';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 import { Vector } from 'src/app/model/vector/vector';
 import { MewDataProperties } from 'src/app/enum/mew-data-properties';
+import { Layer } from 'src/app/model/layer/layer';
 
 // TODO: cleanup
 // TODO: sanitize input and error messages (error checking, too)
@@ -31,17 +32,23 @@ export class MewDataFormComponent implements OnInit {
   positionYInputPlaceholder: string;
   angle: number;
   angleInputPlaceholder: string;
-  length: number;
-  lengthInputPlaceholder: string;
-  distanceToNextFiber: number;
-  distanceToNextFiberInputPlaceholder: string;
+  width: number;
+  widthInputPlaceholder: string;
+  height: number;
+  heightInputPlaceholder: string;
+  distanceBetweenFibers: number;
+  distanceBetweenFibersInputPlaceholder: string;
+  fibers: number;
+  fibersInputPlaceholder: string;
 
   readonly nameInputName: string;
   readonly positionXInputName: string;
   readonly positionYInputName: string;
   readonly angleInputName: string;
-  readonly lengthInputName: string;
-  readonly distanceToNextFiberInputName: string;
+  readonly widthInputName: string;
+  readonly heightInputName: string;
+  readonly distanceBetweenFibersInputName: string;
+  readonly fibersInputName: string;
 
   constructor(private textConfig: TextConfig, private mewDataService: MewDataService) {
     this.data = [];
@@ -54,19 +61,23 @@ export class MewDataFormComponent implements OnInit {
       [MewDataProperties.NAME, false],
       [MewDataProperties.POSITION, false],
       [MewDataProperties.ANGLE, false],
-      [MewDataProperties.LENGTH, false],
-      [MewDataProperties.DISTANCE_TO_NEXT_FIBER, false],
+      [MewDataProperties.DISTANCE_BETWEEN_FIBERS, false],
+      [MewDataProperties.FIBERS, false],
+      [MewDataProperties.HEIGHT, false],
+      [MewDataProperties.WIDTH, false],
     ]);
     this.hasPropertyMapIsPopulated = false;
-    
+
     this.initializeForm("");
 
     this.nameInputName = MewDataProperties.NAME;
     this.positionXInputName = MewDataProperties.POSITION + "X";
     this.positionYInputName = MewDataProperties.POSITION + "Y";
     this.angleInputName = MewDataProperties.ANGLE;
-    this.lengthInputName = MewDataProperties.LENGTH;
-    this.distanceToNextFiberInputName = MewDataProperties.DISTANCE_TO_NEXT_FIBER;
+    this.widthInputName = MewDataProperties.WIDTH;
+    this.heightInputName = MewDataProperties.HEIGHT;
+    this.fibersInputName = MewDataProperties.FIBERS;
+    this.distanceBetweenFibersInputName = MewDataProperties.DISTANCE_BETWEEN_FIBERS;
   }
 
   ngOnInit() {
@@ -101,13 +112,21 @@ export class MewDataFormComponent implements OnInit {
             this.angle = property[1];
             this.angleInputPlaceholder = this.textConfig.angleInputPlaceholder;
             break;
-          case MewDataProperties.LENGTH:
-            this.length = property[1];
-            this.lengthInputPlaceholder = this.textConfig.lengthInputPlaceholder;
+          case MewDataProperties.WIDTH:
+            this.width = property[1];
+            this.widthInputPlaceholder = this.textConfig.widthInputPlaceholder;
             break;
-          case MewDataProperties.DISTANCE_TO_NEXT_FIBER:
-            this.distanceToNextFiber = property[1];
-            this.distanceToNextFiberInputPlaceholder = this.textConfig.distanceToNextFiberInputPlaceholder;
+          case MewDataProperties.HEIGHT:
+            this.height = property[1];
+            this.heightInputPlaceholder = this.textConfig.heightInputPlaceholder;
+            break;
+          case MewDataProperties.FIBERS:
+            this.fibers = property[1];
+            this.fibersInputPlaceholder = this.textConfig.fibersInputPlaceholder;
+            break;
+          case MewDataProperties.DISTANCE_BETWEEN_FIBERS:
+            this.distanceBetweenFibers = property[1];
+            this.distanceBetweenFibersInputPlaceholder = this.textConfig.distanceBetweenFibersInputPlaceholder;
             break;
         }
       });
@@ -125,6 +144,7 @@ export class MewDataFormComponent implements OnInit {
   }
 
   onInput(name: string, value: string) {
+    let concreteLayer: Layer = null;
     this.getSelectedData().forEach(item => {
       switch (name) {
         case this.nameInputName:
@@ -139,11 +159,21 @@ export class MewDataFormComponent implements OnInit {
         case this.angleInputName:
           item[MewDataProperties.ANGLE] = parseFloat(value);
           break;
-        case this.lengthInputName:
-          item[MewDataProperties.LENGTH] = parseFloat(value);
+        case this.fibersInputName: // this case shouldn't happen
+          item[MewDataProperties.FIBERS] = parseInt(value);
           break;
-        case this.distanceToNextFiberInputName:
-          item[MewDataProperties.DISTANCE_TO_NEXT_FIBER] = parseFloat(value);
+        case this.widthInputName:
+          item[MewDataProperties.WIDTH] = parseFloat(value);
+          break;
+        case this.heightInputName:
+          concreteLayer = item as Layer;
+          item[MewDataProperties.HEIGHT] = parseFloat(value);
+          item[MewDataProperties.FIBERS] = this.mewDataService.calculateFibersOfLayer(concreteLayer);
+          break;
+        case this.distanceBetweenFibersInputName:
+          concreteLayer = item as Layer;
+          item[MewDataProperties.DISTANCE_BETWEEN_FIBERS] = parseFloat(value);
+          item[MewDataProperties.FIBERS] = this.mewDataService.calculateFibersOfLayer(concreteLayer);
           break;
       }
     });
@@ -164,9 +194,13 @@ export class MewDataFormComponent implements OnInit {
     this.positionYInputPlaceholder = initString;
     this.angle = null;
     this.angleInputPlaceholder = initString;
-    this.length = null;
-    this.lengthInputPlaceholder = initString;
-    this.distanceToNextFiber = null;
-    this.distanceToNextFiberInputPlaceholder = initString;
+    this.width = null;
+    this.widthInputPlaceholder = initString;
+    this.height = null;
+    this.heightInputPlaceholder = initString;
+    this.fibers = null;
+    this.fibersInputPlaceholder = initString;
+    this.distanceBetweenFibers = null;
+    this.distanceBetweenFibersInputPlaceholder = initString;
   }
 }

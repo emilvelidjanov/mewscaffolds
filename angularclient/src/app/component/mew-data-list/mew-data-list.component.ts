@@ -22,7 +22,8 @@ export class MewDataListComponent implements OnInit {
 
   // TODO: auto-collapse and force collapse/uncollapse?
   isCollapsed: boolean;
-  collapseButtonText: string;
+  collapseButtonIcon: string;
+  collapseButtonTitle: string;
 
   isAddDisabled: boolean;
 
@@ -34,13 +35,14 @@ export class MewDataListComponent implements OnInit {
     this.label = "";
     this.tokenLabel = "";
     this.isCollapsed = false;
-    this.collapseButtonText = "";
+    this.collapseButtonIcon = "";
+    this.collapseButtonTitle = "";
     this.selectedTotal = 0;
   }
 
   // TODO: button tooltips
   ngOnInit() {
-    this.checkCollapseButtonText();
+    this.checkCollapseButtonIcon();
   }
 
   ngOnChanges() {
@@ -137,14 +139,15 @@ export class MewDataListComponent implements OnInit {
 
   collapse(): void {
     this.isCollapsed = !this.isCollapsed;
-    this.checkCollapseButtonText();
+    this.checkCollapseButtonIcon();
   }
 
   getViewData(): MewData[] {
     return this.data.filter(token => token.parent.isSelected);
   }
 
-  private checkCollapseButtonText(): void {
-    this.collapseButtonText = (this.isCollapsed ? this.textConfig.collapseButtonTextOpen : this.textConfig.collapseButtonTextClose);
+  private checkCollapseButtonIcon(): void {
+    this.collapseButtonIcon = (this.isCollapsed ? "oi oi-chevron-bottom" : "oi oi-chevron-top");
+    this.collapseButtonTitle = (this.isCollapsed ? this.textConfig.collapseButtonTextOpen : this.textConfig.collapseButtonTextClose);
   }
 }

@@ -1,7 +1,10 @@
 export enum MewDataProperties {
   NAME = "name",
   POSITION = "position",
+  FIBERS = "fibers",
   ANGLE = "angle",
   LENGTH = "length",
-  DISTANCE_TO_NEXT_FIBER = "distanceToNextFiber",
+  WIDTH = "width",
+  HEIGHT = "height",
+  DISTANCE_BETWEEN_FIBERS = "distanceBetweenFibers"
 }

@@ -20,7 +20,7 @@ public class MewscaffoldsApplication {
 	}
 
 	@Bean
-	CommandLineRunner init(PrintRepository printRepository, ScaffoldRepository scaffoldRepository, LayerRepository layerRepository, FiberRepository fiberRepository) {
+	CommandLineRunner init(PrintRepository printRepository, ScaffoldRepository scaffoldRepository, LayerRepository layerRepository) {
 		return args -> {
 			Print print = new Print("Print 1");
 			printRepository.saveAndFlush(print);
@@ -36,24 +36,12 @@ public class MewscaffoldsApplication {
 				Double angleIncrement = 22.5d;
 				ArrayList<Layer> layers = new ArrayList<>();
 				for (int i = 1; i < 9; i++) {
-					Layer layer = new Layer("Layer " + i);
-					layer.setAngle(baseAngle);
+					Layer layer = new Layer("Layer " + i, baseAngle, 15d, 15d, 0.5d);
 					baseAngle += angleIncrement;
 					layers.add(layer);
 				}
 				item.setChildren(layers);
 				scaffoldRepository.saveAndFlush(item);
-			});
-			layerRepository.findAll().forEach(item -> {
-				ArrayList<Fiber> fibers = new ArrayList<>();
-				for (int i = 1; i < 32; i++) {
-					Fiber fiber = new Fiber("Fiber " + i);
-					fiber.setLength(30.0d);
-					fiber.setDistanceToNextFiber(1.0d);
-					fibers.add(fiber);
-				}
-				item.setChildren(fibers);
-				layerRepository.saveAndFlush(item);
 			});
 			printRepository.findAll().forEach(item -> {
 				log.debug("Print: {}", item);
@@ -63,9 +51,6 @@ public class MewscaffoldsApplication {
 			});
 			layerRepository.findAll().forEach(item -> {
 				log.debug("Layer: {}", item);
-			});
-			fiberRepository.findAll().forEach(item -> {
-				log.debug("Fiber: {}", item);
 			});
 		};
 	}

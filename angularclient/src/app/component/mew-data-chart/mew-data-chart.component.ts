@@ -4,6 +4,7 @@ import { TextConfig } from 'src/app/config/text-config/text-config';
 import { Layer } from 'src/app/model/layer/layer';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 import { Color } from 'ng2-charts';
+import { Scaffold } from 'src/app/model/scaffold/scaffold';
 
 @Component({
   selector: 'app-mew-data-chart',
@@ -67,9 +68,10 @@ export class MewDataChartComponent implements OnInit {
     }];
     this.mewDataService.fetchChartData(this.getViewData()).subscribe(data => {
       this.chartDataSets = [];
-      this.getViewData().forEach(layer => {
+      let layers: Layer[] = this.getViewData();
+      layers.forEach(layer => {
         let layerData = data[layer.id];
-        for (let index = 0; index < layer.children.length; index++) {
+        for (let index = 0; index < layer.fibers; index++) {
           let fiberData = layerData[index];
           this.chartDataSets.push({
             backgroundColor: this.defaultChartDataSet.backgroundColor,
@@ -91,6 +93,13 @@ export class MewDataChartComponent implements OnInit {
   }
 
   getViewData(): Layer[] {
-    return this.data.filter(layer => layer.isSelected);
+    let layers: Layer[] = this.data.filter(layer => layer.isSelected);
+    if (layers.length === 0) {
+      this.mewDataService.getScaffoldsOfPrint(this.mewDataService.print).filter(scaffold => scaffold.isSelected).forEach(scaffold => {
+        let pushLayers: Layer[] = scaffold.children as Layer[];
+        layers = layers.concat(pushLayers);
+      });
+    }
+    return layers;
   }
 }

@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Scaffold } from 'src/app/model/scaffold/scaffold';
 import { Layer } from 'src/app/model/layer/layer';
-import { Fiber } from 'src/app/model/fiber/fiber';
 import { MewData } from 'src/app/model/abstract/mew-data';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { takeUntil } from 'rxjs/operators';
@@ -58,6 +57,14 @@ export class MewDataService {
   }
 
   fetchChartData(layers: Layer[]): Observable<[number, Vector[]]> {
+    if (layers.length == 0) {
+      this.print.children.filter(scaffold => scaffold.isSelected).forEach(scaffold => {
+        scaffold.children.forEach(layer => {
+          let copyLayer: Layer = layer as Layer;
+          layers.push(copyLayer);
+        });
+      });
+    }
     let serializedLayers: Object[] = [];
     layers.forEach(layer => {
       serializedLayers.push(this.serializeLayer(layer));
@@ -77,14 +84,6 @@ export class MewDataService {
       layers.push.apply(layers, scaffold.children);
     });
     return layers;
-  }
-
-  getFibersOfPrint(print: Print): Fiber[] {
-    let fibers: Fiber[] = [];
-    this.getLayersOfPrint(print).forEach(layer => {
-      fibers.push.apply(fibers, layer.children);
-    });
-    return fibers;
   }
 
   createPathOfMewData(data: MewData): string {
@@ -146,10 +145,6 @@ export class MewDataService {
         name = this.settingsConfig.defaultLayerName + name;
         newChild = new Layer(id, name, parent);
       }
-      else if (parent instanceof Layer) {
-        name = this.settingsConfig.defaultFiberName + name;
-        newChild = new Fiber(id, name, parent);
-      }
       parent.children.push(newChild);
     }
     return newChild;
@@ -165,11 +160,6 @@ export class MewDataService {
     else if (data instanceof Layer) {
       copy = new Layer(id, data.name, parent);
       copy["angle"] = data["angle"];
-    }
-    else if (data instanceof Fiber) {
-      copy = new Fiber(id, data.name, parent);
-      copy["length"] = data["length"];
-      copy["distanceToNextFiber"] = data["distanceToNextFiber"];
     }
     if (data.children != null) {
       data.children.forEach(child => {
@@ -189,23 +179,10 @@ export class MewDataService {
       isSelected: layer.isSelected,
       isPersisted: layer.isPersisted,
       angle: layer.angle,
-    }
-    layer.children.forEach(fiber => {
-      result.children.push(this.serializeFiber(fiber as Fiber));
-    });
-    return result;
-  }
-
-  serializeFiber(fiber: Fiber): any {
-    let result = {
-      id: fiber.id,
-      name: fiber.name,
-      path: fiber.path,
-      children: fiber.children,
-      isSelected: fiber.isSelected,
-      isPersisted: fiber.isPersisted,
-      length: fiber.length,
-      distanceToNextFiber: fiber.distanceToNextFiber,
+      fibers: layer.fibers,
+      width: layer.width,
+      height: layer.height,
+      distanceBetweenFibers: layer.distanceBetweenFibers
     }
     return result;
   }
@@ -246,6 +223,18 @@ export class MewDataService {
     return this.attachChildToParent(child, neighbor.parent, index);
   }
 
+  calculateScaffoldRadius(scaffold: Scaffold) {
+    let largest: number = 0;
+    scaffold.children.forEach(child => {
+      let layer: Layer = child as Layer;
+      // TODO
+    });
+  }
+
+  calculateFibersOfLayer(layer: Layer): number {
+    return Math.floor(layer.height / layer.distanceBetweenFibers) + 1;
+  }
+
   private initializeFetchedPrint(print: Print): Print {
     let newPrint: Print = new Print(print.id, print.name);
     newPrint.isPersisted = true;
@@ -257,13 +246,6 @@ export class MewDataService {
         let newLayer: Layer = new Layer(layer.id, layer.name, newScaffold);
         newLayer.isPersisted = true;
         newLayer.angle = layer["angle"];
-        layer.children.forEach(fiber => {
-          let newFiber: Fiber = new Fiber(fiber.id, fiber.name, newLayer);
-          newFiber.isPersisted = true;
-          newFiber.length = fiber["length"];
-          newFiber.distanceToNextFiber = fiber["distanceToNextFiber"];
-          newLayer.children.push(newFiber);
-        });
         newScaffold.children.push(newLayer);
       });
       newPrint.children.push(newScaffold);

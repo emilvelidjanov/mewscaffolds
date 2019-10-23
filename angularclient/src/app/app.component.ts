@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MewDataService } from './service/mew-data/mew-data.service';
 import { Layer } from './model/layer/layer';
 import { Scaffold } from './model/scaffold/scaffold';
-import { Fiber } from './model/fiber/fiber';
 import { Print } from './model/print/print';
 import { TextConfig } from './config/text-config/text-config';
 import { Subject } from 'rxjs';
@@ -20,14 +19,12 @@ export class AppComponent implements OnInit {
   print: Print[];
   scaffolds: Scaffold[];
   layers: Layer[];
-  fibers: Fiber[];
 
   constructor(private mewDataService: MewDataService, private textConfig: TextConfig) {
     this.unsubscribe = new Subject<any>();
     this.print = [];
     this.scaffolds = [];
     this.layers = [];
-    this.fibers = [];
   }
 
   // TODO: load failed message
@@ -40,7 +37,6 @@ export class AppComponent implements OnInit {
       this.print[0].isSelected = true;
       this.scaffolds = this.mewDataService.getScaffoldsOfPrint(this.print[0]);
       this.layers = this.mewDataService.getLayersOfPrint(this.print[0]);
-      this.fibers = this.mewDataService.getFibersOfPrint(this.print[0]);
     }, error => {
       this.print.push(defaultPrint);
       this.print[0].isSelected = true;

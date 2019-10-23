@@ -15,9 +15,13 @@ export class SettingsModalComponent implements OnInit {
   constructor(private textConfig: TextConfig, private settingsConfig: SettingsConfig, private cookieService: CookieService) { }
 
   ngOnInit() {
-    this.settingsConfig.multiSelectOn = Boolean(JSON.parse(this.cookieService.get(this.nameMultiSelectOn)));
+    let multiSelectOptionValue: string = this.cookieService.get(this.nameMultiSelectOn);
+    if (multiSelectOptionValue) {
+      this.settingsConfig.multiSelectOn = Boolean(JSON.parse(multiSelectOptionValue));
+    }
   }
 
+  // TODO: implement other settings too
   // TODO: save settings as cookie
   onInput(name: string, value: string) {
     switch (name) {

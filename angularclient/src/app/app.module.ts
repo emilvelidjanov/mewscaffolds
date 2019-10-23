@@ -15,6 +15,7 @@ import { ChartsModule } from 'ng2-charts';
 import { SettingsModalComponent } from './component/settings-modal/settings-modal.component';
 import { SettingsConfig } from './config/settings-config/settings-config';
 import { CookieService } from 'ngx-cookie-service';
+import { ScaffoldPositioningComponent } from './component/scaffold-positioning/scaffold-positioning.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { CookieService } from 'ngx-cookie-service';
     MewDataFormComponent,
     MewDataChartComponent,
     SettingsModalComponent,
+    ScaffoldPositioningComponent,
   ],
   imports: [
     BrowserModule,
