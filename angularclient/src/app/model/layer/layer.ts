@@ -9,6 +9,25 @@ export class Layer extends MewData {
     height: number;
     distanceBetweenFibers: number;
 
+    // TODO: speed, loop speed?, loopRadius?, wait in, wait out, z-distance?, angleDelta?, fiberDistanceDelta?
+    // advanced mode?
+    // do a cleanup for the forms...
+    speed: number;
+    loopSpeed: number;
+    loopRadius: number;
+    waitIn: number;
+    waitOut: number;
+    zDistance: number;
+    angleIncrement: number;
+    distanceBetweenFibersIncrement: number;
+    
+    // TODO: amplitude
+    isSinusoidal: boolean;
+    amplitude: number;
+    phase: number;
+    phaseShift: number;
+
+
     constructor(id: number, name: string, parent: MewData) {
         super(id, name, null, parent);
         this.angle = SettingsConfig.instance.defaultLayerAngle;

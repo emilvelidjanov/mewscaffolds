@@ -1,10 +1,8 @@
-import { Component, OnInit, Input, ViewContainerRef } from '@angular/core';
-import { ChartOptions, ChartDataSets, ChartType, ChartPoint, ChartData, ChartColor } from 'chart.js';
+import { Component, OnInit, Input } from '@angular/core';
+import { ChartOptions, ChartDataSets, ChartType } from 'chart.js';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { Layer } from 'src/app/model/layer/layer';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
-import { Color } from 'ng2-charts';
-import { Scaffold } from 'src/app/model/scaffold/scaffold';
 
 @Component({
   selector: 'app-mew-data-chart',
@@ -18,7 +16,6 @@ export class MewDataChartComponent implements OnInit {
   chartDataSets: ChartDataSets[];
   chartOptions: ChartOptions;
   chartType: ChartType;
-  chartColors: Color[];
 
   private readonly defaultChartDataSet: ChartDataSets;
 

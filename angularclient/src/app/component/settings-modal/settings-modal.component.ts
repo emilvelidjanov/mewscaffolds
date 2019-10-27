@@ -10,26 +10,53 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class SettingsModalComponent implements OnInit {
 
+  readonly settingsCookieName: string = "settings";
+
   readonly nameMultiSelectOn: string = "multiSelectOn";
+  readonly namePrintAreaBottomLeftX: string = "printAreaBottomLeftX";
+  readonly namePrintAreaBottomLeftY: string = "printAreaBottomLeftY";
+  readonly namePrintAreaTopRightX: string = "printAreaTopRightX";
+  readonly namePrintAreaTopRightY: string = "printAreaTopRightY";
+  readonly nameDefaultScaffoldName: string = "defaultScaffoldName";
+  readonly nameDefaultScaffoldPositionX: string = "defaultScaffoldPositionX";
+  readonly nameDefaultScaffoldPositionY: string = "defaultScaffoldPositionY";
+  readonly nameDefaultLayerName: string = "defaultLayerName";
+  readonly nameDefaultLayerWidth: string = "defaultLayerWidth";
+  readonly nameDefaultLayerHeight: string = "defaultLayerHeight";
+  readonly nameDefaultDistanceBetweenFibers: string = "defaultDistanceBetweenFibers";
+  readonly nameDefaultLayerAngle: string = "defaultLayerAngle";
 
   constructor(private textConfig: TextConfig, private settingsConfig: SettingsConfig, private cookieService: CookieService) { }
 
   ngOnInit() {
-    let multiSelectOptionValue: string = this.cookieService.get(this.nameMultiSelectOn);
-    if (multiSelectOptionValue) {
-      this.settingsConfig.multiSelectOn = Boolean(JSON.parse(multiSelectOptionValue));
+    let settingsCookie: string = this.cookieService.get(this.settingsCookieName);
+    if (settingsCookie) {
+      let entries: [string, any][] = JSON.parse(settingsCookie);
+      entries.forEach(entry => {
+        this.settingsConfig[entry[0]] = entry[1];
+      });
     }
   }
 
-  // TODO: implement other settings too
-  // TODO: save settings as cookie
-  onInput(name: string, value: string) {
+  onInput(name: string, value: string): void {
     switch (name) {
       case this.nameMultiSelectOn:
-        this.settingsConfig.multiSelectOn = Boolean(JSON.parse(value));
+        this.settingsConfig.multiSelectOn = Boolean(value);
+        break;
+      case this.nameDefaultScaffoldName:
+      case this.nameDefaultLayerName:
+        this.settingsConfig[name] = String(value);
+        break;
+      default:
+        this.settingsConfig[name] = Number(value);
         break;
     }
-    this.cookieService.set(this.nameMultiSelectOn, JSON.stringify(this.settingsConfig.multiSelectOn));
   }
 
+  saveSettingsAsCookie(): void {
+    let entries: [string, any][] = Object.entries(this.settingsConfig);
+    entries = entries.filter(entry => entry[0] != "textConfig");
+    this.cookieService.set(this.settingsCookieName, JSON.stringify(entries), 365);
+    alert(this.textConfig.settingsSavedSuccessfullyMessage);
+  }
 }

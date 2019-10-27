@@ -1,16 +1,22 @@
-<div class="container mt-1">
+<div class="container mt-2">
   <div class="row mb-1">
+    <div class="col-sm h2">
+      {{textConfig.appTitle}}
+    </div>
     <div class="col-sm">
-      <div class="d-flex">
-        <div class="d-inline-block h2">
-          {{textConfig.appTitle}}
-        </div>
-        <div class="btn-group ml-auto">
-          <!-- TODO: disable when no changes, loading icon, and save successful message -->
+      <div class="btn-toolbar float-right">
+        <!-- TODO: disable when no changes, loading icon, and save successful message -->
+        <div class="btn-group mr-1">
           <button type="button" class="btn btn-secondary">{{textConfig.saveButtonText}}</button>
+          <button type="button" class="btn btn-secondary">{{textConfig.loadButtonText}}</button>
           <button type="button" class="btn btn-secondary">{{textConfig.cancelButtonText}}</button>
-          <button type="button" class="btn btn-secondary" data-toggle="modal"
-            data-target="#settingsModal">{{textConfig.settingsButtonText}}</button>
+        </div>
+        <div class="btn-group mr-1">
+          <button type="button" class="btn btn-secondary">{{textConfig.generateCodeButtonText}}</button>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary oi oi-cog" data-toggle="modal"
+            data-target="#settingsModal"></button>
         </div>
       </div>
     </div>

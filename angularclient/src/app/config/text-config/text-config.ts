@@ -52,7 +52,7 @@ export class TextConfig {
     readonly chartTitle: string = "chart";
 
     // Positioning component
-    readonly positioningTitle: string = "positioning"
+    readonly positioningTitle: string = "positions"
 
     // Buttons
     readonly collapseButtonTextClose: string = "Close";
@@ -66,6 +66,8 @@ export class TextConfig {
     readonly cancelButtonText: string = "Cancel";
     readonly settingsButtonText: string = "Settings";
     readonly refreshButtonText: string = "Refresh";
+    readonly loadButtonText: string = "Load";
+    readonly generateCodeButtonText: string = "Generate code";
 
     // Settings Modal
     readonly settingsTitle: string = "Settings";
@@ -87,6 +89,7 @@ export class TextConfig {
     readonly settingsDefaultLayerHeightLabel: string = "Height";
     readonly settingsDefaultDistanceBetweenFibersLabel: string = "Distance between fibers";
     readonly settingsDefaultLayerAngleLabel: string = "Angle";
+    readonly settingsSavedSuccessfullyMessage: string = "Saved settings in your browser.";
 
     // Drag & Drop
     readonly cdkDragPlaceholderText: string = "Move here...";

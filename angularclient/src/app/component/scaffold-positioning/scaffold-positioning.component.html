@@ -2,13 +2,10 @@
   <div class="card-body">
     <div class="card-title h5 d-flex">
       {{textConfig.scaffold}} {{textConfig.positioningTitle}}
+      <!-- TODO: expand button? -->
     </div>
-    <div class="d-flex justify-content-center">
-      <div id="positionBoundary" class="border border-secondary" [ngStyle]="positionBoundaryStyle">
-        <div class="bg-dark" *ngFor="let scaffold of data" cdkDrag cdkDragBoundary="#positionBoundary" [ngStyle]="getScaffoldStyle(scaffold)">
-  
-        </div>
-      </div>
-    </div>
+    <!-- TODO: zoom & pan -->
+    <canvas baseChart [datasets]="chartDataSets" [options]="chartOptions" [chartType]="chartType" [colors]="chartColors">
+    </canvas>
   </div>
 </div>

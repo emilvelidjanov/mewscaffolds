@@ -140,6 +140,8 @@ export class MewDataService {
       if (parent instanceof Print) {
         name = this.settingsConfig.defaultScaffoldName + name;
         newChild = new Scaffold(id, name, parent);
+        newChild["position"]["x"] = this.settingsConfig.defaultScaffoldPositionX;
+        newChild["position"]["y"] = this.settingsConfig.defaultScaffoldPositionY;
       }
       else if (parent instanceof Scaffold) {
         name = this.settingsConfig.defaultLayerName + name;
@@ -155,11 +157,16 @@ export class MewDataService {
     let id: number = this.getNextChildId(parent);
     if (data instanceof Scaffold) {
       copy = new Scaffold(id, data.name, parent);
-      copy["position"] = data["position"];
+      copy["position"]["x"] = data["position"]["x"];
+      copy["position"]["y"] = data["position"]["y"];
     }
     else if (data instanceof Layer) {
       copy = new Layer(id, data.name, parent);
       copy["angle"] = data["angle"];
+      copy["fibers"] = data["fibers"];
+      copy["width"] = data["width"];
+      copy["height"] = data["height"];
+      copy["distanceBetweenFibers"] = data["distanceBetweenFibers"];
     }
     if (data.children != null) {
       data.children.forEach(child => {
@@ -223,12 +230,16 @@ export class MewDataService {
     return this.attachChildToParent(child, neighbor.parent, index);
   }
 
-  calculateScaffoldRadius(scaffold: Scaffold) {
-    let largest: number = 0;
+  getRadiusOfScaffold(scaffold: Scaffold): number {
+    let result: number = 0;
     scaffold.children.forEach(child => {
       let layer: Layer = child as Layer;
-      // TODO
+      let width: number = layer.width;
+      let height: number = layer.height;
+      let radius: number = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) / 2;
+      if (radius > result) result = radius;
     });
+    return result;
   }
 
   calculateFibersOfLayer(layer: Layer): number {

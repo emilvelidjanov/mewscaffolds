@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     let defaultPrint: Print = new Print(1, this.textConfig.print + " 1");
     this.mewDataService.fetchPrintById(1).pipe(takeUntil(this.unsubscribe)).subscribe(print => {
-      if (print == null) print = defaultPrint;
+      if (print == null || print == undefined) print = defaultPrint;
       this.print = [];
       this.print.push(print);
       this.print[0].isSelected = true;
