@@ -37,11 +37,23 @@ public class Layer {
     @NonNull
     private Double distanceBetweenFibers;
 
-    public Layer(@NotNull @NonNull String name, @NotNull @NonNull Double angle, @NotNull @NonNull Double width,
-                 @NotNull @NonNull Double height, @NotNull @NonNull Double distanceBetweenFibers) {
-        this.name = name;
-        this.angle = angle;
-        this.width = width;
+    @NotNull
+    @NonNull
+    private Boolean isSinusoidal;
+
+    @NotNull
+    @NonNull
+    private Double amplitude;
+
+    @NotNull
+    @NonNull
+    private Double phase;
+
+    @NotNull
+    @NonNull
+    private Double phaseShift;
+
+    public Layer(@NotNull @NonNull Double height, @NotNull @NonNull Double distanceBetweenFibers) {
         this.height = height;
         this.distanceBetweenFibers = distanceBetweenFibers;
         this.fibers = (int) (this.height / this.distanceBetweenFibers);

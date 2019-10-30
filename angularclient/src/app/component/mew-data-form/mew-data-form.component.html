@@ -10,8 +10,9 @@
       <div *ngIf="hasPropertyMap.get(mewDataProperties.NAME)" class="form-group">
         <!-- TODO: naming number hint -->
         <label for="nameInput{{dataLabel}}">{{textConfig.nameInputLabel}}</label>
-        <input id="nameInput{{dataLabel}}" type="text" class="form-control" [value]="name" [name]="nameInputName" [placeholder]="nameInputPlaceholder"
-          (input)="onInput($event.target.name, $event.target.value)" (focusout)="recalculatePaths()">
+        <input id="nameInput{{dataLabel}}" type="text" class="form-control" [value]="name" [name]="nameInputName"
+          [placeholder]="nameInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)"
+          (focusout)="recalculatePaths()">
       </div>
       <div *ngIf="hasPropertyMap.get(mewDataProperties.POSITION)" class="form-group form-row">
         <div class="col">
@@ -25,7 +26,8 @@
             [placeholder]="positionYInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
       </div>
-      <div *ngIf="hasPropertyMap.get(mewDataProperties.WIDTH) || hasPropertyMap.get(mewDataProperties.HEIGHT)" class="form-group form-row">
+      <div *ngIf="hasPropertyMap.get(mewDataProperties.WIDTH) || hasPropertyMap.get(mewDataProperties.HEIGHT)"
+        class="form-group form-row">
         <div class="col">
           <label for="widthInput">{{textConfig.widthInputLabel}}</label>
           <input id="widthInput" type="number" class="form-control" [value]="width" [name]="widthInputName"
@@ -37,22 +39,50 @@
             [placeholder]="heightInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
       </div>
-      <div *ngIf="hasPropertyMap.get(mewDataProperties.DISTANCE_BETWEEN_FIBERS) || hasPropertyMap.get(mewDataProperties.ANGLE)" class="form-group form-row">
+      <div
+        *ngIf="hasPropertyMap.get(mewDataProperties.DISTANCE_BETWEEN_FIBERS) || hasPropertyMap.get(mewDataProperties.ANGLE)"
+        class="form-group form-row">
         <div class="col">
           <label for="distanceBetweenFibersInput">{{textConfig.distanceBetweenFibersInputLabel}}</label>
-          <input id="distanceBetweenFibersInput" type="number" step="0.1" class="form-control" [value]="distanceBetweenFibers" [name]="distanceBetweenFibersInputName"
-            [placeholder]="distanceBetweenFibersInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
+          <input id="distanceBetweenFibersInput" type="number" step="0.1" class="form-control"
+            [value]="distanceBetweenFibers" [name]="distanceBetweenFibersInputName"
+            [placeholder]="distanceBetweenFibersInputPlaceholder"
+            (input)="onInput($event.target.name, $event.target.value)">
         </div>
         <div class="col">
           <label for="angleInput">{{textConfig.angleInputLabel}}</label>
-          <input id="angleInput" type="number" class="form-control" [value]="angle" [name]="angleInputName" [placeholder]="angleInputPlaceholder"
-            (input)="onInput($event.target.name, $event.target.value)">
+          <input id="angleInput" type="number" class="form-control" [value]="angle" [name]="angleInputName"
+            [placeholder]="angleInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
       </div>
       <div *ngIf="hasPropertyMap.get(mewDataProperties.FIBERS)" class="form-group">
         <label for="fibersInput">{{textConfig.fibersInputLabel}}</label>
-        <input id="fibersInput" type="number" class="form-control" [value]="fibers" [name]="fibersInputName" [placeholder]="fibersInputPlaceholder"
-          (input)="onInput($event.target.name, $event.target.value)" disabled>
+        <input id="fibersInput" type="number" class="form-control" [value]="fibers" [name]="fibersInputName"
+          [placeholder]="fibersInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)" disabled>
+      </div>
+      <div *ngIf="hasPropertyMap.get(mewDataProperties.IS_SINUSOIDAL)" class="form-group form-check">
+        <input id="isSinusoidalInput" type="checkbox" class="form-check-input" [checked]="isSinusoidal"
+          [name]="isSinusoidalInputName" (input)="onInput($event.target.name, $event.target.checked)">
+        <label for="isSinusoidalInput" class="form-check-label">{{textConfig.isSinusoidalInputLabel}}</label>
+      </div>
+      <div *ngIf="isSinusoidal" class="form-group form-row">
+        <div *ngIf="hasPropertyMap.get(mewDataProperties.AMPLITUDE)" class="col">
+          <label for="amplitudeInput">{{textConfig.amplitudeInputLabel}}</label>
+          <input id="amplitudeInput" type="number" class="form-control" [value]="amplitude" [name]="amplitudeInputName"
+            [placeholder]="amplitudeInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)"
+            step="0.1">
+        </div>
+        <div *ngIf="hasPropertyMap.get(mewDataProperties.PHASE)" class="col">
+          <label for="phaseInput">{{textConfig.phaseInputLabel}}</label>
+          <input id="phaseInput" type="number" class="form-control" [value]="phase" [name]="phaseInputName"
+            [placeholder]="phaseInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
+        </div>
+        <div *ngIf="hasPropertyMap.get(mewDataProperties.PHASE_SHIFT)" class="col">
+          <label for="phaseShiftInput">{{textConfig.phaseShiftInputLabel}}</label>
+          <input id="phaseShiftInput" type="number" class="form-control" [value]="phaseShift"
+            [name]="phaseShiftInputName" [placeholder]="phaseShiftInputPlaceholder"
+            (input)="onInput($event.target.name, $event.target.value)">
+        </div>
       </div>
     </form>
   </div>

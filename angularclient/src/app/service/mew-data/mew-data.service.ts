@@ -189,7 +189,11 @@ export class MewDataService {
       fibers: layer.fibers,
       width: layer.width,
       height: layer.height,
-      distanceBetweenFibers: layer.distanceBetweenFibers
+      distanceBetweenFibers: layer.distanceBetweenFibers,
+      isSinusoidal: layer.isSinusoidal,
+      amplitude: layer.amplitude,
+      phase: layer.phase,
+      phaseShift: layer.phaseShift,
     }
     return result;
   }
@@ -252,11 +256,15 @@ export class MewDataService {
     print.children.forEach(scaffold => {
       let newScaffold: Scaffold = new Scaffold(scaffold.id, scaffold.name, newPrint);
       newScaffold.isPersisted = true;
-      newScaffold.position = scaffold["position"];
+      newScaffold.position = new Vector(scaffold["positionX"], scaffold["positionY"]);
       scaffold.children.forEach(layer => {
         let newLayer: Layer = new Layer(layer.id, layer.name, newScaffold);
         newLayer.isPersisted = true;
         newLayer.angle = layer["angle"];
+        newLayer.isSinusoidal = layer["isSinusoidal"];
+        newLayer.amplitude = layer["amplitude"];
+        newLayer.phase = layer["phase"];
+        newLayer.phaseShift = layer["phaseShift"];
         newScaffold.children.push(newLayer);
       });
       newPrint.children.push(newScaffold);

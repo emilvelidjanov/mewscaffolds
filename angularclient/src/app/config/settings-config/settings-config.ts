@@ -14,6 +14,7 @@ export class SettingsConfig {
   printAreaTopRightY: number;
 
   multiSelectOn: boolean;
+  advancedModeOn: boolean;
 
   defaultScaffoldName: string;
   defaultScaffoldPositionX: number;
@@ -25,9 +26,22 @@ export class SettingsConfig {
   defaultLayerHeight: number;
   defaultDistanceBetweenFibers: number;
 
-  // TODO: add to settings
   slideWidth: number;
   slideHeight: number;
+
+  defaultLayerZDistance: number;
+  defaultLayerSpeed: number;
+  defaultLayerLoopSpeed: number;
+  defaultLayerLoopRadius: number;
+  defaultLayerWaitIn: number;
+  defaultLayerWaitOut: number;
+  defaultLayerAngleIncrement: number;
+  defaultLayerDistanceBetweenFibersIncrement: number;
+
+  defaultLayerIsSinusoidal: boolean;
+  defaultLayerAmplitude: number;
+  defaultLayerPhase: number;
+  defaultLayerPhaseShift: number;
 
   constructor(private textConfig: TextConfig) {
     SettingsConfig.instance = this;
@@ -37,7 +51,8 @@ export class SettingsConfig {
     this.printAreaTopRightX = 223;
     this.printAreaTopRightY = 134;
 
-    this.multiSelectOn = true;
+    this.multiSelectOn = false;
+    this.advancedModeOn = false;
 
     this.defaultScaffoldName = "Scaffold";
     let smallerX = Math.min(this.printAreaTopRightX, this.printAreaBottomLeftX);
@@ -53,5 +68,18 @@ export class SettingsConfig {
 
     this.slideWidth = 76;
     this.slideHeight = 26;
+
+    this.defaultLayerSpeed = 300;
+    this.defaultLayerLoopSpeed = 300;
+    this.defaultLayerLoopRadius = 2 * this.defaultDistanceBetweenFibers;
+    this.defaultLayerWaitIn = 0.2;
+    this.defaultLayerWaitOut = 0.06;
+    this.defaultLayerZDistance = 4;
+    this.defaultLayerAngleIncrement = 0;
+    this.defaultLayerDistanceBetweenFibersIncrement = 0;
+    this.defaultLayerIsSinusoidal = false;
+    this.defaultLayerAmplitude = 0.25;
+    this.defaultLayerPhase = 1;
+    this.defaultLayerPhaseShift = 0;
   }
 }

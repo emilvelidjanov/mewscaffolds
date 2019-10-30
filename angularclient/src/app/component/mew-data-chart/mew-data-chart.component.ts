@@ -46,7 +46,7 @@ export class MewDataChartComponent implements OnInit {
       pointBorderColor: "rgba(0, 0, 0, 1)",
       pointHoverBackgroundColor: "rgba(0, 0, 0, 1)",
       pointHoverBorderColor: "rgba(0, 0, 0, 1)",
-      pointRadius: 5,
+      pointRadius: 0,
       pointRotation: 45,
       pointStyle: "cross",
     }
@@ -70,7 +70,7 @@ export class MewDataChartComponent implements OnInit {
         let layerData = data[layer.id];
         for (let index = 0; index < layer.fibers; index++) {
           let fiberData = layerData[index];
-          this.chartDataSets.push({
+          let chartDataSet: ChartDataSets = {
             backgroundColor: this.defaultChartDataSet.backgroundColor,
             borderColor: this.defaultChartDataSet.borderColor,
             borderWidth: this.defaultChartDataSet.borderWidth,
@@ -82,8 +82,19 @@ export class MewDataChartComponent implements OnInit {
             pointRadius: this.defaultChartDataSet.pointRadius,
             pointRotation: this.defaultChartDataSet.pointRotation,
             pointStyle: this.defaultChartDataSet.pointStyle,
-            data: [fiberData["origin"], fiberData["target"]],
-          });
+            data: [],
+          }
+          if (Object.keys(fiberData).includes("sinePoints")) {
+            console.log(fiberData.sinePoints);
+            fiberData.sinePoints.forEach(pt => {
+              chartDataSet.data.push(pt);
+            });
+          }
+          else {
+            chartDataSet.data.push(fiberData["origin"]);
+            chartDataSet.data.push(fiberData["target"]);
+          }
+          this.chartDataSets.push(chartDataSet);
         }
       });
     });

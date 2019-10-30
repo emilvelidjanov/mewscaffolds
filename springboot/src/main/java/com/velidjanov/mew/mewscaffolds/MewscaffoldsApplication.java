@@ -26,8 +26,14 @@ public class MewscaffoldsApplication {
 			printRepository.saveAndFlush(print);
 			printRepository.findAll().forEach(item -> {
 				ArrayList<Scaffold> scaffolds = new ArrayList<>();
-				scaffolds.add(new Scaffold("Scaffold 1"));
-				scaffolds.add(new Scaffold("Scaffold 2"));
+				Scaffold scaffold1 = new Scaffold("Scaffold 1");
+                scaffold1.setPositionX(0d);
+                scaffold1.setPositionY(0d);
+                scaffolds.add(scaffold1);
+                Scaffold scaffold2 = new Scaffold("Scaffold 2");
+                scaffold1.setPositionX(0d);
+                scaffold1.setPositionY(0d);
+                scaffolds.add(scaffold2);
 				item.setChildren(scaffolds);
 				printRepository.saveAndFlush(item);
 			});
@@ -36,8 +42,15 @@ public class MewscaffoldsApplication {
 				Double angleIncrement = 22.5d;
 				ArrayList<Layer> layers = new ArrayList<>();
 				for (int i = 1; i < 9; i++) {
-					Layer layer = new Layer("Layer " + i, baseAngle, 15d, 15d, 0.5d);
+					Layer layer = new Layer(15d, 0.5d);
+					layer.setWidth(15d);
+					layer.setName("Layer " + i);
 					baseAngle += angleIncrement;
+					layer.setAngle(baseAngle);
+					layer.setIsSinusoidal(item.getName().equals("Scaffold 2"));
+					layer.setAmplitude(0.5);
+                    layer.setPhase(1d);
+                    layer.setPhaseShift(0d);
 					layers.add(layer);
 				}
 				item.setChildren(layers);

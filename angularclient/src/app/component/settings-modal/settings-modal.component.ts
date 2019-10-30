@@ -13,6 +13,9 @@ export class SettingsModalComponent implements OnInit {
   readonly settingsCookieName: string = "settings";
 
   readonly nameMultiSelectOn: string = "multiSelectOn";
+  readonly nameAdvancedModeOn: string = "advancedModeOn";
+  readonly nameSlideWidth: string = "slideWidth";
+  readonly nameSlideHeight: string = "slideHeight";
   readonly namePrintAreaBottomLeftX: string = "printAreaBottomLeftX";
   readonly namePrintAreaBottomLeftY: string = "printAreaBottomLeftY";
   readonly namePrintAreaTopRightX: string = "printAreaTopRightX";
@@ -25,6 +28,20 @@ export class SettingsModalComponent implements OnInit {
   readonly nameDefaultLayerHeight: string = "defaultLayerHeight";
   readonly nameDefaultDistanceBetweenFibers: string = "defaultDistanceBetweenFibers";
   readonly nameDefaultLayerAngle: string = "defaultLayerAngle";
+    
+  readonly nameDefaultLayerIsSinusoidal: string = "defaultLayerIsSinusoidal";
+  readonly nameDefaultLayerAmplitude: string = "defaultLayerAmplitude";
+  readonly nameDefaultLayerPhase: string = "defaultLayerPhase";
+  readonly nameDefaultLayerPhaseShift: string = "defaultLayerPhaseShift";
+
+  readonly nameDefaultLayerSpeed: string = "defaultLayerSpeed";
+  readonly nameDefaultLayerLoopSpeed: string = "defaultLayerLoopSpeed";
+  readonly nameDefaultLayerLoopRadius: string = "defaultLayerLoopRadius";
+  readonly nameDefaultLayerWaitIn: string = "defaultLayerWaitIn";
+  readonly nameDefaultLayerWaitOut: string = "defaultLayerWaitOut";
+  readonly nameDefaultLayerZDistance: string = "defaultLayerZDistance";
+  readonly nameDefaultLayerAngleIncrement: string = "defaultLayerAngleIncrement";
+  readonly nameDefaultLayerDistanceBetweenFibersIncrement: string = "defaultLayerDistanceBetweenFibersIncrement";
 
   constructor(private textConfig: TextConfig, private settingsConfig: SettingsConfig, private cookieService: CookieService) { }
 
@@ -41,7 +58,9 @@ export class SettingsModalComponent implements OnInit {
   onInput(name: string, value: string): void {
     switch (name) {
       case this.nameMultiSelectOn:
-        this.settingsConfig.multiSelectOn = Boolean(value);
+      case this.nameAdvancedModeOn:
+      case this.nameDefaultLayerIsSinusoidal:
+        this.settingsConfig[name] = Boolean(value);
         break;
       case this.nameDefaultScaffoldName:
       case this.nameDefaultLayerName:

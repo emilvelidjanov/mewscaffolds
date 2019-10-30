@@ -6,5 +6,17 @@ export enum MewDataProperties {
   LENGTH = "length",
   WIDTH = "width",
   HEIGHT = "height",
-  DISTANCE_BETWEEN_FIBERS = "distanceBetweenFibers"
+  DISTANCE_BETWEEN_FIBERS = "distanceBetweenFibers",
+  SPEED = "speed",
+  LOOP_SPEED = "loopSpeed",
+  LOOP_RADIUS = "loopRadius",
+  WAIT_IN = "waitIn",
+  WAIT_OUT = "waitOut",
+  Z_DISTANCE = "zDistance",
+  ANGLE_INCREMENT = "angleIncrement",
+  DISTANCE_BETWEEN_FIBERS_INCREMENT = "distanceBetweenFibersIncrement",
+  IS_SINUSOIDAL = "isSinusoidal",
+  AMPLITUDE = "amplitude",
+  PHASE = "phase",
+  PHASE_SHIFT = "phaseShift",
 }

@@ -12,6 +12,12 @@
         <form>
           <div class="h5">{{textConfig.settingsUserInterfaceLabel}}</div>
           <div class="form-group form-check">
+            <input id="settingsAdvancedModeOn" type="checkbox" class="form-check-input" [name]="nameAdvancedModeOn"
+              [checked]="settingsConfig.advancedModeOn" (input)="onInput($event.target.name, $event.target.checked)">
+            <label for="settingsAdvancedModeOn"
+              class="form-check-label">{{textConfig.settingsAdvancedModeLabel}}</label>
+          </div>
+          <div class="form-group form-check">
             <input id="settingsMultiSelectOn" type="checkbox" class="form-check-input" [name]="nameMultiSelectOn"
               [checked]="settingsConfig.multiSelectOn" (input)="onInput($event.target.name, $event.target.checked)">
             <label for="settingsMultiSelectOn" class="form-check-label">{{textConfig.settingsMultiSelectLabel}}</label>
@@ -43,6 +49,18 @@
               <label for="settingsPrintAreaTopRightY">{{textConfig.settingsPrintAreaTopRightYLabel}}</label>
               <input id="settingsPrintAreaTopRightY" type="number" class="form-control" [name]="namePrintAreaTopRightY"
                 [value]="settingsConfig.printAreaTopRightY" (input)="onInput($event.target.name, $event.target.value)">
+            </div>
+          </div>
+          <div *ngIf="settingsConfig.advancedModeOn" class="form-group form-row">
+            <div class="col">
+              <label for="settingsSlideWidth">{{textConfig.settingsSlideWidthLabel}}</label>
+              <input id="settingsSlideWidth" type="number" class="form-control" [name]="nameSlideWidth"
+                [value]="settingsConfig.slideWidth" (input)="onInput($event.target.name, $event.target.value)">
+            </div>
+            <div class="col">
+              <label for="settingsSlideHeight">{{textConfig.settingsSlideHeightLabel}}</label>
+              <input id="settingsSlideHeight" type="number" class="form-control" [name]="nameSlideHeight"
+                [value]="settingsConfig.slideHeight" (input)="onInput($event.target.name, $event.target.value)">
             </div>
           </div>
           <hr class="my-4">
@@ -114,9 +132,40 @@
                 [placeholder]="textConfig.angleInputPlaceholder">
             </div>
           </div>
+          <div class="form-group form-check">
+            <input id="settingsDefaultLayerIsSinusoidal" type="checkbox" class="form-check-input"
+              [name]="nameDefaultLayerIsSinusoidal" [checked]="settingsConfig.isSinusoidal"
+              (input)="onInput($event.target.name, $event.target.checked)">
+            <label for="settingsDefaultLayerIsSinusoidal"
+              class="form-check-label">{{textConfig.isSinusoidalInputLabel}}</label>
+          </div>
+          <div class="form-group form-row">
+            <div class="col">
+              <label for="settingsDefaultLayerAmplitude">{{textConfig.amplitudeInputLabel}}</label>
+              <input id="settingsDefaultLayerAmplitude" type="number" class="form-control"
+                [value]="settingsConfig.defaultLayerAmplitude" [name]="nameDefaultLayerAmplitude"
+                (input)="onInput($event.target.name, $event.target.value)"
+                [placeholder]="textConfig.defaultLayerAmplitudeInputPlaceholder" step="0.1">
+            </div>
+            <div class="col">
+              <label for="settingsDefaultLayerPhase">{{textConfig.phaseInputLabel}}</label>
+              <input id="settingsDefaultLayerPhase" type="number" class="form-control"
+                [value]="settingsConfig.defaultLayerPhase" [name]="nameDefaultLayerPhase"
+                (input)="onInput($event.target.name, $event.target.value)"
+                [placeholder]="textConfig.defaultLayerPhaseInputPlaceholder">
+            </div>
+            <div class="col">
+              <label for="settingsDefaultLayerPhaseShift">{{textConfig.phaseShiftInputLabel}}</label>
+              <input id="settingsDefaultLayerPhaseShift" type="number" class="form-control"
+                [value]="settingsConfig.defaultLayerPhaseShift" [name]="nameDefaultLayerPhaseShift"
+                (input)="onInput($event.target.name, $event.target.value)"
+                [placeholder]="textConfig.defaultLayerPhaseShiftInputPlaceholder">
+            </div>
+          </div>
 
           <hr class="my-4">
-          <button type="button" class="btn btn-secondary" (click)="saveSettingsAsCookie()">{{textConfig.saveButtonText}}</button>
+          <button type="button" class="btn btn-secondary"
+            (click)="saveSettingsAsCookie()">{{textConfig.saveButtonText}}</button>
         </form>
       </div>
     </div>

@@ -47,6 +47,29 @@ export class TextConfig {
     readonly distanceBetweenFibersInputPlaceholder: string = "Distance between fibers";
     readonly multiplePlaceholder: string = "Multiple..."
     readonly formPleaseSelectText: string = "Please select a";
+    readonly speedInputLabel: string = "Speed";
+    readonly speedInputPlaceholder: string = "Speed";
+    readonly loopSpeedInputLabel: string = "Loop speed";
+    readonly loopSpeedInputPlaceholder: string = "Loop speed";
+    readonly loopRadiusInputLabel: string = "Loop radius";
+    readonly loopRadiusInputPlaceholder: string = "Loop radius";
+    readonly waitInInputLabel: string = "Wait-in time";
+    readonly waitInInputPlaceholder: string = "Wait-in time";
+    readonly waitOutInputLabel: string = "Wait-out time";
+    readonly waitOutInputPlaceholder: string = "Wait-out time";
+    readonly zDistanceInputLabel: string = "Z-distance";
+    readonly zDistanceInputPlaceholder: string = "Z-distance";
+    readonly angleIncrementInputLabel: string = "Angle increment";
+    readonly angleIncrementInputPlaceholder: string = "Angle increment";
+    readonly distanceBetweenFibersIncrementInputLabel: string = "Distance to next fiber increment";
+    readonly distanceBetweenFibersIncrementInputPlaceholder: string = "Distance to next fiber increment";
+    readonly isSinusoidalInputLabel: string = "Sinusoidal";
+    readonly amplitudeInputLabel: string = "Amplitude";
+    readonly amplitudeInputPlaceholder: string = "Amplitude";
+    readonly phaseInputLabel: string = "Phase";
+    readonly phaseInputPlaceholder: string = "Phase";
+    readonly phaseShiftInputLabel: string = "Phase shift";
+    readonly phaseShiftInputPlaceholder: string = "Phase shift";
 
     // Chart
     readonly chartTitle: string = "chart";
@@ -75,6 +98,9 @@ export class TextConfig {
     readonly settingsSave: string = "Save";
     readonly settingsUserInterfaceLabel: string = "User interface";
     readonly settingsMultiSelectLabel: string = "Multi-select enabled";
+    readonly settingsAdvancedModeLabel: string = "Advanced mode enabled";
+    readonly settingsSlideWidthLabel: string = "Slide width";
+    readonly settingsSlideHeightLabel: string = "Slide height";
     readonly settingsPrintAreaLabel: string = "Print area coordinates";
     readonly settingsPrintAreaBottomLeftXLabel: string = "Bottom-left corner X";
     readonly settingsPrintAreaBottomLeftYLabel: string = "Bottom-left corner Y";

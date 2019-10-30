@@ -9,9 +9,6 @@ export class Layer extends MewData {
     height: number;
     distanceBetweenFibers: number;
 
-    // TODO: speed, loop speed?, loopRadius?, wait in, wait out, z-distance?, angleDelta?, fiberDistanceDelta?
-    // advanced mode?
-    // do a cleanup for the forms...
     speed: number;
     loopSpeed: number;
     loopRadius: number;
@@ -21,12 +18,10 @@ export class Layer extends MewData {
     angleIncrement: number;
     distanceBetweenFibersIncrement: number;
     
-    // TODO: amplitude
     isSinusoidal: boolean;
     amplitude: number;
     phase: number;
     phaseShift: number;
-
 
     constructor(id: number, name: string, parent: MewData) {
         super(id, name, null, parent);
@@ -35,5 +30,19 @@ export class Layer extends MewData {
         this.height = SettingsConfig.instance.defaultLayerHeight;
         this.distanceBetweenFibers = SettingsConfig.instance.defaultDistanceBetweenFibers;
         this.fibers = Math.floor(this.height / this.distanceBetweenFibers) + 1;
+
+        this.speed = SettingsConfig.instance.defaultLayerSpeed;
+        this.loopSpeed = SettingsConfig.instance.defaultLayerLoopSpeed;
+        this.loopRadius = SettingsConfig.instance.defaultLayerLoopRadius;
+        this.waitIn = SettingsConfig.instance.defaultLayerWaitIn;
+        this.waitOut = SettingsConfig.instance.defaultLayerWaitOut;
+        this.zDistance = SettingsConfig.instance.defaultLayerZDistance;
+        this.angleIncrement = SettingsConfig.instance.defaultLayerAngleIncrement;
+        this.distanceBetweenFibersIncrement = SettingsConfig.instance.defaultLayerDistanceBetweenFibersIncrement;
+
+        this.isSinusoidal = SettingsConfig.instance.defaultLayerIsSinusoidal;
+        this.amplitude = SettingsConfig.instance.defaultLayerAmplitude;
+        this.phase = SettingsConfig.instance.defaultLayerPhase;
+        this.phaseShift = SettingsConfig.instance.defaultLayerPhaseShift;
     }
 }
