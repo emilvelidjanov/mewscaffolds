@@ -119,6 +119,9 @@ export class TextConfig {
     readonly settingsDefaultLayerAngleLabel: string = "Angle";
     readonly settingsSavedSuccessfullyMessage: string = "Saved settings in your browser.";
 
+    // Load modal
+    readonly loadTitle: string = "Load settings from file";
+
     // Drag & Drop
     readonly cdkDragPlaceholderText: string = "Move here...";
 }

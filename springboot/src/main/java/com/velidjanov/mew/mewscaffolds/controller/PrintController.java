@@ -1,13 +1,19 @@
 package com.velidjanov.mew.mewscaffolds.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.velidjanov.mew.mewscaffolds.entity.Print;
 import com.velidjanov.mew.mewscaffolds.entity.Scaffold;
 import com.velidjanov.mew.mewscaffolds.repository.PrintRepository;
 import com.velidjanov.mew.mewscaffolds.repository.ScaffoldRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.List;
 
 @RestController
@@ -28,27 +34,5 @@ public class PrintController {
         Print print = printRepository.findById(id).orElse(null);
         log.debug("getById() >>> Print: {}", print);
         return print;
-    }
-
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<Print> getAll() {
-        log.debug("getAll() <<<");
-        List<Print> prints = printRepository.findAll();
-        log.debug("getAll() >>> List<Print>: {}", prints);
-        return prints;
-    }
-
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public Print save(@RequestBody final Print print) {
-        log.debug("save() <<< print: {}", print);
-        Print savedPrint = printRepository.saveAndFlush(print);
-        log.debug("save() >>> Print: {}", savedPrint);
-        return savedPrint;
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") final Long id) {
-        log.debug("delete() <<< id: {}", id);
-        printRepository.findById(id).ifPresent(print -> printRepository.delete(print));
     }
 }

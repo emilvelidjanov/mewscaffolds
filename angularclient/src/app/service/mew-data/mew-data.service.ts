@@ -36,19 +36,10 @@ export class MewDataService {
     this.print = null;
   }
 
-  fetchPrintById(id: number): Observable<Print> {
-    this.httpClient.get<Print>(this.printUrl + "/" + id).pipe(takeUntil(this.unsubscribe)).subscribe(print => {
-      if (print) {
-        this.print = this.initializeFetchedPrint(print);
-      }
-      else {
-        this.print = null;
-      }
-      this.pushNextPrint(this.print);
-    }, error => {
-      this.print = null;
-      this.pushNextPrint(this.print);
-    });
+  setObservedPrint(print: Print): Observable<Print> {
+    this.print = print;
+    this.print.isSelected = true;
+    this.pushNextPrint(print);
     return this.print$;
   }
 
@@ -113,13 +104,6 @@ export class MewDataService {
     }
   }
 
-  setMewDataIsPersistedRecursive(data: MewData, isPersisted: boolean): void {
-    data.isPersisted = isPersisted;
-    if (data.children !== null) {
-      data.children.forEach(child => this.setMewDataIsPersistedRecursive(child, isPersisted));
-    }
-  }
-
   addChildToParent(child: MewData, parent: MewData): MewData {
     let addedChild: MewData = null;
     if (parent.children != null) {
@@ -167,6 +151,18 @@ export class MewDataService {
       copy["width"] = data["width"];
       copy["height"] = data["height"];
       copy["distanceBetweenFibers"] = data["distanceBetweenFibers"];
+      copy["isSinusoidal"] = data["isSinusoidal"];
+      copy["amplitude"] = data["amplitude"];
+      copy["phase"] = data["phase"];
+      copy["phaseShift"] = data["phaseShift"];
+      copy["temperature"] = data["temperature"];
+      copy["pressure"] = data["pressure"];
+      copy["speed"] = data["speed"];
+      copy["loopSpeed"] = data["loopSpeed"];
+      copy["loopRadius"] = data["loopRadius"];
+      copy["waitIn"] = data["waitIn"];
+      copy["waitOut"] = data["waitOut"];
+      copy["zDistance"] = data["zDistance"];
     }
     if (data.children != null) {
       data.children.forEach(child => {
@@ -183,8 +179,6 @@ export class MewDataService {
       name: layer.name,
       path: layer.path,
       children: [],
-      isSelected: layer.isSelected,
-      isPersisted: layer.isPersisted,
       angle: layer.angle,
       fibers: layer.fibers,
       width: layer.width,
@@ -194,6 +188,46 @@ export class MewDataService {
       amplitude: layer.amplitude,
       phase: layer.phase,
       phaseShift: layer.phaseShift,
+      temperature: layer.temperature,
+      pressure: layer.pressure,
+      speed: layer.speed,
+      loopSpeed: layer.loopSpeed,
+      loopRadius: layer.loopRadius,
+      waitIn: layer.waitIn,
+      waitOut: layer.waitOut,
+      zDistance: layer.zDistance,
+    }
+    return result;
+  }
+
+  serializeScaffold(scaffold: Scaffold): any {
+    let layers: any[] = [];
+    scaffold.children.forEach(layer => {
+      layers.push(this.serializeLayer(layer as Layer));
+    });
+    let result: any = {
+      id: scaffold.id,
+      name: scaffold.name,
+      path: scaffold.path,
+      isSelected: scaffold.isSelected,
+      positionX: scaffold.position.x,
+      positionY: scaffold.position.y,
+      position: {x: scaffold.position.x, y: scaffold.position.y},
+      children: layers,
+    }
+    return result;
+  }
+
+  serializePrint(print: Print): any {
+    let scaffolds: any[] = [];
+    print.children.forEach(scaffold => {
+      scaffolds.push(this.serializeScaffold(scaffold as Scaffold));
+    });
+    let result: any = {
+      id: print.id,
+      name: print.name,
+      path: print.path,
+      children: scaffolds,
     }
     return result;
   }
@@ -250,26 +284,40 @@ export class MewDataService {
     return Math.floor(layer.height / layer.distanceBetweenFibers) + 1;
   }
 
-  private initializeFetchedPrint(print: Print): Print {
+  initializeFetchedPrint(print: Print): Print {
     let newPrint: Print = new Print(print.id, print.name);
-    newPrint.isPersisted = true;
     print.children.forEach(scaffold => {
       let newScaffold: Scaffold = new Scaffold(scaffold.id, scaffold.name, newPrint);
-      newScaffold.isPersisted = true;
       newScaffold.position = new Vector(scaffold["positionX"], scaffold["positionY"]);
       scaffold.children.forEach(layer => {
         let newLayer: Layer = new Layer(layer.id, layer.name, newScaffold);
-        newLayer.isPersisted = true;
         newLayer.angle = layer["angle"];
         newLayer.isSinusoidal = layer["isSinusoidal"];
         newLayer.amplitude = layer["amplitude"];
         newLayer.phase = layer["phase"];
         newLayer.phaseShift = layer["phaseShift"];
+        newLayer.temperature = layer["temperature"];
+        newLayer.pressure = layer["pressure"];
+        newLayer.speed = layer["speed"];
+        newLayer.loopSpeed = layer["loopSpeed"];
+        newLayer.loopRadius = layer["loopRadius"];
+        newLayer.waitIn = layer["waitIn"];
+        newLayer.waitOut = layer["waitOut"];
+        newLayer.zDistance = layer["zDistance"];
         newScaffold.children.push(newLayer);
       });
       newPrint.children.push(newScaffold);
     });
     return newPrint;
+  }
+
+  setParents(print: Print): void {
+    print.children.forEach(scaffold => {
+      scaffold.parent = print;
+      scaffold.children.forEach(layer => {
+        layer.parent = scaffold;
+      });
+    });
   }
 
   private getNextChildNameSuffix(parent: MewData): string {

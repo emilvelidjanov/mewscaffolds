@@ -15,7 +15,6 @@ export enum MewDataProperties {
   WAIT_IN = "waitIn",
   WAIT_OUT = "waitOut",
   Z_DISTANCE = "zDistance",
-  DISTANCE_BETWEEN_FIBERS_INCREMENT = "distanceBetweenFibersIncrement",
   IS_SINUSOIDAL = "isSinusoidal",
   AMPLITUDE = "amplitude",
   PHASE = "phase",

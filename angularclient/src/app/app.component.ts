@@ -6,6 +6,7 @@ import { Print } from './model/print/print';
 import { TextConfig } from './config/text-config/text-config';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-root',
@@ -29,8 +30,8 @@ export class AppComponent implements OnInit {
 
   // TODO: load failed message
   ngOnInit() {
-    let defaultPrint: Print = new Print(1, this.textConfig.print + " 1");
-    this.mewDataService.fetchPrintById(1).pipe(takeUntil(this.unsubscribe)).subscribe(print => {
+    let defaultPrint: Print = new Print(1, this.textConfig.print);
+    this.mewDataService.setObservedPrint(defaultPrint).pipe(takeUntil(this.unsubscribe)).subscribe(print => {
       if (print == null || print == undefined) print = defaultPrint;
       this.print = [];
       this.print.push(print);
@@ -41,6 +42,30 @@ export class AppComponent implements OnInit {
       this.print.push(defaultPrint);
       this.print[0].isSelected = true;
     });
+    this.mewDataService.pushNextPrint(defaultPrint);
+  }
+
+  saveToFile(): void {
+    let data: string = JSON.stringify(this.mewDataService.serializePrint(this.mewDataService.print));
+    let blob = new Blob([data], {
+      type: "text/plain;charset=utf-8"
+    });
+    FileSaver.saveAs(blob, "saveFile.txt");  
+  }
+
+  loadFromFile(event: any): void {
+    let selectedFile = event.target.files[0];
+    const fileReader = new FileReader();
+    fileReader.readAsText(selectedFile, "UTF-8");
+    fileReader.onload = () => {
+      let newPrint: Print = this.mewDataService.initializeFetchedPrint(JSON.parse(fileReader.result.toString()));
+      this.mewDataService.print = newPrint;
+      this.mewDataService.pushNextPrint(this.mewDataService.print);
+      console.log(this.mewDataService.print);
+    }
+    fileReader.onerror = (error) => {
+      console.log(error);
+    }
   }
 
   ngOnDestroy() {

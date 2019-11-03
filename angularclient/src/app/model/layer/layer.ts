@@ -17,7 +17,6 @@ export class Layer extends MewData {
     waitIn: number;
     waitOut: number;
     zDistance: number;
-    distanceBetweenFibersIncrement: number;
     
     isSinusoidal: boolean;
     amplitude: number;
@@ -40,7 +39,6 @@ export class Layer extends MewData {
         this.waitIn = SettingsConfig.instance.defaultLayerWaitIn;
         this.waitOut = SettingsConfig.instance.defaultLayerWaitOut;
         this.zDistance = SettingsConfig.instance.defaultLayerZDistance;
-        this.distanceBetweenFibersIncrement = SettingsConfig.instance.defaultLayerDistanceBetweenFibersIncrement;
 
         this.isSinusoidal = SettingsConfig.instance.defaultLayerIsSinusoidal;
         this.amplitude = SettingsConfig.instance.defaultLayerAmplitude;

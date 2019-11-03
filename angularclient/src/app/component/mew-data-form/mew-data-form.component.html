@@ -135,20 +135,12 @@
           </div>
         </div>
         <div
-          *ngIf="hasPropertyMap.get(mewDataProperties.Z_DISTANCE) && hasPropertyMap.get(mewDataProperties.DISTANCE_BETWEEN_FIBERS_INCREMENT)"
+          *ngIf="hasPropertyMap.get(mewDataProperties.Z_DISTANCE)"
           class="form-group form-row">
           <div class="col">
             <label for="zDistanceInput">{{textConfig.zDistanceInputLabel}}</label>
             <input id="zDistanceInput" type="number" class="form-control" [value]="zDistance"
               [name]="zDistanceInputName" [placeholder]="zDistanceInputPlaceholder"
-              (input)="onInput($event.target.name, $event.target.value)">
-          </div>
-          <div class="col">
-            <label
-              for="distanceBetweenFibersIncrementInput">{{textConfig.distanceBetweenFibersIncrementInputLabel}}</label>
-            <input id="distanceBetweenFibersIncrementInput" type="number" class="form-control"
-              [value]="distanceBetweenFibersIncrement" [name]="distanceBetweenFibersIncrementInputName"
-              [placeholder]="distanceBetweenFibersIncrementInputPlaceholder"
               (input)="onInput($event.target.name, $event.target.value)">
           </div>
         </div>

@@ -37,7 +37,6 @@ export class SettingsConfig {
   defaultLayerWaitIn: number;
   defaultLayerWaitOut: number;
   defaultLayerZDistance: number;
-  defaultLayerDistanceBetweenFibersIncrement: number;
 
   defaultLayerIsSinusoidal: boolean;
   defaultLayerAmplitude: number;
@@ -78,7 +77,6 @@ export class SettingsConfig {
     this.defaultLayerWaitIn = 0.2;
     this.defaultLayerWaitOut = 0.06;
     this.defaultLayerZDistance = 4;
-    this.defaultLayerDistanceBetweenFibersIncrement = 0;
     this.defaultLayerIsSinusoidal = false;
     this.defaultLayerAmplitude = 0.25;
     this.defaultLayerPhase = 1;

@@ -57,8 +57,6 @@ export class MewDataFormComponent implements OnInit {
   waitOutInputPlaceholder: string;
   zDistance: number;
   zDistanceInputPlaceholder: string;
-  distanceBetweenFibersIncrement: string;
-  distanceBetweenFibersIncrementInputPlaceholder: string;
   isSinusoidal: boolean;
   amplitude: number;
   amplitudeInputPlaceholder: string;
@@ -83,7 +81,6 @@ export class MewDataFormComponent implements OnInit {
   readonly waitInInputName: string;
   readonly waitOutInputName: string;
   readonly zDistanceInputName: string;
-  readonly distanceBetweenFibersIncrementInputName: string;
   readonly isSinusoidalInputName: string;
   readonly amplitudeInputName: string;
   readonly phaseInputName: string;
@@ -112,7 +109,6 @@ export class MewDataFormComponent implements OnInit {
       [MewDataProperties.WAIT_IN, false],
       [MewDataProperties.WAIT_OUT, false],
       [MewDataProperties.Z_DISTANCE, false],
-      [MewDataProperties.DISTANCE_BETWEEN_FIBERS_INCREMENT, false],
       [MewDataProperties.IS_SINUSOIDAL, false],
       [MewDataProperties.AMPLITUDE, false],
       [MewDataProperties.PHASE, false],
@@ -139,7 +135,6 @@ export class MewDataFormComponent implements OnInit {
     this.waitInInputName = MewDataProperties.WAIT_IN;
     this.waitOutInputName = MewDataProperties.WAIT_OUT;
     this.zDistanceInputName = MewDataProperties.Z_DISTANCE;
-    this.distanceBetweenFibersIncrementInputName = MewDataProperties.DISTANCE_BETWEEN_FIBERS_INCREMENT;
     this.isSinusoidalInputName = MewDataProperties.IS_SINUSOIDAL;
     this.amplitudeInputName = MewDataProperties.AMPLITUDE;
     this.phaseInputName = MewDataProperties.PHASE;
@@ -225,10 +220,6 @@ export class MewDataFormComponent implements OnInit {
           case MewDataProperties.Z_DISTANCE:
             this.zDistance = property[1];
             this.zDistanceInputPlaceholder = this.textConfig.zDistanceInputPlaceholder;
-            break;
-          case MewDataProperties.DISTANCE_BETWEEN_FIBERS_INCREMENT:
-            this.distanceBetweenFibersIncrement = property[1];
-            this.distanceBetweenFibersIncrementInputPlaceholder = this.textConfig.distanceBetweenFibersIncrementInputPlaceholder;
             break;
           case MewDataProperties.IS_SINUSOIDAL:
             this.isSinusoidal = property[1];
@@ -316,9 +307,6 @@ export class MewDataFormComponent implements OnInit {
         case this.zDistanceInputName:
           item[MewDataProperties.Z_DISTANCE] = parseFloat(value);
           break;
-        case this.distanceBetweenFibersIncrementInputName:
-          item[MewDataProperties.DISTANCE_BETWEEN_FIBERS_INCREMENT] = parseFloat(value);
-          break;
         case this.isSinusoidalInputName:
           item[MewDataProperties.IS_SINUSOIDAL] = Boolean(value);
           break;
@@ -374,8 +362,6 @@ export class MewDataFormComponent implements OnInit {
     this.waitOutInputPlaceholder = initString;
     this.zDistance = null;
     this.zDistanceInputPlaceholder = initString;
-    this.distanceBetweenFibersIncrement = initString;
-    this.distanceBetweenFibersIncrementInputPlaceholder = initString;
     this.isSinusoidal = false;
     this.amplitude = null;
     this.amplitudeInputPlaceholder = initString;

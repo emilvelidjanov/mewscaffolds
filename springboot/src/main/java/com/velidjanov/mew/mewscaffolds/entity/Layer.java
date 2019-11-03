@@ -53,6 +53,38 @@ public class Layer {
     @NonNull
     private Double phaseShift;
 
+    @NotNull
+    @NonNull
+    private Double temperature;
+
+    @NotNull
+    @NonNull
+    private Double pressure;
+
+    @NotNull
+    @NonNull
+    private Double speed;
+
+    @NotNull
+    @NonNull
+    private Double loopSpeed;
+
+    @NotNull
+    @NonNull
+    private Double loopRadius;
+
+    @NotNull
+    @NonNull
+    private Double waitIn;
+
+    @NotNull
+    @NonNull
+    private Double waitOut;
+
+    @NotNull
+    @NonNull
+    private Double zDistance;
+
     public Layer(@NotNull @NonNull Double height, @NotNull @NonNull Double distanceBetweenFibers) {
         this.height = height;
         this.distanceBetweenFibers = distanceBetweenFibers;

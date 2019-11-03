@@ -85,7 +85,6 @@ export class MewDataChartComponent implements OnInit {
             data: [],
           }
           if (Object.keys(fiberData).includes("sinePoints")) {
-            console.log(fiberData.sinePoints);
             fiberData.sinePoints.forEach(pt => {
               chartDataSet.data.push(pt);
             });

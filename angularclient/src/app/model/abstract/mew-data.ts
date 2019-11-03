@@ -9,7 +9,6 @@ export abstract class MewData {
     children: MewData[];
     parent: MewData;
     isSelected: boolean;
-    isPersisted: boolean;
     
     constructor(id: number, name: string, children: MewData[], parent: MewData) {
         this.id = id;
@@ -17,7 +16,6 @@ export abstract class MewData {
         this.children = children;
         this.parent = parent;
         this.isSelected = false;
-        this.isPersisted = false;
         this.path = "";
         if (parent != null) {
             this.path = parent.name + TextConfig.instance.pathSeperator;

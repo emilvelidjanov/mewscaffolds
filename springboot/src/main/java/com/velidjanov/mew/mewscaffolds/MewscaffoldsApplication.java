@@ -51,6 +51,14 @@ public class MewscaffoldsApplication {
 					layer.setAmplitude(0.5);
                     layer.setPhase(1d);
                     layer.setPhaseShift(0d);
+                    layer.setTemperature(770d);
+                    layer.setPressure(40d);
+                    layer.setSpeed(300d);
+                    layer.setLoopSpeed(300d);
+                    layer.setLoopRadius(2 * layer.getDistanceBetweenFibers());
+                    layer.setWaitIn(0.2d);
+                    layer.setWaitOut(0.06d);
+                    layer.setZDistance(4d);
 					layers.add(layer);
 				}
 				item.setChildren(layers);

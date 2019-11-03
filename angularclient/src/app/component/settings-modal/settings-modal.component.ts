@@ -42,7 +42,6 @@ export class SettingsModalComponent implements OnInit {
   readonly nameDefaultLayerWaitIn: string = "defaultLayerWaitIn";
   readonly nameDefaultLayerWaitOut: string = "defaultLayerWaitOut";
   readonly nameDefaultLayerZDistance: string = "defaultLayerZDistance";
-  readonly nameDefaultLayerDistanceBetweenFibersIncrement: string = "defaultLayerDistanceBetweenFibersIncrement";
 
   constructor(private textConfig: TextConfig, private settingsConfig: SettingsConfig, private cookieService: CookieService) { }
 
@@ -77,6 +76,5 @@ export class SettingsModalComponent implements OnInit {
     let entries: [string, any][] = Object.entries(this.settingsConfig);
     entries = entries.filter(entry => entry[0] != "textConfig");
     this.cookieService.set(this.settingsCookieName, JSON.stringify(entries), 365);
-    alert(this.textConfig.settingsSavedSuccessfullyMessage);
   }
 }
