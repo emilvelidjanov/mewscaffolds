@@ -162,6 +162,81 @@
                 [placeholder]="textConfig.defaultLayerPhaseShiftInputPlaceholder">
             </div>
           </div>
+          <div *ngIf="settingsConfig.advancedModeOn">
+            <div class="form-group form-row">
+              <div class="col">
+                <label for="settingsDefaultLayerSpeed">{{textConfig.speedInputLabel}}</label>
+                <input id="settingsDefaultLayerSpeed" type="number" class="form-control"
+                  [value]="settingsConfig.defaultLayerSpeed" [name]="nameDefaultLayerSpeed"
+                  (input)="onInput($event.target.name, $event.target.value)"
+                  [placeholder]="textConfig.defaultLayerSpeedInputPlaceholder">
+              </div>
+              <div class="col">
+                <label for="settingsDefaultLayerPressure">{{textConfig.pressureInputLabel}}</label>
+                <input id="settingsDefaultLayerPressure" type="number" class="form-control"
+                  [value]="settingsConfig.defaultLayerPressure" [name]="nameDefaultLayerPressure"
+                  (input)="onInput($event.target.name, $event.target.value)"
+                  [placeholder]="textConfig.defaultLayerPressureInputPlaceholder">
+              </div>
+              <div class="col">
+                <label for="settingsDefaultLayerTemperature">{{textConfig.temperatureInputLabel}}</label>
+                <input id="settingsDefaultLayerTemperature" type="number" class="form-control"
+                  [value]="settingsConfig.defaultLayerTemperature" [name]="nameDefaultLayerTemperature"
+                  (input)="onInput($event.target.name, $event.target.value)"
+                  [placeholder]="textConfig.defaultLayerTemperatureInputPlaceholder">
+              </div>
+            </div>
+            <div class="form-group form-row">
+              <div class="col">
+                <label for="settingsDefaultLayerLoopSpeed">{{textConfig.loopSpeedInputLabel}}</label>
+                <input id="settingsDefaultLayerLoopSpeed" type="number" class="form-control"
+                  [value]="settingsConfig.defaultLayerLoopSpeed" [name]="nameDefaultLayerLoopSpeed"
+                  (input)="onInput($event.target.name, $event.target.value)"
+                  [placeholder]="textConfig.defaultLayerLoopSpeedInputPlaceholder">
+              </div>
+              <div class="col">
+                <label for="settingsDefaultLayerLoopRadius">{{textConfig.loopRadiusInputLabel}}</label>
+                <input id="settingsDefaultLayerLoopRadius" type="number" class="form-control"
+                  [value]="settingsConfig.defaultLayerLoopRadius" [name]="nameDefaultLayerLoopRadius"
+                  (input)="onInput($event.target.name, $event.target.value)"
+                  [placeholder]="textConfig.defaultLayerLoopRadiusInputPlaceholder">
+              </div>
+            </div>
+            <div class="form-group form-row">
+              <div class="col">
+                <label for="settingsDefaultLayerWaitIn">{{textConfig.waitInInputLabel}}</label>
+                <input id="settingsDefaultLayerWaitIn" type="number" class="form-control"
+                  [value]="settingsConfig.defaultLayerWaitIn" [name]="nameDefaultLayerWaitIn"
+                  (input)="onInput($event.target.name, $event.target.value)"
+                  [placeholder]="textConfig.defaultLayerWaitInInputPlaceholder">
+              </div>
+              <div class="col">
+                <label for="settingsDefaultLayerWaitOut">{{textConfig.waitOutInputLabel}}</label>
+                <input id="settingsDefaultLayerWaitOut" type="number" class="form-control"
+                  [value]="settingsConfig.defaultLayerWaitOut" [name]="nameDefaultLayerWaitOut"
+                  (input)="onInput($event.target.name, $event.target.value)"
+                  [placeholder]="textConfig.defaultLayerWaitOutInputPlaceholder">
+              </div>
+            </div>
+            <div class="form-group form-row">
+              <div class="col">
+                <label for="settingsDefaultLayerZDistance">{{textConfig.zDistanceInputLabel}}</label>
+                <input id="settingsDefaultLayerZDistance" type="number" class="form-control"
+                  [value]="settingsConfig.defaultLayerZDistance" [name]="nameDefaultLayerZDistance"
+                  (input)="onInput($event.target.name, $event.target.value)"
+                  [placeholder]="textConfig.defaultLayerZDistanceInputPlaceholder">
+              </div>
+              <div class="col">
+                <label
+                  for="settingsDefaultLayerDistanceBetweenFibersIncrement">{{textConfig.distanceBetweenFibersIncrementInputLabel}}</label>
+                <input id="settingsDefaultLayerDistanceBetweenFibersIncrement" type="number" class="form-control"
+                  [value]="settingsConfig.defaultLayerDistanceBetweenFibersIncrement"
+                  [name]="nameDefaultLayerDistanceBetweenFibersIncrement"
+                  (input)="onInput($event.target.name, $event.target.value)"
+                  [placeholder]="textConfig.defaultLayerDistanceBetweenFibersIncrementInputPlaceholder">
+              </div>
+            </div>
+          </div>
 
           <hr class="my-4">
           <button type="button" class="btn btn-secondary"

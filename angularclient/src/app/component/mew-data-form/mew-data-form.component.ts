@@ -5,6 +5,7 @@ import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 import { Vector } from 'src/app/model/vector/vector';
 import { MewDataProperties } from 'src/app/enum/mew-data-properties';
 import { Layer } from 'src/app/model/layer/layer';
+import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
 
 // TODO: cleanup
 // TODO: sanitize input and error messages (error checking, too)
@@ -42,6 +43,10 @@ export class MewDataFormComponent implements OnInit {
   fibersInputPlaceholder: string;
   speed: number;
   speedInputPlaceholder: string;
+  temperature: number;
+  temperatureInputPlaceholder: string;
+  pressure: number;
+  pressureInputPlaceholder: string;
   loopSpeed: number;
   loopSpeedInputPlaceholder: string;
   loopRadius: number;
@@ -52,8 +57,6 @@ export class MewDataFormComponent implements OnInit {
   waitOutInputPlaceholder: string;
   zDistance: number;
   zDistanceInputPlaceholder: string;
-  angleIncrement: number;
-  angleIncrementInputPlaceholder: string;
   distanceBetweenFibersIncrement: string;
   distanceBetweenFibersIncrementInputPlaceholder: string;
   isSinusoidal: boolean;
@@ -73,19 +76,20 @@ export class MewDataFormComponent implements OnInit {
   readonly distanceBetweenFibersInputName: string;
   readonly fibersInputName: string;
   readonly speedInputName: string;
+  readonly temperatureInputName: string;
+  readonly pressureInputName: string;
   readonly loopSpeedInputName: string;
   readonly loopRadiusInputName: string;
   readonly waitInInputName: string;
   readonly waitOutInputName: string;
   readonly zDistanceInputName: string;
-  readonly angleIncrementInputName: string;
   readonly distanceBetweenFibersIncrementInputName: string;
   readonly isSinusoidalInputName: string;
   readonly amplitudeInputName: string;
   readonly phaseInputName: string;
   readonly phaseShiftInputName: string;
 
-  constructor(private textConfig: TextConfig, private mewDataService: MewDataService) {
+  constructor(private textConfig: TextConfig, private mewDataService: MewDataService, private settingsConfig: SettingsConfig) {
     this.data = [];
     this.label = "";
     this.dataLabel = "";
@@ -101,12 +105,13 @@ export class MewDataFormComponent implements OnInit {
       [MewDataProperties.HEIGHT, false],
       [MewDataProperties.WIDTH, false],
       [MewDataProperties.SPEED, false],
+      [MewDataProperties.TEMPERATURE, false],
+      [MewDataProperties.PRESSURE, false],
       [MewDataProperties.LOOP_SPEED, false],
       [MewDataProperties.LOOP_RADIUS, false],
       [MewDataProperties.WAIT_IN, false],
       [MewDataProperties.WAIT_OUT, false],
       [MewDataProperties.Z_DISTANCE, false],
-      [MewDataProperties.ANGLE_INCREMENT, false],
       [MewDataProperties.DISTANCE_BETWEEN_FIBERS_INCREMENT, false],
       [MewDataProperties.IS_SINUSOIDAL, false],
       [MewDataProperties.AMPLITUDE, false],
@@ -127,12 +132,13 @@ export class MewDataFormComponent implements OnInit {
     this.distanceBetweenFibersInputName = MewDataProperties.DISTANCE_BETWEEN_FIBERS;
 
     this.speedInputName = MewDataProperties.SPEED;
+    this.temperatureInputName = MewDataProperties.TEMPERATURE;
+    this.pressureInputName = MewDataProperties.PRESSURE;
     this.loopSpeedInputName = MewDataProperties.LOOP_SPEED;
     this.loopRadiusInputName = MewDataProperties.LOOP_RADIUS;
     this.waitInInputName = MewDataProperties.WAIT_IN;
     this.waitOutInputName = MewDataProperties.WAIT_OUT;
     this.zDistanceInputName = MewDataProperties.Z_DISTANCE;
-    this.angleIncrementInputName = MewDataProperties.ANGLE_INCREMENT
     this.distanceBetweenFibersIncrementInputName = MewDataProperties.DISTANCE_BETWEEN_FIBERS_INCREMENT;
     this.isSinusoidalInputName = MewDataProperties.IS_SINUSOIDAL;
     this.amplitudeInputName = MewDataProperties.AMPLITUDE;
@@ -192,6 +198,14 @@ export class MewDataFormComponent implements OnInit {
             this.speed = property[1];
             this.speedInputPlaceholder = this.textConfig.speedInputPlaceholder;
             break;
+          case MewDataProperties.TEMPERATURE:
+            this.temperature = property[1];
+            this.temperatureInputPlaceholder = this.textConfig.temperatureInputPlaceholder;
+            break;
+          case MewDataProperties.PRESSURE:
+            this.pressure = property[1];
+            this.pressureInputPlaceholder = this.textConfig.pressureInputPlaceholder;
+            break;
           case MewDataProperties.LOOP_SPEED:
             this.loopSpeed = property[1];
             this.loopSpeedInputPlaceholder = this.textConfig.loopSpeedInputPlaceholder;
@@ -211,10 +225,6 @@ export class MewDataFormComponent implements OnInit {
           case MewDataProperties.Z_DISTANCE:
             this.zDistance = property[1];
             this.zDistanceInputPlaceholder = this.textConfig.zDistanceInputPlaceholder;
-            break;
-          case MewDataProperties.ANGLE_INCREMENT:
-            this.angleIncrement = property[1];
-            this.angleIncrementInputPlaceholder = this.textConfig.angleIncrementInputPlaceholder;
             break;
           case MewDataProperties.DISTANCE_BETWEEN_FIBERS_INCREMENT:
             this.distanceBetweenFibersIncrement = property[1];
@@ -285,6 +295,12 @@ export class MewDataFormComponent implements OnInit {
         case this.speedInputName:
           item[MewDataProperties.SPEED] = parseFloat(value);
           break;
+        case this.temperatureInputName:
+          item[MewDataProperties.TEMPERATURE] = parseFloat(value);
+          break;
+        case this.pressureInputName:
+          item[MewDataProperties.PRESSURE] = parseFloat(value);
+          break;
         case this.loopSpeedInputName:
           item[MewDataProperties.LOOP_SPEED] = parseFloat(value);
           break;
@@ -299,9 +315,6 @@ export class MewDataFormComponent implements OnInit {
           break;
         case this.zDistanceInputName:
           item[MewDataProperties.Z_DISTANCE] = parseFloat(value);
-          break;
-        case this.angleIncrementInputName:
-          item[MewDataProperties.ANGLE_INCREMENT] = parseFloat(value);
           break;
         case this.distanceBetweenFibersIncrementInputName:
           item[MewDataProperties.DISTANCE_BETWEEN_FIBERS_INCREMENT] = parseFloat(value);
@@ -347,6 +360,10 @@ export class MewDataFormComponent implements OnInit {
     this.distanceBetweenFibersInputPlaceholder = initString;
     this.speed = null;
     this.speedInputPlaceholder = initString;
+    this.temperature = null;
+    this.temperatureInputPlaceholder = initString;
+    this.pressure = null;
+    this.pressureInputPlaceholder = initString;
     this.loopSpeed = null;
     this.loopSpeedInputPlaceholder = initString;
     this.loopRadius = null;
@@ -357,8 +374,6 @@ export class MewDataFormComponent implements OnInit {
     this.waitOutInputPlaceholder = initString;
     this.zDistance = null;
     this.zDistanceInputPlaceholder = initString;
-    this.angleIncrement = null;
-    this.angleIncrementInputPlaceholder = initString;
     this.distanceBetweenFibersIncrement = initString;
     this.distanceBetweenFibersIncrementInputPlaceholder = initString;
     this.isSinusoidal = false;

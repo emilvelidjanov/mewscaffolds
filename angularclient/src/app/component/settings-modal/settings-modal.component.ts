@@ -34,13 +34,14 @@ export class SettingsModalComponent implements OnInit {
   readonly nameDefaultLayerPhase: string = "defaultLayerPhase";
   readonly nameDefaultLayerPhaseShift: string = "defaultLayerPhaseShift";
 
+  readonly nameDefaultLayerTemperature: string = "defaultLayerTemperature";
+  readonly nameDefaultLayerPressure: string = "defaultLayerPressure";
   readonly nameDefaultLayerSpeed: string = "defaultLayerSpeed";
   readonly nameDefaultLayerLoopSpeed: string = "defaultLayerLoopSpeed";
   readonly nameDefaultLayerLoopRadius: string = "defaultLayerLoopRadius";
   readonly nameDefaultLayerWaitIn: string = "defaultLayerWaitIn";
   readonly nameDefaultLayerWaitOut: string = "defaultLayerWaitOut";
   readonly nameDefaultLayerZDistance: string = "defaultLayerZDistance";
-  readonly nameDefaultLayerAngleIncrement: string = "defaultLayerAngleIncrement";
   readonly nameDefaultLayerDistanceBetweenFibersIncrement: string = "defaultLayerDistanceBetweenFibersIncrement";
 
   constructor(private textConfig: TextConfig, private settingsConfig: SettingsConfig, private cookieService: CookieService) { }

@@ -9,13 +9,14 @@ export class Layer extends MewData {
     height: number;
     distanceBetweenFibers: number;
 
+    temperature: number;
+    pressure: number;
     speed: number;
     loopSpeed: number;
     loopRadius: number;
     waitIn: number;
     waitOut: number;
     zDistance: number;
-    angleIncrement: number;
     distanceBetweenFibersIncrement: number;
     
     isSinusoidal: boolean;
@@ -31,13 +32,14 @@ export class Layer extends MewData {
         this.distanceBetweenFibers = SettingsConfig.instance.defaultDistanceBetweenFibers;
         this.fibers = Math.floor(this.height / this.distanceBetweenFibers) + 1;
 
+        this.temperature = SettingsConfig.instance.defaultLayerTemperature;
+        this.pressure = SettingsConfig.instance.defaultLayerPressure;
         this.speed = SettingsConfig.instance.defaultLayerSpeed;
         this.loopSpeed = SettingsConfig.instance.defaultLayerLoopSpeed;
         this.loopRadius = SettingsConfig.instance.defaultLayerLoopRadius;
         this.waitIn = SettingsConfig.instance.defaultLayerWaitIn;
         this.waitOut = SettingsConfig.instance.defaultLayerWaitOut;
         this.zDistance = SettingsConfig.instance.defaultLayerZDistance;
-        this.angleIncrement = SettingsConfig.instance.defaultLayerAngleIncrement;
         this.distanceBetweenFibersIncrement = SettingsConfig.instance.defaultLayerDistanceBetweenFibersIncrement;
 
         this.isSinusoidal = SettingsConfig.instance.defaultLayerIsSinusoidal;

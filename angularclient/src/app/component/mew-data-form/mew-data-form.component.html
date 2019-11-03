@@ -26,7 +26,7 @@
             [placeholder]="positionYInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
       </div>
-      <div *ngIf="hasPropertyMap.get(mewDataProperties.WIDTH) || hasPropertyMap.get(mewDataProperties.HEIGHT)"
+      <div *ngIf="hasPropertyMap.get(mewDataProperties.WIDTH) && hasPropertyMap.get(mewDataProperties.HEIGHT)"
         class="form-group form-row">
         <div class="col">
           <label for="widthInput">{{textConfig.widthInputLabel}}</label>
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div
-        *ngIf="hasPropertyMap.get(mewDataProperties.DISTANCE_BETWEEN_FIBERS) || hasPropertyMap.get(mewDataProperties.ANGLE)"
+        *ngIf="hasPropertyMap.get(mewDataProperties.DISTANCE_BETWEEN_FIBERS) && hasPropertyMap.get(mewDataProperties.ANGLE)"
         class="form-group form-row">
         <div class="col">
           <label for="distanceBetweenFibersInput">{{textConfig.distanceBetweenFibersInputLabel}}</label>
@@ -82,6 +82,75 @@
           <input id="phaseShiftInput" type="number" class="form-control" [value]="phaseShift"
             [name]="phaseShiftInputName" [placeholder]="phaseShiftInputPlaceholder"
             (input)="onInput($event.target.name, $event.target.value)">
+        </div>
+      </div>
+      <div *ngIf="settingsConfig.advancedModeOn">
+        <div
+          *ngIf="hasPropertyMap.get(mewDataProperties.SPEED) && hasPropertyMap.get(mewDataProperties.TEMPERATURE) && hasPropertyMap.get(mewDataProperties.PRESSURE)"
+          class="form-group form-row">
+          <div class="col">
+            <label for="speedInput">{{textConfig.speedInputLabel}}</label>
+            <input id="speedInput" type="number" class="form-control" [value]="speed" [name]="speedInputName"
+              [placeholder]="speedInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
+          </div>
+          <div class="col">
+            <label for="pressureInput">{{textConfig.pressureInputLabel}}</label>
+            <input id="pressureInput" type="number" class="form-control" [value]="pressure" [name]="pressureInputName"
+              [placeholder]="pressureInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
+          </div>
+          <div class="col">
+            <label for="temperatureInput">{{textConfig.temperatureInputLabel}}</label>
+            <input id="temperatureInput" type="number" class="form-control" [value]="temperature"
+              [name]="temperatureInputName" [placeholder]="temperatureInputPlaceholder"
+              (input)="onInput($event.target.name, $event.target.value)">
+          </div>
+        </div>
+        <div
+          *ngIf="hasPropertyMap.get(mewDataProperties.LOOP_SPEED) && hasPropertyMap.get(mewDataProperties.LOOP_RADIUS)"
+          class="form-group form-row">
+          <div class="col">
+            <label for="loopSpeedInput">{{textConfig.loopSpeedInputLabel}}</label>
+            <input id="loopSpeedInput" type="number" class="form-control" [value]="loopSpeed"
+              [name]="loopSpeedInputName" [placeholder]="loopSpeedInputPlaceholder"
+              (input)="onInput($event.target.name, $event.target.value)">
+          </div>
+          <div class="col">
+            <label for="loopRadiusInput">{{textConfig.loopRadiusInputLabel}}</label>
+            <input id="loopRadiusInput" type="number" class="form-control" [value]="loopRadius"
+              [name]="loopRadiusInputName" [placeholder]="loopRadiusInputPlaceholder"
+              (input)="onInput($event.target.name, $event.target.value)">
+          </div>
+        </div>
+        <div *ngIf="hasPropertyMap.get(mewDataProperties.WAIT_IN) && hasPropertyMap.get(mewDataProperties.WAIT_OUT)"
+          class="form-group form-row">
+          <div class="col">
+            <label for="waitInInput">{{textConfig.waitInInputLabel}}</label>
+            <input id="waitInInput" type="number" class="form-control" [value]="waitIn" [name]="waitInInputName"
+              [placeholder]="waitInInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
+          </div>
+          <div class="col">
+            <label for="waitOutInput">{{textConfig.waitOutInputLabel}}</label>
+            <input id="waitOutInput" type="number" class="form-control" [value]="waitOut" [name]="waitOutInputName"
+              [placeholder]="waitOutInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
+          </div>
+        </div>
+        <div
+          *ngIf="hasPropertyMap.get(mewDataProperties.Z_DISTANCE) && hasPropertyMap.get(mewDataProperties.DISTANCE_BETWEEN_FIBERS_INCREMENT)"
+          class="form-group form-row">
+          <div class="col">
+            <label for="zDistanceInput">{{textConfig.zDistanceInputLabel}}</label>
+            <input id="zDistanceInput" type="number" class="form-control" [value]="zDistance"
+              [name]="zDistanceInputName" [placeholder]="zDistanceInputPlaceholder"
+              (input)="onInput($event.target.name, $event.target.value)">
+          </div>
+          <div class="col">
+            <label
+              for="distanceBetweenFibersIncrementInput">{{textConfig.distanceBetweenFibersIncrementInputLabel}}</label>
+            <input id="distanceBetweenFibersIncrementInput" type="number" class="form-control"
+              [value]="distanceBetweenFibersIncrement" [name]="distanceBetweenFibersIncrementInputName"
+              [placeholder]="distanceBetweenFibersIncrementInputPlaceholder"
+              (input)="onInput($event.target.name, $event.target.value)">
+          </div>
         </div>
       </div>
     </form>

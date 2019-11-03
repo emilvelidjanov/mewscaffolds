@@ -29,13 +29,14 @@ export class SettingsConfig {
   slideWidth: number;
   slideHeight: number;
 
-  defaultLayerZDistance: number;
   defaultLayerSpeed: number;
+  defaultLayerPressure: number;
+  defaultLayerTemperature: number;
   defaultLayerLoopSpeed: number;
   defaultLayerLoopRadius: number;
   defaultLayerWaitIn: number;
   defaultLayerWaitOut: number;
-  defaultLayerAngleIncrement: number;
+  defaultLayerZDistance: number;
   defaultLayerDistanceBetweenFibersIncrement: number;
 
   defaultLayerIsSinusoidal: boolean;
@@ -69,13 +70,14 @@ export class SettingsConfig {
     this.slideWidth = 76;
     this.slideHeight = 26;
 
+    this.defaultLayerTemperature = 770;
+    this.defaultLayerPressure = 40;
     this.defaultLayerSpeed = 300;
     this.defaultLayerLoopSpeed = 300;
     this.defaultLayerLoopRadius = 2 * this.defaultDistanceBetweenFibers;
     this.defaultLayerWaitIn = 0.2;
     this.defaultLayerWaitOut = 0.06;
     this.defaultLayerZDistance = 4;
-    this.defaultLayerAngleIncrement = 0;
     this.defaultLayerDistanceBetweenFibersIncrement = 0;
     this.defaultLayerIsSinusoidal = false;
     this.defaultLayerAmplitude = 0.25;

@@ -49,6 +49,10 @@ export class TextConfig {
     readonly formPleaseSelectText: string = "Please select a";
     readonly speedInputLabel: string = "Speed";
     readonly speedInputPlaceholder: string = "Speed";
+    readonly temperatureInputLabel: string = "Temperature";
+    readonly temperatureInputPlaceholder: string = "Temperature";
+    readonly pressureInputLabel: string = "Pressure";
+    readonly pressureInputPlaceholder: string = "Pressure";
     readonly loopSpeedInputLabel: string = "Loop speed";
     readonly loopSpeedInputPlaceholder: string = "Loop speed";
     readonly loopRadiusInputLabel: string = "Loop radius";
@@ -59,8 +63,6 @@ export class TextConfig {
     readonly waitOutInputPlaceholder: string = "Wait-out time";
     readonly zDistanceInputLabel: string = "Z-distance";
     readonly zDistanceInputPlaceholder: string = "Z-distance";
-    readonly angleIncrementInputLabel: string = "Angle increment";
-    readonly angleIncrementInputPlaceholder: string = "Angle increment";
     readonly distanceBetweenFibersIncrementInputLabel: string = "Distance to next fiber increment";
     readonly distanceBetweenFibersIncrementInputPlaceholder: string = "Distance to next fiber increment";
     readonly isSinusoidalInputLabel: string = "Sinusoidal";
