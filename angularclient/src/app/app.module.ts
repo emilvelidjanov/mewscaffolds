@@ -16,6 +16,7 @@ import { SettingsModalComponent } from './component/settings-modal/settings-moda
 import { SettingsConfig } from './config/settings-config/settings-config';
 import { CookieService } from 'ngx-cookie-service';
 import { ScaffoldPositioningComponent } from './component/scaffold-positioning/scaffold-positioning.component';
+import { GenerateCodeModalComponent } from './component/generate-code-modal/generate-code-modal.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ScaffoldPositioningComponent } from './component/scaffold-positioning/s
     MewDataChartComponent,
     SettingsModalComponent,
     ScaffoldPositioningComponent,
+    GenerateCodeModalComponent,
   ],
   imports: [
     BrowserModule,

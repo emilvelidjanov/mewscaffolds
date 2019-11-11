@@ -1,20 +1,18 @@
 package com.velidjanov.mew.mewscaffolds.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.velidjanov.mew.mewscaffolds.entity.Print;
-import com.velidjanov.mew.mewscaffolds.entity.Scaffold;
 import com.velidjanov.mew.mewscaffolds.repository.PrintRepository;
 import com.velidjanov.mew.mewscaffolds.repository.ScaffoldRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/print")
@@ -34,5 +32,18 @@ public class PrintController {
         Print print = printRepository.findById(id).orElse(null);
         log.debug("getById() >>> Print: {}", print);
         return print;
+    }
+
+    @RequestMapping(value = "/generateCode", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, byte[]> generateCode(@RequestBody final Print print) throws IOException {
+        log.debug("generateCode() <<< print: {}", print.getId());
+        Map<String, byte[]> result = new HashMap<>();
+        InputStream inputStream = getClass()
+                .getClassLoader().getResourceAsStream("gcode/template.txt");
+        if (inputStream != null) {
+            result.put("code", inputStream.readAllBytes());
+        }
+        return result;
     }
 }

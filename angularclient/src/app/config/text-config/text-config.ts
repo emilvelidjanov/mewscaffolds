@@ -122,6 +122,9 @@ export class TextConfig {
     // Load modal
     readonly loadTitle: string = "Load settings from file";
 
+    // Generate code modal
+    readonly generateCodeModalTitle: string = "Generate code";
+
     // Drag & Drop
     readonly cdkDragPlaceholderText: string = "Move here...";
 }

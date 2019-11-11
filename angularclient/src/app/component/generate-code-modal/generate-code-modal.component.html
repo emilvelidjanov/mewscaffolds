@@ -1,0 +1,18 @@
+<div class="modal fade" id="generateCodeModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title h4">{{textConfig.generateCodeModalTitle}}</span>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <textarea>{{code}}</textarea>
+        <div class="button-toolbar">
+          <button class="btn btn-secondary" (click)="generateCode()">Generate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

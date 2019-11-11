@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Print } from 'src/app/model/print/print';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Scaffold } from 'src/app/model/scaffold/scaffold';
 import { Layer } from 'src/app/model/layer/layer';
@@ -21,6 +21,7 @@ export class MewDataService {
   readonly printUrl: string = "http://localhost:8080/print";
   readonly chartUrl: string = "http://localhost:8080/chart";
   readonly chartCalculateEndpoint: string = "/calculate";
+  readonly generateCodeEndpoint: string = "/generateCode";
 
   private unsubscribe: Subject<any>;
   private printSource: Subject<Print>;
@@ -61,6 +62,11 @@ export class MewDataService {
       serializedLayers.push(this.serializeLayer(layer));
     });
     return this.httpClient.post<[number, Vector[]]>(this.chartUrl + this.chartCalculateEndpoint, serializedLayers).pipe(takeUntil(this.unsubscribe));
+  }
+
+  fetchGeneratedCode(): Observable<any> {
+    return this.httpClient.post<any>(this.printUrl + this.generateCodeEndpoint, this.serializePrint(this.print))
+      .pipe(takeUntil(this.unsubscribe));
   }
 
   getScaffoldsOfPrint(print: Print): Scaffold[] {

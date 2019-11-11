@@ -12,7 +12,7 @@
             data-target="#loadModal">{{textConfig.loadButtonText}}</button>
         </div>
         <div class="btn-group mr-1">
-          <button type="button" class="btn btn-secondary">{{textConfig.generateCodeButtonText}}</button>
+          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#generateCodeModal">{{textConfig.generateCodeButtonText}}</button>
         </div>
         <div class="btn-group">
           <button type="button" class="btn btn-secondary oi oi-cog" data-toggle="modal"
@@ -48,6 +48,7 @@
   </div>
 
   <app-settings-modal></app-settings-modal>
+  <app-generate-code-modal></app-generate-code-modal>
   <div class="modal fade" id="loadModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
