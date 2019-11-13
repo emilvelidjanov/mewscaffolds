@@ -124,6 +124,7 @@ export class TextConfig {
 
     // Generate code modal
     readonly generateCodeModalTitle: string = "Generate code";
+    readonly saveToFileButtonText: string = "Save to file";
 
     // Drag & Drop
     readonly cdkDragPlaceholderText: string = "Move here...";

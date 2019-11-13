@@ -1,18 +1,19 @@
 package com.velidjanov.mew.mewscaffolds.controller;
 
+import com.velidjanov.mew.mewscaffolds.MewscaffoldsApplication;
 import com.velidjanov.mew.mewscaffolds.entity.Print;
+import com.velidjanov.mew.mewscaffolds.pojo.GeneratedCode;
 import com.velidjanov.mew.mewscaffolds.repository.PrintRepository;
 import com.velidjanov.mew.mewscaffolds.repository.ScaffoldRepository;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.StringWriter;
+import java.io.Writer;
 
 @RestController
 @RequestMapping("/print")
@@ -35,15 +36,16 @@ public class PrintController {
     }
 
     @RequestMapping(value = "/generateCode", method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, byte[]> generateCode(@RequestBody final Print print) throws IOException {
+    public GeneratedCode generateCode(@RequestBody final Print print) throws IOException, TemplateException {
         log.debug("generateCode() <<< print: {}", print.getId());
-        Map<String, byte[]> result = new HashMap<>();
-        InputStream inputStream = getClass()
-                .getClassLoader().getResourceAsStream("gcode/template.txt");
-        if (inputStream != null) {
-            result.put("code", inputStream.readAllBytes());
-        }
-        return result;
+        freemarker.template.Configuration cfg = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_28);
+        cfg.setClassForTemplateLoading(MewscaffoldsApplication.class, "/");
+        cfg.setDefaultEncoding("UTF-8");
+        Template template = cfg.getTemplate("template.ftl");
+        Writer stringWriter = new StringWriter();
+        template.process(print, stringWriter);
+        GeneratedCode generatedCode = new GeneratedCode();
+        generatedCode.setCode(stringWriter.toString());
+        return generatedCode;
     }
 }

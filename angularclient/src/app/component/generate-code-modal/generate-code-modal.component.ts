@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-generate-code-modal',
@@ -19,8 +20,14 @@ export class GenerateCodeModalComponent implements OnInit {
 
   generateCode(): void {
     this.mewDataService.fetchGeneratedCode().subscribe(response => {
-      console.log(response);
-      this.code = "test\ntest";
+      this.code = response["code"];
     });
+  }
+
+  saveToFile(): void {
+    let blob = new Blob([this.code], {
+      type: "text/plain;charset=utf-8"
+    });
+    FileSaver.saveAs(blob, "gcode.txt"); 
   }
 }

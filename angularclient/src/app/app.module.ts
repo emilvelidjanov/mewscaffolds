@@ -36,7 +36,12 @@ import { GenerateCodeModalComponent } from './component/generate-code-modal/gene
     DragDropModule,
     ChartsModule,
   ],
-  providers: [MewDataService, TextConfig, SettingsConfig, CookieService],
+  providers: [
+    MewDataService, 
+    TextConfig, 
+    SettingsConfig, 
+    CookieService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -8,9 +8,10 @@
         </button>
       </div>
       <div class="modal-body">
-        <textarea>{{code}}</textarea>
-        <div class="button-toolbar">
-          <button class="btn btn-secondary" (click)="generateCode()">Generate</button>
+        <textarea id="codeArea" class="w-100">{{code}}</textarea>
+        <div class="btn-group">
+          <button class="btn btn-secondary" (click)="generateCode()">{{textConfig.generateCodeButtonText}}</button>
+          <button class="btn btn-secondary" (click)="saveToFile()">{{textConfig.saveToFileButtonText}}</button>
         </div>
       </div>
     </div>
