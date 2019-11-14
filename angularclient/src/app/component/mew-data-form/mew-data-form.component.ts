@@ -9,7 +9,6 @@ import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
 
 // TODO: cleanup
 // TODO: sanitize input and error messages (error checking, too)
-// TODO: add missing data
 @Component({
   selector: 'app-mew-data-form',
   templateUrl: './mew-data-form.component.html',

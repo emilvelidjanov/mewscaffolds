@@ -58,7 +58,6 @@ export class MewDataChartComponent implements OnInit {
   }
 
   // TODO: fix .000000001 stuff
-  // TODO: is 45° angle fixable?
   refresh() {
     this.chartDataSets = [{
       data: [],

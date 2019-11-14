@@ -16,8 +16,6 @@ import java.util.*;
 @Slf4j
 public class ChartController {
 
-    // TODO: cleanup!
-    // TODO: cleanup return data ?
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)
     public Map<Long, List<ChartData>> calculateLayerChartData(@RequestBody final List<Layer> layers) {
         log.debug("calculateLayerChartData() <<< List<Layer>: {}", layers);

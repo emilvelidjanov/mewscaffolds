@@ -28,7 +28,6 @@ export class AppComponent implements OnInit {
     this.layers = [];
   }
 
-  // TODO: load failed message
   ngOnInit() {
     let defaultPrint: Print = new Print(1, this.textConfig.print);
     this.mewDataService.setObservedPrint(defaultPrint).pipe(takeUntil(this.unsubscribe)).subscribe(print => {
@@ -61,7 +60,6 @@ export class AppComponent implements OnInit {
       let newPrint: Print = this.mewDataService.initializeFetchedPrint(JSON.parse(fileReader.result.toString()));
       this.mewDataService.print = newPrint;
       this.mewDataService.pushNextPrint(this.mewDataService.print);
-      console.log(this.mewDataService.print);
     }
     fileReader.onerror = (error) => {
       console.log(error);

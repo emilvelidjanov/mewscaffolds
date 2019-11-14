@@ -7,7 +7,6 @@ import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
 
 // TODO: token colors
 // TODO: symbols instead of text
-// TODO: style when multi select off
 @Component({
   selector: 'app-mew-data-list',
   templateUrl: './mew-data-list.component.html',
@@ -20,7 +19,6 @@ export class MewDataListComponent implements OnInit {
   @Input() label: string;
   @Input() tokenLabel: string;
 
-  // TODO: auto-collapse and force collapse/uncollapse?
   isCollapsed: boolean;
   collapseButtonIcon: string;
   collapseButtonTitle: string;
@@ -61,9 +59,7 @@ export class MewDataListComponent implements OnInit {
     this.mewDataService.pushNextPrint(this.mewDataService.print);
   }
 
-  // TODO: cleanup
   // TODO: adjust "drop here..." text based on where it was dragged
-  // TODO: drag to other box to switch parent?
   onTokenDropped(event: CdkDragDrop<string[]>): void {
     if (event.previousContainer === event.container && event.previousIndex !== event.currentIndex) {
       let viewData: MewData[] = this.getViewData().reverse();
@@ -103,7 +99,6 @@ export class MewDataListComponent implements OnInit {
     this.mewDataService.pushNextPrint(this.mewDataService.print);
   }
 
-  // TODO: cleanup
   cloneSelected(): void {
     this.getViewData().filter(token => token.isSelected).forEach(token => {
       token.parent.children.push(this.mewDataService.deepCopy(token, token.parent));

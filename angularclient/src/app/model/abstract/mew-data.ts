@@ -1,6 +1,6 @@
 import { TextConfig } from 'src/app/config/text-config/text-config';
 
-// TODO: cleanup children and parent type mistakes
+// TODO: cleanup children and parent type errors
 export abstract class MewData {
 
     id: number;

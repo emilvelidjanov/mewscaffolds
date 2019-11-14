@@ -178,7 +178,6 @@ export class MewDataService {
     return copy;
   }
 
-  // Really... clean this up...
   serializeLayer(layer: Layer): any {
     let result = {
       id: layer.id,
