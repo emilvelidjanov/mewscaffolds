@@ -57,13 +57,13 @@ LP initCoordinateSystem()
 1 SCF_NUMBER% = ${numberOfScaffolds}
 
 ; Number of layers of each scaffold
-1 DIM LAY_NUMBERS% (${highestNumberOfLayers})
+1 DIM LAY_NUMBERS% (${numberOfScaffolds})
 <#list print.children as scaffold>
 1 LAY_NUMBERS%(${scaffold?index + 1}) = ${scaffold.children?size}
 </#list>
 
 ; X coordinates of scaffolds
-1 DIM X_SCF_POSITIONS! (${highestNumberOfLayers})
+1 DIM X_SCF_POSITIONS! (${numberOfScaffolds})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	X_SCF_POSITIONS!(I%) = ${settings.defaultScaffoldPositionX} - XMIN!
 1 NEXT I%
@@ -74,7 +74,7 @@ LP initCoordinateSystem()
 </#list>
 
 ; Y coordinates of scaffolds
-1 DIM Y_SCF_POSITIONS! (${highestNumberOfLayers})
+1 DIM Y_SCF_POSITIONS! (${numberOfScaffolds})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	Y_SCF_POSITIONS!(I%) = ${settings.defaultScaffoldPositionY} - YMIN!
 1 NEXT I%
@@ -676,7 +676,7 @@ LPS drawSine
 1	CUTOFF! = P5
 1	SPEED! = P6
 1	LEN_COUNT! = 0
-1	LEN_INCREMENT! = PHASE! / 16
+1	LEN_INCREMENT! = PHASE! / 8
 1	PREV_X_VALUE! = 0
 1	PREV_Y_VALUE! = SIN(PHASE_SHIFT! / PHASE! * 360) * AMPLITUDE!
 1	WHILE LEN_COUNT! < CUTOFF! DO

@@ -42,7 +42,7 @@ public class ChartController {
                 }
             }
             else {
-                Double phaseStep = layer.getPhase() / 16d;
+                Double phaseStep = layer.getPhase() / 8d;
                 for (int i = 0; i < layer.getFibers(); i++) {
                     SinusoidalChartData sinusoidalChartData = new SinusoidalChartData();
                     Double progress = 0d;

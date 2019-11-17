@@ -240,6 +240,16 @@ export class MewDataService {
     return result;
   }
 
+  serializePrintForSaveFile(print: Print):any {
+    let result: any = this.serializePrint(print);
+    result.children.forEach(scaffold => {
+      (scaffold as Scaffold).children.forEach(layer => {
+        (layer as Layer).zDistance = layer["distanceZ"];
+        delete layer["distanceZ"];
+      });
+    });
+  }
+
   serializeSettings(): any {
     let result: any = {};
     Object.entries(this.settingsConfig).forEach(entry => {
