@@ -65,7 +65,7 @@
           [name]="isSinusoidalInputName" (input)="onInput($event.target.name, $event.target.checked)">
         <label for="isSinusoidalInput" class="form-check-label">{{textConfig.isSinusoidalInputLabel}}</label>
       </div>
-      <div *ngIf="isSinusoidal || data.length > 1" class="form-group form-row">
+      <div *ngIf="isSinusoidal || getSelectedData().length > 1" class="form-group form-row">
         <div *ngIf="hasPropertyMap.get(mewDataProperties.AMPLITUDE)" class="col">
           <label for="amplitudeInput">{{textConfig.amplitudeInputLabel}}</label>
           <input id="amplitudeInput" type="number" class="form-control" [value]="amplitude" [name]="amplitudeInputName"

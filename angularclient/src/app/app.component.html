@@ -58,7 +58,9 @@
           </button>
         </div>
         <div class="modal-body">
-          <input type="file" (change)="loadFromFile($event)">
+          <div class="form-group">
+            <input type="file" class="form-control-file" (change)="loadFromFile($event)" />
+          </div>
         </div>
       </div>
     </div>

@@ -117,24 +117,34 @@ export class ScaffoldPositioningComponent implements OnInit {
   private setScaffoldData() {
     this.data.forEach(scaffold => {
       let scaff: Scaffold = scaffold as Scaffold;
-      let radius: number = this.mewDataService.getRadiusOfScaffold(scaffold);
+      let radius: number = this.mewDataService.getRadiusOfScaffoldAndNavigationArea(scaffold);
       let x: number = scaff.position.x;
       let y: number = scaff.position.y;
       let set: ChartDataSets = this.copyDefaultChartDataSet();
-      set.data = [
-        {x: x - radius, y: y + radius},
-        {x: x + radius, y: y + radius},
-        {x: x + radius, y: y - radius},
-        {x: x - radius, y: y - radius},
-        {x: x - radius, y: y + radius},
-      ];
+      set.pointRadius = 0;
+      set.data = [];
+      for (let angle = 0; angle <= 360; angle += 22.5) {
+        let point: any = {x: this.calculatePointOnCircleX(x, radius, angle), y: this.calculatePointOnCircleY(y, radius, angle)};
+        set.data.push(point);
+      }
+      let point: any = {x: this.calculatePointOnCircleX(x, radius, 0), y: this.calculatePointOnCircleY(y, radius, 0)};
+      set.data.push(point);
       this.chartDataSets.push(set);
+
       let center: ChartDataSets = this.copyDefaultChartDataSet();
       center.data = [
         {x: x, y: y},
       ]
       this.chartDataSets.push(center);
     });
+  }
+
+  private calculatePointOnCircleX(centerX: number, radius: number, angle: number): number {
+    return centerX + (radius * Math.cos(angle * (Math.PI / 180)));
+  }
+
+  private calculatePointOnCircleY(centerY: number, radius: number, angle: number): number {
+    return centerY + (radius * Math.sin(angle * (Math.PI / 180)));
   }
 
   private copyDefaultChartDataSet(): ChartDataSets {

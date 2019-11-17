@@ -65,8 +65,11 @@ export class MewDataService {
   }
 
   fetchGeneratedCode(): Observable<any> {
-    return this.httpClient.post<any>(this.printUrl + this.generateCodeEndpoint, this.serializePrint(this.print))
-      .pipe(takeUntil(this.unsubscribe));
+    let obj: any = {
+      print: this.serializePrint(this.print),
+      settings: this.serializeSettings(),
+    }
+    return this.httpClient.post<any>(this.printUrl + this.generateCodeEndpoint, obj).pipe(takeUntil(this.unsubscribe));
   }
 
   getScaffoldsOfPrint(print: Print): Scaffold[] {
@@ -179,7 +182,7 @@ export class MewDataService {
   }
 
   serializeLayer(layer: Layer): any {
-    let result = {
+    let result: any = {
       id: layer.id,
       name: layer.name,
       path: layer.path,
@@ -200,7 +203,7 @@ export class MewDataService {
       loopRadius: layer.loopRadius,
       waitIn: layer.waitIn,
       waitOut: layer.waitOut,
-      zDistance: layer.zDistance,
+      distanceZ: layer.zDistance,
     }
     return result;
   }
@@ -234,6 +237,16 @@ export class MewDataService {
       path: print.path,
       children: scaffolds,
     }
+    return result;
+  }
+
+  serializeSettings(): any {
+    let result: any = {};
+    Object.entries(this.settingsConfig).forEach(entry => {
+      if (entry[0] != "textConfig") {
+        result[entry[0]] = entry[1];
+      }
+    });
     return result;
   }
 
@@ -280,6 +293,19 @@ export class MewDataService {
       let width: number = layer.width;
       let height: number = layer.height;
       let radius: number = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) / 2;
+      if (radius > result) result = radius;
+    });
+    return result;
+  }
+
+  getRadiusOfScaffoldAndNavigationArea(scaffold: Scaffold): number {
+    let result: number = 0;
+    scaffold.children.forEach(child => {
+      let layer: Layer = child as Layer;
+      let width: number = layer.width;
+      let height: number = layer.height;
+      let radius: number = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) / 2;
+      radius += layer.loopRadius;
       if (radius > result) result = radius;
     });
     return result;

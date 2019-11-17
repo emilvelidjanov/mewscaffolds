@@ -1,27 +1,24 @@
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CONFIGURATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-; Temparature
-;T = 770
-; Pressure
-;P = 40
+<#setting number_format="computer">
+<#setting boolean_format="TRUE,FALSE">
 
 ; Maximum width of the collector in X direction
-1 XMAX! = 230
+1 XMAX! = ${settings.printAreaTopRightX}
 ; Minimum width of the collector in X direction
-1 XMIN! = 71
+1 XMIN! = ${settings.printAreaBottomLeftX}
 ; Maximum height of the collector in Y direction
-1 YMAX! = 212
+1 YMAX! = ${settings.printAreaTopRightY}
 ; Minimum height of the collector in Y direction
-1 YMIN! = 40
+1 YMIN! = ${settings.printAreaBottomLeftY}
 ; Distance of print head from the collector in Z direction
 1 ZDIST! = 4
 ; Speed / feedrate of the print head
-1 SPEED! = 300 
+1 SPEED! = 300
 
 ; The height of a single slide
-1 SLIDE_HEIGHT! = 26
+1 SLIDE_HEIGHT! = ${settings.slideHeight}
 ; The width of a single slide
-1 SLIDE_WIDTH! = 76
+1 SLIDE_WIDTH! = ${settings.slideWidth}
 ; Margin to keep some extra space from the slide edges
 1 SLIDE_MARGIN! = 2
 
@@ -31,7 +28,7 @@
 1 STAB_WIDTH! = 15
 
 LP moveAbsoluteZ(ZDIST!)
-LP moveAbsolute(XMIN!, YMAX!, SPEED!)
+LP moveAbsolute(XMIN!, YMIN!, SPEED!)
 LP initCoordinateSystem()
 
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CONFIGURATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -43,9 +40,11 @@ LP initCoordinateSystem()
 ; Move in place so the stabilization is centered vertically on the slide
 LP moveRelative(SLIDE_MARGIN!, -SLIDE_MARGIN!, SPEED!)
 ; Stabilize for about 10 minutes
-LP stabilize(1, 1, STAB_WIDTH!, STAB_HEIGHT!, 1, SPEED!)
-; Move to the slide above the stabilization slide
+;LP stabilize(8, 1, STAB_WIDTH!, STAB_HEIGHT!, 1, SPEED!)
+
+; Move to the slide above the stabilization
 LP moveAbsolute(0, -SLIDE_HEIGHT!, SPEED!)
+; Set this as the origin of the main program
 LP initCoordinateSystem()
 
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> STABILIZATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -54,140 +53,221 @@ LP initCoordinateSystem()
 
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> VARIABLES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-; TESTING VARIABLES
-; Radius of the navigation from previous layer to next layer TEMPORARY
-1 ORBIT_RADIUS! = 10
-
-
-; ACTUALLY USED VARIABLES
 ; Number of scaffolds
-1 SCF_NUMBER% = 4
+1 SCF_NUMBER% = ${numberOfScaffolds}
 
 ; Number of layers of each scaffold
-1 DIM LAY_NUMBERS% (4)
-1 LAY_NUMBERS%(1) = 1
-1 LAY_NUMBERS%(2) = 1
-1 LAY_NUMBERS%(3) = 1
-1 LAY_NUMBERS%(4) = 1
+1 DIM LAY_NUMBERS% (${highestNumberOfLayers})
+<#list print.children as scaffold>
+1 LAY_NUMBERS%(${scaffold?index + 1}) = ${scaffold.children?size}
+</#list>
 
 ; X coordinates of scaffolds
-; For now just for testing purposes
-1 DIM X_SCF_POSITIONS! (4)
-1 X_SCF_POSITIONS!(1) = SLIDE_MARGIN! + ORBIT_RADIUS!
-1 X_SCF_POSITIONS!(2) = SLIDE_MARGIN! + ORBIT_RADIUS! + 30
-1 X_SCF_POSITIONS!(3) = SLIDE_MARGIN! + ORBIT_RADIUS!
-1 X_SCF_POSITIONS!(4) = SLIDE_MARGIN! + ORBIT_RADIUS! + 30
+1 DIM X_SCF_POSITIONS! (${highestNumberOfLayers})
+1 FOR I% = 1 TO SCF_NUMBER%
+1	X_SCF_POSITIONS!(I%) = ${settings.defaultScaffoldPositionX} - XMIN!
+1 NEXT I%
+<#list print.children as scaffold>
+<#if scaffold.positionX != settings.defaultScaffoldPositionX>
+1 X_SCF_POSITIONS!(${scaffold?index + 1}) = ${scaffold.positionX} - XMIN!
+</#if>
+</#list>
 
 ; Y coordinates of scaffolds
-1 DIM Y_SCF_POSITIONS! (4)
-1 Y_SCF_POSITIONS!(1) = -SLIDE_HEIGHT! / 2
-1 Y_SCF_POSITIONS!(2) = -SLIDE_HEIGHT! / 2
-1 Y_SCF_POSITIONS!(3) = -SLIDE_HEIGHT! - (SLIDE_HEIGHT! / 2)
-1 Y_SCF_POSITIONS!(4) = -SLIDE_HEIGHT! - (SLIDE_HEIGHT! / 2)
+1 DIM Y_SCF_POSITIONS! (${highestNumberOfLayers})
+1 FOR I% = 1 TO SCF_NUMBER%
+1	Y_SCF_POSITIONS!(I%) = ${settings.defaultScaffoldPositionY} - YMIN!
+1 NEXT I%
+<#list print.children as scaffold>
+<#if scaffold.positionY != settings.defaultScaffoldPositionY>
+1 Y_SCF_POSITIONS!(${scaffold?index + 1}) = ${scaffold.positionY} - YMIN!
+</#if>
+</#list>
 
 ; SINUSOIDALS
 ; Whether a layer is sinusoidal or not
-1 DIM LAY_SINUSOIDALS? (4, 4)
+1 DIM LAY_SINUSOIDALS? (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		LAY_SINUSOIDALS?(I%, J%) = TRUE
+1		LAY_SINUSOIDALS?(I%, J%) = ${settings.defaultLayerIsSinusoidal}
 1	 NEXT J%
 1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.isSinusoidal != settings.defaultLayerIsSinusoidal>
+1 LAY_SINUSOIDALS?(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.isSinusoidal}
+</#if>
+</#list>
+</#list>
 
 ; Phase lengths of each scaffolds sinusoidal layers
-1 DIM LAY_PHASES! (4, 4)
+1 DIM LAY_PHASES! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		IF (LAY_SINUSOIDALS?(I%, J%) = TRUE) THEN LAY_PHASES!(I%, J%) = 1 ENDIF
+1		IF (LAY_SINUSOIDALS?(I%, J%) = TRUE) THEN 
+1			LAY_PHASES!(I%, J%) = ${settings.defaultLayerPhase} 
+1		ENDIF
 1	 NEXT J%
 1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.phase != settings.defaultLayerPhase>
+1 LAY_PHASES!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.phase}
+</#if>
+</#list>
+</#list>
 
 ; Phase shift of each scaffolds sinusoidal layers
-1 DIM LAY_PHSHIFTS! (4, 4)
+1 DIM LAY_PHSHIFTS! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		IF (LAY_SINUSOIDALS?(I%, J%) = TRUE) THEN LAY_PHSHIFTS!(I%, J%) = 0 ENDIF
+1		IF (LAY_SINUSOIDALS?(I%, J%) = TRUE) THEN 
+1			LAY_PHSHIFTS!(I%, J%) = ${settings.defaultLayerPhaseShift} 
+1		ENDIF
 1	 NEXT J%
 1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.phaseShift != settings.defaultLayerPhaseShift>
+1 LAY_PHSHIFTS!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.phaseShift}
+</#if>
+</#list>
+</#list>
 
 ; Amplitude of each scaffolds sinusoidal layers
-1 DIM LAY_AMPLITUDES! (4, 4)
+1 DIM LAY_AMPLITUDES! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		IF (LAY_SINUSOIDALS?(I%, J%) = TRUE) THEN LAY_AMPLITUDES!(I%, J%) = 0.5 ENDIF
+1		IF (LAY_SINUSOIDALS?(I%, J%) = TRUE) THEN 
+1			LAY_AMPLITUDES!(I%, J%) = ${settings.defaultLayerAmplitude} 
+1		ENDIF
 1	 NEXT J%
 1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.amplitude != settings.defaultLayerAmplitude>
+1 LAY_AMPLITUDES!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.amplitude}
+</#if>
+</#list>
+</#list>
 ; SINUSOIDALS
 
 ; Widths of each scaffolds layers
-1 DIM LAY_WIDTHS! (4, 4)
+1 DIM LAY_WIDTHS! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		LAY_WIDTHS!(I%, J%) = 15
+1		LAY_WIDTHS!(I%, J%) = ${settings.defaultLayerWidth}
 1	NEXT J%
 1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.width != settings.defaultLayerWidth>
+1 LAY_WIDTHS!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.width}
+</#if>
+</#list>
+</#list>
 
 ; Heights of each scaffolds layers
-1 DIM LAY_HEIGHTS! (4, 4)
+1 DIM LAY_HEIGHTS! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		LAY_HEIGHTS!(I%, J%) = 15
-1		IF (LAY_SINUSOIDALS?(I%, J%) = TRUE) THEN 
+1		LAY_HEIGHTS!(I%, J%) = ${settings.defaultLayerHeight}
+1		IF (LAY_SINUSOIDALS?(I%, J%) = TRUE) THEN
 1			LAY_HEIGHTS!(I%, J%) = LAY_HEIGHTS!(I%, J%) - (2 * LAY_AMPLITUDES!(I%, J%))
 1		ENDIF
 1 	NEXT J%
 1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.height != settings.defaultLayerHeight>
+<#if layer.isSinusoidal>
+1 LAY_HEIGHTS!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.height} - (2 * LAY_AMPLITUDES!(${scaffold?index + 1}, ${layer?index + 1}))
+<#else>
+1 LAY_HEIGHTS!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.height}
+</#if>
+</#if>
+</#list>
+</#list>
+
+; Loop speeds for each scaffolds layers
+1 DIM LAY_LSPEEDS! (${numberOfScaffolds}, ${highestNumberOfLayers})
+1 FOR I% = 1 TO SCF_NUMBER%
+1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_LSPEEDS!(I%, J%) = ${settings.defaultLayerLoopSpeed}
+1	 NEXT J%
+1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.loopSpeed != settings.defaultLayerLoopSpeed>
+1 LAY_LSPEEDS!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.loopSpeed}
+</#if>
+</#list>
+</#list>
+
+; Loop radii for each scaffolds layers
+1 DIM LAY_LRADII! (${numberOfScaffolds}, ${highestNumberOfLayers})
+1 FOR I% = 1 TO SCF_NUMBER%
+1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_LRADII!(I%, J%) = ${settings.defaultLayerLoopRadius}
+1	 NEXT J%
+1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.loopRadius != settings.defaultLayerLoopRadius>
+1 LAY_LRADII!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.loopRadius}
+</#if>
+</#list>
+</#list>
 
 ; Orbit radii of each scaffold
-1 DIM SCF_ORBITS! (4)
+1 DIM SCF_ORBITS! (${numberOfScaffolds})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	SCF_ORBITS!(I%) = 0
 1 NEXT I%
-; Calculate all orbit radii 
+; Calculate all orbit radii
 1 FOR I% = 1 TO SCF_NUMBER%
 1	FOR J% = 1 TO LAY_NUMBERS%(I%)
 1		TMP_RADIUS! = SQRT(EXP(2, LAY_HEIGHTS!(I%, J%)) + EXP(2, LAY_WIDTHS!(I%, J%))) / 2
+1		TMP_RADIUS! = TMP_RADIUS! + LAY_LRADII!(I%, J%)
 1		IF TMP_RADIUS! > SCF_ORBITS!(I%) THEN
 			; Found the biggest radius of the scaffold, save it and add a safety margin to avoid errors
-1			SCF_ORBITS!(I%) = TMP_RADIUS! + 2
+1			SCF_ORBITS!(I%) = TMP_RADIUS!
 1		ENDIF
 1	NEXT J%
 1 NEXT I%
 
 ; Angles of each scaffolds layers
-1 DIM LAY_ANGLES! (4, 4)
+1 DIM LAY_ANGLES! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		LAY_ANGLES!(I%, J%) = 0
+1		LAY_ANGLES!(I%, J%) = ${settings.defaultLayerAngle}
 1	 NEXT J%
 1 NEXT I%
-1 LAY_ANGLES!(1, 1) = 0
-1 LAY_ANGLES!(1, 2) = 45
-1 LAY_ANGLES!(1, 3) = 90
-1 LAY_ANGLES!(1, 4) = 135
-1 LAY_ANGLES!(2, 1) = 0
-1 LAY_ANGLES!(2, 2) = 135
-1 LAY_ANGLES!(2, 3) = 225
-1 LAY_ANGLES!(2, 4) = 315
-1 LAY_ANGLES!(3, 1) = 0
-1 LAY_ANGLES!(3, 2) = 45
-1 LAY_ANGLES!(3, 3) = 67.5
-1 LAY_ANGLES!(3, 4) = 90
-1 LAY_ANGLES!(4, 1) = 0
-1 LAY_ANGLES!(4, 2) = 45
-1 LAY_ANGLES!(4, 3) = 67.5
-1 LAY_ANGLES!(4, 4) = 90
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.angle != settings.defaultLayerAngle>
+1 LAY_ANGLES!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.angle}
+</#if>
+</#list>
+</#list>
 
 ; Distances between each fiber of each scaffolds layers
-1 DIM FIB_DISTANCES! (4, 4)
+1 DIM FIB_DISTANCES! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		FIB_DISTANCES!(I%, J%) = 0.5
+1		FIB_DISTANCES!(I%, J%) = ${settings.defaultDistanceBetweenFibers}
 1	 NEXT J%
 1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.distanceBetweenFibers != settings.defaultDistanceBetweenFibers>
+1 FIB_DISTANCES!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.distanceBetweenFibers}
+</#if>
+</#list>
+</#list>
 
 ; Number of fibers of each scaffolds layers
-1 DIM FIB_NUMBERS% (4, 4)
+1 DIM FIB_NUMBERS% (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	FOR J% = 1 TO LAY_NUMBERS%(I%)
 1		TMP_DIST! = FIB_DISTANCES!(I%, J%)
@@ -198,37 +278,97 @@ LP initCoordinateSystem()
 1 NEXT I%
 
 ; Wait in times in seconds of each scaffolds layers
-1 DIM LAY_IN_WAITS! (4, 4)
+1 DIM LAY_IN_WAITS! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		LAY_IN_WAITS!(I%, J%) = 0.2
+1		LAY_IN_WAITS!(I%, J%) = ${settings.defaultLayerWaitIn}
 1	 NEXT J%
 1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.waitIn != settings.defaultLayerWaitIn>
+1 LAY_IN_WAITS!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.waitIn}
+</#if>
+</#list>
+</#list>
 
 ; Wait out times in seconds of each scaffolds layers
-1 DIM LAY_OUT_WAITS! (4, 4)
+1 DIM LAY_OUT_WAITS! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		LAY_OUT_WAITS!(I%, J%) = 0.06
+1		LAY_OUT_WAITS!(I%, J%) = ${settings.defaultLayerWaitOut}
 1	 NEXT J%
 1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.waitOut != settings.defaultLayerWaitOut>
+1 LAY_OUT_WAITS!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.waitOut}
+</#if>
+</#list>
+</#list>
 
 ; Feedrates of each scaffolds layers
-1 DIM LAY_SPEEDS! (4, 4)
+1 DIM LAY_SPEEDS! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		LAY_SPEEDS!(I%, J%) = 300
+1		LAY_SPEEDS!(I%, J%) = ${settings.defaultLayerSpeed}
 1	 NEXT J%
 1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.speed != settings.defaultLayerSpeed>
+1 LAY_SPEEDS!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.speed}
+</#if>
+</#list>
+</#list>
 
-; FEEDRATES FOR SINUSOID TESTS
-1 LAY_SPEEDS!(1, 1) = 200
-1 LAY_SPEEDS!(2, 1) = 250
-1 LAY_SPEEDS!(3, 1) = 300
-1 LAY_SPEEDS!(4, 1) = 350
+; Pressures for each scaffolds layers
+1 DIM LAY_PRESSURES! (${numberOfScaffolds}, ${highestNumberOfLayers})
+1 FOR I% = 1 TO SCF_NUMBER%
+1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_PRESSURES!(I%, J%) = ${settings.defaultLayerPressure}
+1	 NEXT J%
+1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.pressure != settings.defaultLayerPressure>
+1 LAY_PRESSURES!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.pressure}
+</#if>
+</#list>
+</#list>
+
+; Temperatures for each scaffolds layers
+1 DIM LAY_TEMPERATURES! (${numberOfScaffolds}, ${highestNumberOfLayers})
+1 FOR I% = 1 TO SCF_NUMBER%
+1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_TEMPERATURES!(I%, J%) = ${settings.defaultLayerTemperature}
+1	 NEXT J%
+1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.temperature != settings.defaultLayerTemperature>
+1 LAY_TEMPERATURES!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.temperature}
+</#if>
+</#list>
+</#list>
+
+; Distance from print head for each scaffolds layers
+1 DIM LAY_ZDISTANCES! (${numberOfScaffolds}, ${highestNumberOfLayers})
+1 FOR I% = 1 TO SCF_NUMBER%
+1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
+1		LAY_ZDISTANCES!(I%, J%) = ${settings.defaultLayerZDistance}
+1	 NEXT J%
+1 NEXT I%
+<#list print.children as scaffold>
+<#list scaffold.children as layer>
+<#if layer.distanceZ != settings.defaultLayerZDistance>
+1 LAY_ZDISTANCES!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.distanceZ}
+</#if>
+</#list>
+</#list>
 
 ; PATHFINDING
-; Number of nodes in total
+; Number of nodes in total (4 nodes per scaffold)
 1 #NODE_NUMBER% = SCF_NUMBER% * 4
 
 ; Directions of the pathfinding nodes from the center of a scaffold
@@ -239,8 +379,8 @@ LP initCoordinateSystem()
 1 #NODE_TO_CENTER_ANGLES!(4) = 315
 
 ; X and Y coordinates of all pathfinding nodes
-1 DIM #NODE_X_COORDINATES! (16)
-1 DIM #NODE_Y_COORDINATES! (16)
+1 DIM #NODE_X_COORDINATES! (${4 * numberOfScaffolds})
+1 DIM #NODE_Y_COORDINATES! (${4 * numberOfScaffolds})
 1 N_COUNT% = 1
 1 FOR I% = 1 TO SCF_NUMBER%
 1	PATHF_RADIUS! = SQRT(2 * EXP(2, SCF_ORBITS!(I%) * 2)) / 2
@@ -252,7 +392,7 @@ LP initCoordinateSystem()
 1 NEXT I%
 
 ; Helper array to mark already "excluded" nodes
-1 DIM #NODE_IS_EXCLUDED? (16)
+1 DIM #NODE_IS_EXCLUDED? (${4 * numberOfScaffolds})
 1 FOR I% = 1 TO #NODE_NUMBER%
 1	#NODE_IS_EXCLUDED?(I%) = FALSE
 1 NEXT I%
@@ -264,6 +404,7 @@ LP initCoordinateSystem()
 
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MAIN PROGRAM <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+; Draw scaffolds
 1 FOR S% = 1 TO SCF_NUMBER%
 1 	RX_SCF_POSITION! = X_SCF_POSITIONS!(S%)
 1 	RY_SCF_POSITION! = Y_SCF_POSITIONS!(S%)
@@ -284,6 +425,9 @@ LP initCoordinateSystem()
 1		RLAY_IN_WAIT! = LAY_IN_WAITS!(S%, L%)
 1		RLAY_OUT_WAIT! = LAY_OUT_WAITS!(S%, L%)
 1		RLAY_SPEED! = LAY_SPEEDS!(S%, L%)
+1		RLAY_LSPEED! = LAY_LSPEEDS!(S%, L%)
+1		RLAY_LRADIUS! = LAY_LRADII!(S%, L%)
+1		RLAY_ZDISTANCE! = LAY_ZDISTANCES!(S%, L%)
 
 1		RLAY_SINUSOIDAL? = LAY_SINUSOIDALS?(S%, L%)
 1		IF (RLAY_SINUSOIDAL? = TRUE) THEN
@@ -292,12 +436,19 @@ LP initCoordinateSystem()
 1			RLAY_AMPLITUDE! = LAY_AMPLITUDES!(S%, L%)
 1		ENDIF
 
+		; Set next distance from print head
+		LP moveAbsoluteZ(RLAY_ZDISTANCE!)
+
 		LP navigateToNextLayer(RX_SCF_POSITION!, RY_SCF_POSITION!, RSCF_ORBIT!, RPREV_LAY_ANGLE!, RLAY_ANGLE!, RLAY_WIDTH!, RLAY_HEIGHT!)
-		
+
+		; Set temperature and pressure
+		;T = LAY_TEMPERATURES!(S%, L%)
+		;P = LAY_PRESSURES!(S%, L%)
+
 1		IF (RLAY_SINUSOIDAL? = TRUE) THEN
-			LP drawLayerSinusoidal(RFIB_NUMBER%, RLAY_WIDTH!, RLAY_PHASE!, RLAY_PHSHIFT!, RLAY_AMPLITUDE!, RFIB_DISTANCE!, RLAY_ANGLE!, RLAY_IN_WAIT!, RLAY_OUT_WAIT!, RLAY_SPEED!)
+			LP drawLayerSinusoidal(RFIB_NUMBER%, RLAY_WIDTH!, RLAY_PHASE!, RLAY_PHSHIFT!, RLAY_AMPLITUDE!, RFIB_DISTANCE!, RLAY_ANGLE!, RLAY_IN_WAIT!, RLAY_OUT_WAIT!, RLAY_SPEED!, RLAY_LSPEED!, RLAY_LRADIUS!)
 1		ELSE
-			LP drawLayer(RFIB_NUMBER%, RLAY_WIDTH!, RFIB_DISTANCE!, RLAY_ANGLE!, RLAY_IN_WAIT!, RLAY_OUT_WAIT!, RLAY_SPEED!)
+			LP drawLayer(RFIB_NUMBER%, RLAY_WIDTH!, RFIB_DISTANCE!, RLAY_ANGLE!, RLAY_IN_WAIT!, RLAY_OUT_WAIT!, RLAY_SPEED!, RLAY_LSPEED!, RLAY_LRADIUS!)
 1		ENDIF
 1 	NEXT L%
 1 NEXT S%
@@ -438,7 +589,6 @@ LPS moveCounterClockwiseRelative
 	LP waitForSeconds(WAIT_OUT!)
 PEND
 
-; TODO: include radius
 ; Moves in a clockwise circle relative to current position.
 ; The radius of the circle is equal to 1.
 ; P1 - Distance to target point
@@ -446,13 +596,14 @@ PEND
 ; P3 - Wait time into the circle motion in seconds
 ; P4 - Wait time out of the circle motion in seconds
 ; P5 - Feedrate
+; P6 - Radius
 LPS moveClockwisePolarX
 1	TARGET_DISTANCE! = P1
 1	TARGET_ANGLE! = P2
 1	WAIT_IN! = P3
 1	WAIT_OUT! = P4
 1	SPEED! = P5
-1	RADIUS! = 1
+1	RADIUS! = P6
 	LP waitForSeconds(WAIT_IN!)
 	POP(ACTPOS)
 	G91 G02(POL) X[TARGET_DISTANCE!] A[TARGET_ANGLE!] R[-RADIUS!] F[SPEED!]
@@ -466,43 +617,18 @@ PEND
 ; P3 - Wait time into the circle motion in seconds
 ; P4 - Wait time out of the circle motion in seconds
 ; P5 - Feedrate
+; P6 - Radius
 LPS moveCounterClockwisePolarX
 1	TARGET_DISTANCE! = P1
 1	TARGET_ANGLE! = P2
 1	WAIT_IN! = P3
 1	WAIT_OUT! = P4
 1	SPEED! = P5
-1	RADIUS! = 1
+1	RADIUS! = P6
 	LP waitForSeconds(WAIT_IN!)
 	POP(ACTPOS)
 	G91 G03(POL) X[TARGET_DISTANCE!] A[TARGET_ANGLE!] R[-RADIUS!] F[SPEED!]
 	LP waitForSeconds(WAIT_OUT!)
-PEND
-
-; Line test.
-; P1 - Length of each line
-; P2 - Distance between the lines
-; P3 - Number of lines to draw
-; P4 - Feedrate
-LPS lineTest
-1	LINE_LENGTH! = P1
-1 	LINE_DISTANCE! = P2
-1 	LINE_NUMBER% = INT(ROUND(P3 / 2))
-1 	SPEED! = P4
-1 	LOOP_SIZE! = LINE_DISTANCE! / 2
-1 	WAIT_IN! = 0.2
-1 	WAIT_OUT! = 0.2
-1 	FOR I%=1 TO LINE_NUMBER%
-1		ADDITIONAL_DISTANCE! = 0
-1		EVEN_CHECK% = INT(I% / 2) * 2
-1		IF EVEN_CHECK% = I% THEN
-1			ADDITIONAL_DISTANCE! = LINE_DISTANCE!
-1		ENDIF		
-		LP movePolarRelativeX(LINE_LENGTH!, 90, SPEED!)
-		LP moveClockwisePolarX(LINE_DISTANCE! + ADDITIONAL_DISTANCE!, 0, WAIT_IN!, WAIT_OUT!, SPEED!)
-		LP movePolarRelativeX(LINE_LENGTH!, -90, SPEED!)
-		LP moveCounterClockwisePolarX(LINE_DISTANCE!, 0, WAIT_IN!, WAIT_OUT!, SPEED!)
-1 	NEXT I%
 PEND
 
 ; Draws a single fiber.
@@ -513,6 +639,8 @@ PEND
 ; P5 - Wait time into the circle motion in seconds
 ; P6 - Wait time out of the circle motion in seconds
 ; P7 - Feedrate
+; P8 - Feedrate of the loop
+; P9 - Radius of the loop
 LPS drawFiber
 1	FIBER_LENGTH! = P1
 1	FIBER_ANGLE! = P2
@@ -521,17 +649,18 @@ LPS drawFiber
 1	WAIT_IN! = P5
 1	WAIT_OUT! = P6
 1	SPEED! = P7
+1	LSPEED! = P8
+1	LRADIUS! = P9
 	LP movePolarRelativeX(FIBER_LENGTH!, FIBER_ANGLE!, SPEED!)
 1	IF CLOCKWISE_TURN% = 1 THEN
 1		CIRCLE_ANGLE! = FIBER_ANGLE! - 90
-		LP moveClockwisePolarX(FIBER_DISTANCE!, CIRCLE_ANGLE!, WAIT_IN!, WAIT_OUT!, SPEED!)
+		LP moveClockwisePolarX(FIBER_DISTANCE!, CIRCLE_ANGLE!, WAIT_IN!, WAIT_OUT!, LSPEED!, LRADIUS!)
 1	ELSE
 1		CIRCLE_ANGLE! = FIBER_ANGLE! + 90
-		LP moveCounterClockwisePolarX(FIBER_DISTANCE!, CIRCLE_ANGLE!, WAIT_IN!, WAIT_OUT!, SPEED!)
+		LP moveCounterClockwisePolarX(FIBER_DISTANCE!, CIRCLE_ANGLE!, WAIT_IN!, WAIT_OUT!, LSPEED!, LRADIUS!)
 1	ENDIF
 PEND
 
-; TODO: clean up calculation
 ; Draws a single sine curve.
 ; P1 - Phase length
 ; P2 - Phase shift (relative to P4)
@@ -550,7 +679,7 @@ LPS drawSine
 1	LEN_INCREMENT! = PHASE! / 16
 1	PREV_X_VALUE! = 0
 1	PREV_Y_VALUE! = SIN(PHASE_SHIFT! / PHASE! * 360) * AMPLITUDE!
-1	WHILE LEN_COUNT! <= CUTOFF! DO
+1	WHILE LEN_COUNT! < CUTOFF! DO
 1		X_VALUE! = LEN_COUNT!
 1		Y_VALUE! = SIN((X_VALUE! + PHASE_SHIFT!) / PHASE! * 360) * AMPLITUDE!
 1		DELT_X_VALUE! = X_VALUE! - PREV_X_VALUE!
@@ -582,6 +711,8 @@ PEND
 ; P8 - Wait time into the circle motion in seconds
 ; P9 - Wait time out of the circle motion in seconds
 ; P10 - Feedrate
+; P11 - Feedrate of the loop
+; P12 - Radius of the loop
 LPS drawFiberSinusoidal
 1	FIBER_LENGTH! = P1
 1	FIBER_ANGLE! = P2
@@ -593,20 +724,24 @@ LPS drawFiberSinusoidal
 1	WAIT_IN! = P8
 1	WAIT_OUT! = P9
 1	SPEED! = P10
+1	LSPEED! = P11
+1	LRADIUS! = P12
 1	FREQUENCY! = FIBER_LENGTH! / PHASE!
 1	RND_FREQUENCY% = INT(FREQUENCY!)
 1	LAST_PHASE_CUTOFF! = (FREQUENCY! - RND_FREQUENCY%) * PHASE!
 1	FOR PHASE_COUNT% = 1 TO RND_FREQUENCY%
 		LP drawSine(PHASE!, PHASE_SHIFT!, AMPLITUDE!, FIBER_ANGLE!, PHASE!, SPEED!)
 1	NEXT PHASE_COUNT%
-	LP drawSine(PHASE!, PHASE_SHIFT!, AMPLITUDE!, FIBER_ANGLE!, LAST_PHASE_CUTOFF!, SPEED!)
+1	IF (LAST_PHASE_CUTOFF! <> 0) THEN
+		LP drawSine(PHASE!, PHASE_SHIFT!, AMPLITUDE!, FIBER_ANGLE!, LAST_PHASE_CUTOFF!, SPEED!)
+1	ENDIF
 	; Loop
 1	IF CLOCKWISE_TURN% = 1 THEN
 1		CIRCLE_ANGLE! = FIBER_ANGLE! - 90
-		LP moveClockwisePolarX(FIBER_DISTANCE!, CIRCLE_ANGLE!, WAIT_IN!, WAIT_OUT!, SPEED!)
+		LP moveClockwisePolarX(FIBER_DISTANCE!, CIRCLE_ANGLE!, WAIT_IN!, WAIT_OUT!, LSPEED!, LRADIUS!)
 1	ELSE
 1		CIRCLE_ANGLE! = FIBER_ANGLE! + 90
-		LP moveCounterClockwisePolarX(FIBER_DISTANCE!, CIRCLE_ANGLE!, WAIT_IN!, WAIT_OUT!, SPEED!)
+		LP moveCounterClockwisePolarX(FIBER_DISTANCE!, CIRCLE_ANGLE!, WAIT_IN!, WAIT_OUT!, LSPEED!, LRADIUS!)
 1	ENDIF
 PEND
 
@@ -619,6 +754,8 @@ PEND
 ; P5 - Wait time into the circle motion in seconds for every fiber
 ; P6 - Wait time out of the circle motion in seconds for every fiber
 ; P7 - Feedrate for every fiber
+; P8 - Feedrate for every fibers' loop
+; P9 - Radius for every fibers' loop
 LPS drawLayer
 1	FIBER_NUMBER% = INT(P1)
 1	FIBER_LENGTH! = P2
@@ -627,6 +764,8 @@ LPS drawLayer
 1	WAIT_IN! = P5
 1	WAIT_OUT! = P6
 1	SPEED! = P7
+1	LSPEED! = P8
+1	LRADIUS! = P9
 1 	FOR I%=1 TO FIBER_NUMBER%
 1		CLOCKWISE% = 0
 1		PARALLEL_ANGLE! = 0
@@ -635,7 +774,7 @@ LPS drawLayer
 1			CLOCKWISE% = 1
 1			PARALLEL_ANGLE! = 180
 1		ENDIF
-		LP drawFiber(FIBER_LENGTH!, PARALLEL_ANGLE! + FIBER_ANGLE!, FIBER_DISTANCE!, CLOCKWISE%, WAIT_IN!, WAIT_OUT!, SPEED!)
+		LP drawFiber(FIBER_LENGTH!, PARALLEL_ANGLE! + FIBER_ANGLE!, FIBER_DISTANCE!, CLOCKWISE%, WAIT_IN!, WAIT_OUT!, SPEED!, LSPEED!, LRADIUS!)
 1 	NEXT I%
 PEND
 
@@ -651,6 +790,8 @@ PEND
 ; P8 - Wait time into the circle motion in seconds for every fiber
 ; P9 - Wait time out of the circle motion in seconds for every fiber
 ; P10 - Feedrate for every fiber
+; P11 - Feedrate for every layers loops
+; P12 - Radius for every layers loops
 LPS drawLayerSinusoidal
 1	FIBER_NUMBER% = INT(P1)
 1	FIBER_LENGTH! = P2
@@ -662,6 +803,8 @@ LPS drawLayerSinusoidal
 1	WAIT_IN! = P8
 1	WAIT_OUT! = P9
 1	SPEED! = P10
+1	LSPEED! = P11
+1	LRADIUS! = P12
 1	FREQUENCY! = FIBER_LENGTH! / PHASE_LENGTH!
 1	RND_FREQUENCY% = INT(FREQUENCY!)
 1	LAST_PHASE_CUTOFF! = (FREQUENCY! - RND_FREQUENCY%) * PHASE_LENGTH!
@@ -683,7 +826,7 @@ LPS drawLayerSinusoidal
 1			PARALLEL_ANGLE! = 180
 1			CALC_SHIFT! = -PHASE_SHIFT! + (PHASE_LENGTH! - LAST_PHASE_CUTOFF!)
 1		ENDIF
-		LP drawFiberSinusoidal(FIBER_LENGTH!, FIBER_ANGLE! + PARALLEL_ANGLE!, FIBER_DISTANCE!, PHASE_LENGTH!, CALC_SHIFT!, AMPLITUDE!, CLOCKWISE%, WAIT_IN!, WAIT_OUT!, SPEED!)
+		LP drawFiberSinusoidal(FIBER_LENGTH!, FIBER_ANGLE! + PARALLEL_ANGLE!, FIBER_DISTANCE!, PHASE_LENGTH!, CALC_SHIFT!, AMPLITUDE!, CLOCKWISE%, WAIT_IN!, WAIT_OUT!, SPEED!, LSPEED!, LRADIUS!)
 1 	NEXT I%
 PEND
 
@@ -793,12 +936,11 @@ LPS navigatePathToScaffold
 1 	NEXT I%
 PEND
 
-LPS stabilize
 ;Rectangular construct with chainmail pattern for constant speed
 ;Parameters: P1-hight(layers), P2 - circle radius, P3 - Size in X-direction
 ;P4 - size in Y-direction, P5 - circle spacing, P6 - linear speed
 ;!!!!! diagonal entering movement cancelled
-
+LPS stabilize
 1 H=P1
 1 CRAD=P2
 1 XSIZE=P3
