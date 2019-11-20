@@ -2,6 +2,11 @@
 <#setting number_format="computer">
 <#setting boolean_format="TRUE,FALSE">
 
+; Initial temperature
+T=770
+; Initial pressure
+P=40
+
 ; Maximum width of the collector in X direction
 1 XMAX! = ${settings.printAreaTopRightX}
 ; Minimum width of the collector in X direction
@@ -40,7 +45,7 @@ LP initCoordinateSystem()
 ; Move in place so the stabilization is centered vertically on the slide
 LP moveRelative(SLIDE_MARGIN!, -SLIDE_MARGIN!, SPEED!)
 ; Stabilize for about 10 minutes
-;LP stabilize(8, 1, STAB_WIDTH!, STAB_HEIGHT!, 1, SPEED!)
+LP stabilize(8, 1, STAB_WIDTH!, STAB_HEIGHT!, 1, SPEED!)
 
 ; Move to the slide above the stabilization
 LP moveAbsolute(0, -SLIDE_HEIGHT!, SPEED!)
@@ -437,13 +442,13 @@ LP initCoordinateSystem()
 1		ENDIF
 
 		; Set next distance from print head
-		LP moveAbsoluteZ(RLAY_ZDISTANCE!)
+		;LP moveAbsoluteZ(RLAY_ZDISTANCE!)
 
 		LP navigateToNextLayer(RX_SCF_POSITION!, RY_SCF_POSITION!, RSCF_ORBIT!, RPREV_LAY_ANGLE!, RLAY_ANGLE!, RLAY_WIDTH!, RLAY_HEIGHT!)
 
 		; Set temperature and pressure
-		;T = LAY_TEMPERATURES!(S%, L%)
-		;P = LAY_PRESSURES!(S%, L%)
+		T=LAY_TEMPERATURES!(S%, L%)
+		P=LAY_PRESSURES!(S%, L%)
 
 1		IF (RLAY_SINUSOIDAL? = TRUE) THEN
 			LP drawLayerSinusoidal(RFIB_NUMBER%, RLAY_WIDTH!, RLAY_PHASE!, RLAY_PHSHIFT!, RLAY_AMPLITUDE!, RFIB_DISTANCE!, RLAY_ANGLE!, RLAY_IN_WAIT!, RLAY_OUT_WAIT!, RLAY_SPEED!, RLAY_LSPEED!, RLAY_LRADIUS!)
@@ -498,11 +503,11 @@ LPS movePolarRelativeX
 	G91 G01(POL) X[LENGTH!] A[ANGLE!] F[SPEED!]
 PEND
 
-; Moves in absolute coordinates in Z-Direction with a set speed of 100.
+; Moves in absolute coordinates in Z-Direction with a set speed of 300.
 ; P1 - Distance to move in Z direction
 LPS moveAbsoluteZ
 1	ZDIST! = P1
-	G90 G01 Z[ZDIST!] F100
+	G90 G01 Z[ZDIST!] F300
 PEND
 
 ; Sets the origin of the coordinate system to the current position.
