@@ -18,8 +18,8 @@ export class MewDataService {
 
   static instance: MewDataService;
 
-  readonly printUrl: string = "http://localhost:8080/print";
-  readonly chartUrl: string = "http://localhost:8080/chart";
+  readonly printUrl: string = "/print";
+  readonly chartUrl: string = "/chart";
   readonly chartCalculateEndpoint: string = "/calculate";
   readonly generateCodeEndpoint: string = "/generateCode";
 
