@@ -23,7 +23,7 @@ export class ScaffoldPositioningComponent implements OnInit {
   private readonly slideHeight: number;
   private readonly slideWidth: number;
 
-  constructor(private textConfig: TextConfig, private settingsConfig: SettingsConfig, private mewDataService: MewDataService) { 
+  constructor(public textConfig: TextConfig, private settingsConfig: SettingsConfig, private mewDataService: MewDataService) { 
     this.data = [];
     this.chartOptions = {
       responsive: true,

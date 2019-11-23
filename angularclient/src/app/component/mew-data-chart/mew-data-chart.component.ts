@@ -19,7 +19,7 @@ export class MewDataChartComponent implements OnInit {
 
   private readonly defaultChartDataSet: ChartDataSets;
 
-  constructor(private textConfig: TextConfig, private mewDataService: MewDataService) {
+  constructor(public textConfig: TextConfig, private mewDataService: MewDataService) {
     this.data = [];
     this.chartOptions = {
       responsive: true,

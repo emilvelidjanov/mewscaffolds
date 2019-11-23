@@ -22,9 +22,13 @@ export class TextConfig {
     
     // Control
     readonly controlLabel: string = "control";
+    readonly scaffoldControlLabel: string = "Scaffold control";
+    readonly layerControlLabel: string = "Layer control";
     
     // Form
     readonly formLabel: string = "parameters";
+    readonly scaffoldFormLabel: string = "Scaffold parameters";
+    readonly layerFormLabel: string = "Layer parameters";
     readonly nameInputLabel: string = "Name";
     readonly nameInputPlaceholder: string = "Name";
     readonly positionXInputLabel: string = "Position X";

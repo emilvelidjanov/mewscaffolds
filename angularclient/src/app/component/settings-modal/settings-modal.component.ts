@@ -43,7 +43,7 @@ export class SettingsModalComponent implements OnInit {
   readonly nameDefaultLayerWaitOut: string = "defaultLayerWaitOut";
   readonly nameDefaultLayerZDistance: string = "defaultLayerZDistance";
 
-  constructor(private textConfig: TextConfig, private settingsConfig: SettingsConfig, private cookieService: CookieService) { }
+  constructor(public textConfig: TextConfig, public settingsConfig: SettingsConfig, private cookieService: CookieService) { }
 
   ngOnInit() {
     let settingsCookie: string = this.cookieService.get(this.settingsCookieName);

@@ -12,7 +12,7 @@ export class GenerateCodeModalComponent implements OnInit {
 
   code: string;
 
-  constructor(private textConfig: TextConfig, private mewDataService: MewDataService) { }
+  constructor(public textConfig: TextConfig, private mewDataService: MewDataService) { }
 
   ngOnInit() {
     this.code = "";

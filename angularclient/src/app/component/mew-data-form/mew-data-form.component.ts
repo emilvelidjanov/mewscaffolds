@@ -84,7 +84,7 @@ export class MewDataFormComponent implements OnInit {
   readonly phaseInputName: string;
   readonly phaseShiftInputName: string;
 
-  constructor(private textConfig: TextConfig, private mewDataService: MewDataService, private settingsConfig: SettingsConfig) {
+  constructor(public textConfig: TextConfig, private mewDataService: MewDataService, public settingsConfig: SettingsConfig) {
     this.data = [];
     this.label = "";
     this.dataLabel = "";

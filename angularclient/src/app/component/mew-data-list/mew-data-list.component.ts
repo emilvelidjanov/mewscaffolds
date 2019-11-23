@@ -27,7 +27,7 @@ export class MewDataListComponent implements OnInit {
 
   selectedTotal: number;
 
-  constructor(private mewDataService: MewDataService, private textConfig: TextConfig, private settingsConfig: SettingsConfig) {
+  constructor(private mewDataService: MewDataService, public textConfig: TextConfig, public settingsConfig: SettingsConfig) {
     this.data = [];
     this.parentData = [];
     this.label = "";

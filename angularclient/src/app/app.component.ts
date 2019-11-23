@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   scaffolds: Scaffold[];
   layers: Layer[];
 
-  constructor(private mewDataService: MewDataService, private textConfig: TextConfig) {
+  constructor(private mewDataService: MewDataService, public textConfig: TextConfig) {
     this.unsubscribe = new Subject<any>();
     this.print = [];
     this.scaffolds = [];
