@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
   }
 
   saveToFile(): void {
-    let data: string = JSON.stringify(this.mewDataService.serializePrint(this.mewDataService.print));
+    let data: string = JSON.stringify(this.mewDataService.serializePrintForSaveFile(this.mewDataService.print));
     let blob = new Blob([data], {
       type: "text/plain;charset=utf-8"
     });
@@ -62,6 +62,7 @@ export class AppComponent implements OnInit {
       this.mewDataService.pushNextPrint(this.mewDataService.print);
     }
     fileReader.onerror = (error) => {
+      alert("Error: Could not load data from file.");
       console.log(error);
     }
   }

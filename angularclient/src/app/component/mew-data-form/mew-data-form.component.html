@@ -6,23 +6,22 @@
     <div *ngIf="!isFormVisible">
       {{textConfig.formPleaseSelectText}} {{dataLabel.toLowerCase()}}.
     </div>
-    <form *ngIf="isFormVisible">
+    <div *ngIf="isFormVisible">
       <div *ngIf="hasPropertyMap.get(mewDataProperties.NAME)" class="form-group">
-        <!-- TODO: naming number hint -->
         <label for="nameInput{{dataLabel}}">{{textConfig.nameInputLabel}}</label>
-        <input id="nameInput{{dataLabel}}" type="text" class="form-control" [value]="name" [name]="nameInputName"
+        <input required id="nameInput{{dataLabel}}" type="text" class="form-control" [value]="name" [name]="nameInputName"
           [placeholder]="nameInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)"
           (focusout)="recalculatePaths()">
       </div>
       <div *ngIf="hasPropertyMap.get(mewDataProperties.POSITION)" class="form-group form-row">
         <div class="col">
           <label for="xPosInput">{{textConfig.positionXInputLabel}}</label>
-          <input id="xPosInput" type="number" class="form-control" [value]="position?.x" [name]="positionXInputName"
+          <input required id="xPosInput" type="number" class="form-control" [value]="position?.x" [name]="positionXInputName"
             [placeholder]="positionXInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
         <div class="col">
           <label for="yPosInput">{{textConfig.positionYInputLabel}}</label>
-          <input id="yPosInput" type="number" class="form-control" [value]="position?.y" [name]="positionYInputName"
+          <input required id="yPosInput" type="number" class="form-control" [value]="position?.y" [name]="positionYInputName"
             [placeholder]="positionYInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
       </div>
@@ -30,12 +29,12 @@
         class="form-group form-row">
         <div class="col">
           <label for="widthInput">{{textConfig.widthInputLabel}}</label>
-          <input id="widthInput" type="number" class="form-control" [value]="width" [name]="widthInputName"
+          <input required id="widthInput" type="number" class="form-control" [value]="width" [name]="widthInputName"
             [placeholder]="widthInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
         <div class="col">
           <label for="heightInput">{{textConfig.heightInputLabel}}</label>
-          <input id="heightInput" type="number" class="form-control" [value]="height" [name]="heightInputName"
+          <input required id="heightInput" type="number" class="form-control" [value]="height" [name]="heightInputName"
             [placeholder]="heightInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
       </div>
@@ -44,42 +43,42 @@
         class="form-group form-row">
         <div class="col">
           <label for="distanceBetweenFibersInput">{{textConfig.distanceBetweenFibersInputLabel}}</label>
-          <input id="distanceBetweenFibersInput" type="number" step="0.1" class="form-control"
+          <input required id="distanceBetweenFibersInput" type="number" step="0.1" class="form-control"
             [value]="distanceBetweenFibers" [name]="distanceBetweenFibersInputName"
             [placeholder]="distanceBetweenFibersInputPlaceholder"
             (input)="onInput($event.target.name, $event.target.value)">
         </div>
         <div class="col">
           <label for="angleInput">{{textConfig.angleInputLabel}}</label>
-          <input id="angleInput" type="number" class="form-control" [value]="angle" [name]="angleInputName"
+          <input required id="angleInput" type="number" class="form-control" [value]="angle" [name]="angleInputName"
             [placeholder]="angleInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
       </div>
       <div *ngIf="hasPropertyMap.get(mewDataProperties.FIBERS)" class="form-group">
         <label for="fibersInput">{{textConfig.fibersInputLabel}}</label>
-        <input id="fibersInput" type="number" class="form-control" [value]="fibers" [name]="fibersInputName"
+        <input required id="fibersInput" type="number" class="form-control" [value]="fibers" [name]="fibersInputName"
           [placeholder]="fibersInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)" disabled>
       </div>
       <div *ngIf="hasPropertyMap.get(mewDataProperties.IS_SINUSOIDAL)" class="form-group form-check">
-        <input id="isSinusoidalInput" type="checkbox" class="form-check-input" [checked]="isSinusoidal"
+        <input required id="isSinusoidalInput" type="checkbox" class="form-check-input" [checked]="isSinusoidal"
           [name]="isSinusoidalInputName" (input)="onInput($event.target.name, $event.target.checked)">
         <label for="isSinusoidalInput" class="form-check-label">{{textConfig.isSinusoidalInputLabel}}</label>
       </div>
       <div *ngIf="isSinusoidal || getSelectedData().length > 1" class="form-group form-row">
         <div *ngIf="hasPropertyMap.get(mewDataProperties.AMPLITUDE)" class="col">
           <label for="amplitudeInput">{{textConfig.amplitudeInputLabel}}</label>
-          <input id="amplitudeInput" type="number" class="form-control" [value]="amplitude" [name]="amplitudeInputName"
+          <input required id="amplitudeInput" type="number" class="form-control" [value]="amplitude" [name]="amplitudeInputName"
             [placeholder]="amplitudeInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)"
             step="0.1">
         </div>
         <div *ngIf="hasPropertyMap.get(mewDataProperties.PHASE)" class="col">
           <label for="phaseInput">{{textConfig.phaseInputLabel}}</label>
-          <input id="phaseInput" type="number" class="form-control" [value]="phase" [name]="phaseInputName"
+          <input required id="phaseInput" type="number" class="form-control" [value]="phase" [name]="phaseInputName"
             [placeholder]="phaseInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
         </div>
         <div *ngIf="hasPropertyMap.get(mewDataProperties.PHASE_SHIFT)" class="col">
           <label for="phaseShiftInput">{{textConfig.phaseShiftInputLabel}}</label>
-          <input id="phaseShiftInput" type="number" class="form-control" [value]="phaseShift"
+          <input required id="phaseShiftInput" type="number" class="form-control" [value]="phaseShift"
             [name]="phaseShiftInputName" [placeholder]="phaseShiftInputPlaceholder"
             (input)="onInput($event.target.name, $event.target.value)">
         </div>
@@ -90,17 +89,17 @@
           class="form-group form-row">
           <div class="col">
             <label for="speedInput">{{textConfig.speedInputLabel}}</label>
-            <input id="speedInput" type="number" class="form-control" [value]="speed" [name]="speedInputName"
+            <input required id="speedInput" type="number" class="form-control" [value]="speed" [name]="speedInputName"
               [placeholder]="speedInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
           </div>
           <div class="col">
             <label for="pressureInput">{{textConfig.pressureInputLabel}}</label>
-            <input id="pressureInput" type="number" class="form-control" [value]="pressure" [name]="pressureInputName"
+            <input required id="pressureInput" type="number" class="form-control" [value]="pressure" [name]="pressureInputName"
               [placeholder]="pressureInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
           </div>
           <div class="col">
             <label for="temperatureInput">{{textConfig.temperatureInputLabel}}</label>
-            <input id="temperatureInput" type="number" class="form-control" [value]="temperature"
+            <input required id="temperatureInput" type="number" class="form-control" [value]="temperature"
               [name]="temperatureInputName" [placeholder]="temperatureInputPlaceholder"
               (input)="onInput($event.target.name, $event.target.value)">
           </div>
@@ -110,13 +109,13 @@
           class="form-group form-row">
           <div class="col">
             <label for="loopSpeedInput">{{textConfig.loopSpeedInputLabel}}</label>
-            <input id="loopSpeedInput" type="number" class="form-control" [value]="loopSpeed"
+            <input required id="loopSpeedInput" type="number" class="form-control" [value]="loopSpeed"
               [name]="loopSpeedInputName" [placeholder]="loopSpeedInputPlaceholder"
               (input)="onInput($event.target.name, $event.target.value)">
           </div>
           <div class="col">
             <label for="loopRadiusInput">{{textConfig.loopRadiusInputLabel}}</label>
-            <input id="loopRadiusInput" type="number" class="form-control" [value]="loopRadius"
+            <input required id="loopRadiusInput" type="number" class="form-control" [value]="loopRadius"
               [name]="loopRadiusInputName" [placeholder]="loopRadiusInputPlaceholder"
               (input)="onInput($event.target.name, $event.target.value)">
           </div>
@@ -125,12 +124,12 @@
           class="form-group form-row">
           <div class="col">
             <label for="waitInInput">{{textConfig.waitInInputLabel}}</label>
-            <input id="waitInInput" type="number" class="form-control" [value]="waitIn" [name]="waitInInputName"
+            <input required id="waitInInput" type="number" class="form-control" [value]="waitIn" [name]="waitInInputName"
               [placeholder]="waitInInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
           </div>
           <div class="col">
             <label for="waitOutInput">{{textConfig.waitOutInputLabel}}</label>
-            <input id="waitOutInput" type="number" class="form-control" [value]="waitOut" [name]="waitOutInputName"
+            <input required id="waitOutInput" type="number" class="form-control" [value]="waitOut" [name]="waitOutInputName"
               [placeholder]="waitOutInputPlaceholder" (input)="onInput($event.target.name, $event.target.value)">
           </div>
         </div>
@@ -139,12 +138,12 @@
           class="form-group form-row">
           <div class="col">
             <label for="zDistanceInput">{{textConfig.zDistanceInputLabel}}</label>
-            <input id="zDistanceInput" type="number" class="form-control" [value]="zDistance"
+            <input required id="zDistanceInput" type="number" class="form-control" [value]="zDistance"
               [name]="zDistanceInputName" [placeholder]="zDistanceInputPlaceholder"
               (input)="onInput($event.target.name, $event.target.value)">
           </div>
         </div>
       </div>
-    </form>
+    </div>
   </div>
 </div>

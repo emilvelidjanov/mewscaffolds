@@ -344,7 +344,7 @@ export class MewDataService {
         newLayer.loopRadius = layer["loopRadius"];
         newLayer.waitIn = layer["waitIn"];
         newLayer.waitOut = layer["waitOut"];
-        newLayer.zDistance = layer["zDistance"];
+        newLayer.zDistance = layer["distanceZ"];
         newScaffold.children.push(newLayer);
       });
       newPrint.children.push(newScaffold);

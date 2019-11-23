@@ -19,6 +19,8 @@ P=40
 1 ZDIST! = 4
 ; Speed / feedrate of the print head
 1 SPEED! = 300
+; Reduced speed for critical parts of sinusoidal fibers
+1 #SPD_RED! = 180
 
 ; The height of a single slide
 1 SLIDE_HEIGHT! = ${settings.slideHeight}
@@ -358,16 +360,17 @@ LP initCoordinateSystem()
 </#list>
 
 ; Distance from print head for each scaffolds layers
+; Subtracted ZDIST! because we initialized the coordinate system with ZDIST! as 0
 1 DIM LAY_ZDISTANCES! (${numberOfScaffolds}, ${highestNumberOfLayers})
 1 FOR I% = 1 TO SCF_NUMBER%
 1	 FOR J% = 1 TO LAY_NUMBERS%(I%)
-1		LAY_ZDISTANCES!(I%, J%) = ${settings.defaultLayerZDistance}
+1		LAY_ZDISTANCES!(I%, J%) = ${settings.defaultLayerZDistance} - ZDIST!
 1	 NEXT J%
 1 NEXT I%
 <#list print.children as scaffold>
 <#list scaffold.children as layer>
 <#if layer.distanceZ != settings.defaultLayerZDistance>
-1 LAY_ZDISTANCES!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.distanceZ}
+1 LAY_ZDISTANCES!(${scaffold?index + 1}, ${layer?index + 1}) = ${layer.distanceZ} - ZDIST!
 </#if>
 </#list>
 </#list>
@@ -442,7 +445,7 @@ LP initCoordinateSystem()
 1		ENDIF
 
 		; Set next distance from print head
-		;LP moveAbsoluteZ(RLAY_ZDISTANCE!)
+		LP moveAbsoluteZ(RLAY_ZDISTANCE!)
 
 		LP navigateToNextLayer(RX_SCF_POSITION!, RY_SCF_POSITION!, RSCF_ORBIT!, RPREV_LAY_ANGLE!, RLAY_ANGLE!, RLAY_WIDTH!, RLAY_HEIGHT!)
 
@@ -680,11 +683,11 @@ LPS drawSine
 1	ANGLE! = P4
 1	CUTOFF! = P5
 1	SPEED! = P6
-1	LEN_COUNT! = 0
 1	LEN_INCREMENT! = PHASE! / 8
+1	LEN_COUNT! = LEN_INCREMENT!
 1	PREV_X_VALUE! = 0
 1	PREV_Y_VALUE! = SIN(PHASE_SHIFT! / PHASE! * 360) * AMPLITUDE!
-1	WHILE LEN_COUNT! < CUTOFF! DO
+1	WHILE LEN_COUNT! < (CUTOFF! - LEN_INCREMENT!) DO
 1		X_VALUE! = LEN_COUNT!
 1		Y_VALUE! = SIN((X_VALUE! + PHASE_SHIFT!) / PHASE! * 360) * AMPLITUDE!
 1		DELT_X_VALUE! = X_VALUE! - PREV_X_VALUE!
@@ -692,6 +695,7 @@ LPS drawSine
 1		ROT_X_VALUE! = DELT_X_VALUE! * COS(ANGLE!) - DELT_Y_VALUE! * SIN(ANGLE!)
 1		ROT_Y_VALUE! = DELT_Y_VALUE! * COS(ANGLE!) + DELT_X_VALUE! * SIN(ANGLE!)
 1		LEN_COUNT! = LEN_COUNT! + LEN_INCREMENT!
+1		IF ABS(Y_VALUE!) >= (0.6 * AMPLITUDE!) THEN SPEED! = #SPD_RED! ENDIF
 		LP moveRelative(ROT_X_VALUE!, ROT_Y_VALUE!, SPEED!)
 1		PREV_X_VALUE! = X_VALUE!
 1		PREV_Y_VALUE! = Y_VALUE!

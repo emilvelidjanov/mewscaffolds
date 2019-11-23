@@ -57,7 +57,6 @@ export class MewDataChartComponent implements OnInit {
   ngOnInit() {
   }
 
-  // TODO: fix .000000001 stuff
   refresh() {
     this.chartDataSets = [{
       data: [],
@@ -95,6 +94,10 @@ export class MewDataChartComponent implements OnInit {
           this.chartDataSets.push(chartDataSet);
         }
       });
+    },
+    error => {
+      alert("Error: Couldn't reach server.");
+      console.log(error);
     });
   }
 

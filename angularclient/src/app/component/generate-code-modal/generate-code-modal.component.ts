@@ -21,6 +21,10 @@ export class GenerateCodeModalComponent implements OnInit {
   generateCode(): void {
     this.mewDataService.fetchGeneratedCode().subscribe(response => {
       this.code = response["code"];
+    },
+    error => {
+      alert("Error: Could not generate code. Please make sure that no field is empty.");
+      console.log(error);
     });
   }
 

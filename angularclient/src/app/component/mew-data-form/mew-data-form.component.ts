@@ -7,7 +7,6 @@ import { MewDataProperties } from 'src/app/enum/mew-data-properties';
 import { Layer } from 'src/app/model/layer/layer';
 import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
 
-// TODO: cleanup
 // TODO: sanitize input and error messages (error checking, too)
 @Component({
   selector: 'app-mew-data-form',
