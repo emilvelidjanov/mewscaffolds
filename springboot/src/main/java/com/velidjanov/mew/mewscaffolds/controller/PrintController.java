@@ -17,7 +17,7 @@ import java.io.Writer;
 
 @RestController
 @RequestMapping("/print")
-@CrossOrigin(origins = {"http://mewscaffolds.herokuapp.com"})
+@CrossOrigin(origins = {"http://localhost:8080"})
 @Slf4j
 public class PrintController {
 

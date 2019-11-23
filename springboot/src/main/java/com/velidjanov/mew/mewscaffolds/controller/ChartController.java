@@ -12,7 +12,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/chart")
-@CrossOrigin(origins = {"http://mewscaffolds.herokuapp.com"})
+@CrossOrigin(origins = {"http://localhost:8080"})
 @Slf4j
 public class ChartController {
 
