@@ -12,7 +12,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/chart")
-@CrossOrigin(origins = {"http://localhost:4200", "http://192.168.2.101:4200"})
+@CrossOrigin(origins = {"http://mewscaffolds.herokuapp.com"})
 @Slf4j
 public class ChartController {
 
@@ -28,7 +28,6 @@ public class ChartController {
             Vector2D root = new Vector2D(-layerWidth / 2, -layerHeight / 2);
             if (!layer.getIsSinusoidal()) {
                 for (int i = 0; i < layer.getFibers(); i++) {
-                    // TODO: rotate around scaffold center?
                     Vector2D origin = new Vector2D(root);
                     origin.rotateBy(Math.toRadians(layerAngle));
                     Vector2D target = new Vector2D(root.x + layerWidth, root.y);
