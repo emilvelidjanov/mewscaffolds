@@ -248,6 +248,7 @@ export class MewDataService {
         delete layer["distanceZ"];
       });
     });
+    return result;
   }
 
   serializeSettings(): any {
@@ -344,7 +345,7 @@ export class MewDataService {
         newLayer.loopRadius = layer["loopRadius"];
         newLayer.waitIn = layer["waitIn"];
         newLayer.waitOut = layer["waitOut"];
-        newLayer.zDistance = layer["distanceZ"];
+        newLayer.zDistance = layer["zDistance"];
         newScaffold.children.push(newLayer);
       });
       newPrint.children.push(newScaffold);
