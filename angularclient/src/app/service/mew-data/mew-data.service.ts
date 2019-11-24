@@ -18,8 +18,8 @@ export class MewDataService {
 
   static instance: MewDataService;
 
-  readonly printUrl: string = "/print";
-  readonly chartUrl: string = "/chart";
+  readonly printUrl: string = "http://mewscaffolds-api.herokuapp.com/print";
+  readonly chartUrl: string = "http://mewscaffolds-api.herokuapp.com/chart";
   readonly chartCalculateEndpoint: string = "/calculate";
   readonly generateCodeEndpoint: string = "/generateCode";
 
