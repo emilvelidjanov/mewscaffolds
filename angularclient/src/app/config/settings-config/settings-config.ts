@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TextConfig } from '../text-config/text-config';
+import { MewDataColor } from 'src/app/enum/mew-data-color';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class SettingsConfig {
   defaultScaffoldName: string;
   defaultScaffoldPositionX: number;
   defaultScaffoldPositionY: number;
+  defaultScaffoldColor: string;
 
   defaultLayerName: string;
   defaultLayerAngle: number;
@@ -59,6 +61,7 @@ export class SettingsConfig {
     let smallerY = Math.min(this.printAreaTopRightY, this.printAreaBottomLeftY);
     this.defaultScaffoldPositionX = Math.abs(this.printAreaTopRightX - this.printAreaBottomLeftX) / 2 + smallerX;
     this.defaultScaffoldPositionY = Math.abs(this.printAreaTopRightY - this.printAreaBottomLeftY) / 2 + smallerY;
+    this.defaultScaffoldColor = MewDataColor.RED;
 
     this.defaultLayerName = "Layer";
     this.defaultLayerAngle = 0;

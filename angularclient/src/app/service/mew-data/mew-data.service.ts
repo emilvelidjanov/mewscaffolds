@@ -9,6 +9,7 @@ import { TextConfig } from 'src/app/config/text-config/text-config';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
 import { Vector } from 'src/app/model/vector/vector';
+import { MewDataColor } from 'src/app/enum/mew-data-color';
 
 // TODO: seperate into one service for each model
 @Injectable({
@@ -19,7 +20,7 @@ export class MewDataService {
   static instance: MewDataService;
 
   readonly printUrl: string = "http://mewscaffolds-api.herokuapp.com/print";
-  readonly chartUrl: string = "http://mewscaffolds-api.herokuapp.com/chart";
+  readonly chartUrl: string = "http://localhost:8080/chart";
   readonly chartCalculateEndpoint: string = "/calculate";
   readonly generateCodeEndpoint: string = "/generateCode";
 
@@ -133,8 +134,10 @@ export class MewDataService {
       if (parent instanceof Print) {
         name = this.settingsConfig.defaultScaffoldName + name;
         newChild = new Scaffold(id, name, parent);
+        // TODO: calculate free position
         newChild["position"]["x"] = this.settingsConfig.defaultScaffoldPositionX;
         newChild["position"]["y"] = this.settingsConfig.defaultScaffoldPositionY;
+        newChild["color"] = this.calculateScaffoldColor(newChild as Scaffold);
       }
       else if (parent instanceof Scaffold) {
         name = this.settingsConfig.defaultLayerName + name;
@@ -145,6 +148,20 @@ export class MewDataService {
     return newChild;
   }
 
+  calculateScaffoldColor(scaffold: Scaffold): string {
+    let index: number = this.getChildIndex(scaffold);
+    if (index == -1) index = scaffold.parent.children.length;
+    return this.getMewDataColorForIndex(index);
+  }
+
+  getMewDataColorForIndex(index: number): string {
+    let entries: string[] = Object.values(MewDataColor);
+    let mod: number = index % entries.length;
+    console.log(mod);
+    console.log(entries);
+    return entries[mod];
+  }
+
   deepCopy(data: MewData, parent: MewData): MewData {
     let copy: MewData = null;
     let id: number = this.getNextChildId(parent);
@@ -152,6 +169,7 @@ export class MewDataService {
       copy = new Scaffold(id, data.name, parent);
       copy["position"]["x"] = data["position"]["x"];
       copy["position"]["y"] = data["position"]["y"];
+      copy["color"] = data["color"];
     }
     else if (data instanceof Layer) {
       copy = new Layer(id, data.name, parent);
@@ -221,6 +239,7 @@ export class MewDataService {
       positionX: scaffold.position.x,
       positionY: scaffold.position.y,
       position: {x: scaffold.position.x, y: scaffold.position.y},
+      color: scaffold.color,
       children: layers,
     }
     return result;
@@ -331,6 +350,7 @@ export class MewDataService {
     print.children.forEach(scaffold => {
       let newScaffold: Scaffold = new Scaffold(scaffold.id, scaffold.name, newPrint);
       newScaffold.position = new Vector(scaffold["positionX"], scaffold["positionY"]);
+      newScaffold.color = scaffold["color"];
       scaffold.children.forEach(layer => {
         let newLayer: Layer = new Layer(layer.id, layer.name, newScaffold);
         newLayer.angle = layer["angle"];

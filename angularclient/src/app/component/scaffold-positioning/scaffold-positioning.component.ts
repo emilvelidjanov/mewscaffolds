@@ -4,6 +4,7 @@ import { Scaffold } from 'src/app/model/scaffold/scaffold';
 import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 import { ChartDataSets, ChartOptions, ChartType, ChartYAxe, ChartData, ChartScales } from 'chart.js';
+import { MewDataColor } from 'src/app/enum/mew-data-color';
 
 @Component({
   selector: 'app-scaffold-positioning',
@@ -121,7 +122,9 @@ export class ScaffoldPositioningComponent implements OnInit {
       let x: number = scaff.position.x;
       let y: number = scaff.position.y;
       let set: ChartDataSets = this.copyDefaultChartDataSet();
+      this.updateColors(set, scaff);
       set.pointRadius = 0;
+      set.borderWidth = 2;
       set.data = [];
       for (let angle = 0; angle <= 360; angle += 22.5) {
         let point: any = {x: this.calculatePointOnCircleX(x, radius, angle), y: this.calculatePointOnCircleY(y, radius, angle)};
@@ -132,6 +135,8 @@ export class ScaffoldPositioningComponent implements OnInit {
       this.chartDataSets.push(set);
 
       let center: ChartDataSets = this.copyDefaultChartDataSet();
+      this.updateColors(center, scaff);
+      set.borderWidth = 2;
       center.data = [
         {x: x, y: y},
       ]
@@ -162,5 +167,14 @@ export class ScaffoldPositioningComponent implements OnInit {
       pointStyle: this.defaultChartDataSet.pointStyle,
     }
     return ret as ChartDataSets;
+  }
+
+  private updateColors(set: ChartDataSets, scaffold: Scaffold) {
+    let color: string = scaffold.color;
+    set.borderColor = color;
+    set.pointBackgroundColor = color;
+    set.pointBorderColor = color;
+    set.pointHoverBackgroundColor = color;
+    set.pointHoverBorderColor = color;
   }
 }
