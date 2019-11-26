@@ -67,17 +67,18 @@ export class MewDataChartComponent implements OnInit {
       let layers: Layer[] = this.getViewData();
       layers.forEach(layer => {
         let layerData = data[layer.id]; // TODO: fix scaffold multi select
+        let color: string = (layer.parent as Scaffold).color;
         for (let index = 0; index < layer.fibers; index++) {
           let fiberData = layerData[index];
           let chartDataSet: ChartDataSets = {
             backgroundColor: this.defaultChartDataSet.backgroundColor,
-            borderColor: this.defaultChartDataSet.borderColor,
+            borderColor: color,
             borderWidth: this.defaultChartDataSet.borderWidth,
             lineTension: this.defaultChartDataSet.lineTension,
-            pointBackgroundColor: this.defaultChartDataSet.pointBackgroundColor,
-            pointBorderColor: this.defaultChartDataSet.pointBorderColor,
-            pointHoverBackgroundColor: this.defaultChartDataSet.pointHoverBackgroundColor,
-            pointHoverBorderColor: this.defaultChartDataSet.pointHoverBorderColor,
+            pointBackgroundColor: color,
+            pointBorderColor: color,
+            pointHoverBackgroundColor: color,
+            pointHoverBorderColor: color,
             pointRadius: this.defaultChartDataSet.pointRadius,
             pointRotation: this.defaultChartDataSet.pointRotation,
             pointStyle: this.defaultChartDataSet.pointStyle,

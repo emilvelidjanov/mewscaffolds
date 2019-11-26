@@ -129,7 +129,7 @@ export class MewDataService {
   addNewChildToParent(parent: MewData): MewData {
     let newChild: MewData = null;
     if (parent.children !== null) {
-      let id: number = this.getNextChildId(parent);
+      let id: number = this.getNextGlobalId(this.print);
       let name: string = this.textConfig.suffixSeperator + this.getNextChildNameSuffix(parent);
       if (parent instanceof Print) {
         name = this.settingsConfig.defaultScaffoldName + name;
@@ -157,14 +157,12 @@ export class MewDataService {
   getMewDataColorForIndex(index: number): string {
     let entries: string[] = Object.values(MewDataColor);
     let mod: number = index % entries.length;
-    console.log(mod);
-    console.log(entries);
     return entries[mod];
   }
 
   deepCopy(data: MewData, parent: MewData): MewData {
     let copy: MewData = null;
-    let id: number = this.getNextChildId(parent);
+    let id: number = this.getNextGlobalId(this.print);
     if (data instanceof Scaffold) {
       copy = new Scaffold(id, data.name, parent);
       copy["position"]["x"] = data["position"]["x"];
@@ -408,6 +406,22 @@ export class MewDataService {
       });
     }
     return smallestUnused;
+  }
+
+  private getNextGlobalId(print: Print): number {
+    let allIds: number[] = [];
+    allIds.push(print.id);
+    print.children.forEach(scaffold => {
+      allIds.push(scaffold.id);
+      (scaffold as Scaffold).children.forEach(layer => {
+        allIds.push(layer.id);
+      });
+    });
+    let result: number = 1;
+    allIds.sort((a, b) => a - b).forEach(number => {
+      if (number <= result) result++;
+    })
+    return result;
   }
 
   ngOnDestroy() {
