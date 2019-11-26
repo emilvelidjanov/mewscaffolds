@@ -3,6 +3,7 @@ import { ChartOptions, ChartDataSets, ChartType } from 'chart.js';
 import { TextConfig } from 'src/app/config/text-config/text-config';
 import { Layer } from 'src/app/model/layer/layer';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
+import { Scaffold } from 'src/app/model/scaffold/scaffold';
 
 @Component({
   selector: 'app-mew-data-chart',
@@ -65,7 +66,7 @@ export class MewDataChartComponent implements OnInit {
       this.chartDataSets = [];
       let layers: Layer[] = this.getViewData();
       layers.forEach(layer => {
-        let layerData = data[layer.id];
+        let layerData = data[layer.id]; // TODO: fix scaffold multi select
         for (let index = 0; index < layer.fibers; index++) {
           let fiberData = layerData[index];
           let chartDataSet: ChartDataSets = {
