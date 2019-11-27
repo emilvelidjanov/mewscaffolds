@@ -20,7 +20,7 @@ export class MewDataService {
   static instance: MewDataService;
 
   readonly printUrl: string = "http://mewscaffolds-api.herokuapp.com/print";
-  readonly chartUrl: string = "http://localhost:8080/chart";
+  readonly chartUrl: string = "http://mewscaffolds-api.herokuapp.com/chart";
   readonly chartCalculateEndpoint: string = "/calculate";
   readonly generateCodeEndpoint: string = "/generateCode";
 
@@ -129,14 +129,15 @@ export class MewDataService {
   addNewChildToParent(parent: MewData): MewData {
     let newChild: MewData = null;
     if (parent.children !== null) {
-      let id: number = this.getNextGlobalId(this.print);
+      let id: number = this.getNextGlobalId();
       let name: string = this.textConfig.suffixSeperator + this.getNextChildNameSuffix(parent);
       if (parent instanceof Print) {
         name = this.settingsConfig.defaultScaffoldName + name;
+        newChild = newChild as Scaffold;
         newChild = new Scaffold(id, name, parent);
-        // TODO: calculate free position
-        newChild["position"]["x"] = this.settingsConfig.defaultScaffoldPositionX;
-        newChild["position"]["y"] = this.settingsConfig.defaultScaffoldPositionY;
+        this.settingsConfig.recalculatePositionSlots(); // WHY???
+        newChild["position"]["x"] = this.settingsConfig.positionSlots[this.print.children.length].x;
+        newChild["position"]["y"] = this.settingsConfig.positionSlots[this.print.children.length].y;
         newChild["color"] = this.calculateScaffoldColor(newChild as Scaffold);
       }
       else if (parent instanceof Scaffold) {
@@ -162,7 +163,7 @@ export class MewDataService {
 
   deepCopy(data: MewData, parent: MewData): MewData {
     let copy: MewData = null;
-    let id: number = this.getNextGlobalId(this.print);
+    let id: number = this.getNextGlobalId();
     if (data instanceof Scaffold) {
       copy = new Scaffold(id, data.name, parent);
       copy["position"]["x"] = data["position"]["x"];
@@ -408,10 +409,10 @@ export class MewDataService {
     return smallestUnused;
   }
 
-  private getNextGlobalId(print: Print): number {
+  private getNextGlobalId(): number {
     let allIds: number[] = [];
-    allIds.push(print.id);
-    print.children.forEach(scaffold => {
+    allIds.push(this.print.id);
+    this.print.children.forEach(scaffold => {
       allIds.push(scaffold.id);
       (scaffold as Scaffold).children.forEach(layer => {
         allIds.push(layer.id);

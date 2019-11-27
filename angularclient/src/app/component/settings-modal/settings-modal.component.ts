@@ -70,6 +70,16 @@ export class SettingsModalComponent implements OnInit {
         this.settingsConfig[name] = Number(value);
         break;
     }
+
+    switch (name) {
+      case this.nameSlideWidth:
+      case this.nameSlideHeight:
+      case this.namePrintAreaBottomLeftX:
+      case this.namePrintAreaBottomLeftY:
+      case this.namePrintAreaTopRightX:
+      case this.namePrintAreaTopRightY:
+        this.settingsConfig.recalculatePositionSlots();
+    }
   }
 
   saveSettingsAsCookie(): void {

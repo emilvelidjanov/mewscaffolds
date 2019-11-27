@@ -4,6 +4,8 @@ import { TextConfig } from 'src/app/config/text-config/text-config';
 import { Layer } from 'src/app/model/layer/layer';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
 import { Scaffold } from 'src/app/model/scaffold/scaffold';
+import 'chartjs-plugin-zoom';
+import 'hammerjs';
 
 @Component({
   selector: 'app-mew-data-chart',
@@ -36,6 +38,18 @@ export class MewDataChartComponent implements OnInit {
         animationDuration: 0,
       },
       responsiveAnimationDuration: 0,
+      plugins: {
+        zoom: {
+          pan: {
+            enabled: true,
+            mode: 'xy'
+          },
+          zoom: {
+            enabled: true,
+            mode: 'xy'
+          }
+        }
+      }, 
     }
     this.defaultChartDataSet = {
       backgroundColor: "transparent",
@@ -66,7 +80,7 @@ export class MewDataChartComponent implements OnInit {
       this.chartDataSets = [];
       let layers: Layer[] = this.getViewData();
       layers.forEach(layer => {
-        let layerData = data[layer.id]; // TODO: fix scaffold multi select
+        let layerData = data[layer.id];
         let color: string = (layer.parent as Scaffold).color;
         for (let index = 0; index < layer.fibers; index++) {
           let fiberData = layerData[index];

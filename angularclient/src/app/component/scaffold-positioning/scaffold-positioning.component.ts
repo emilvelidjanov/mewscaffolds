@@ -3,8 +3,9 @@ import { TextConfig } from 'src/app/config/text-config/text-config';
 import { Scaffold } from 'src/app/model/scaffold/scaffold';
 import { SettingsConfig } from 'src/app/config/settings-config/settings-config';
 import { MewDataService } from 'src/app/service/mew-data/mew-data.service';
-import { ChartDataSets, ChartOptions, ChartType, ChartYAxe, ChartData, ChartScales } from 'chart.js';
-import { MewDataColor } from 'src/app/enum/mew-data-color';
+import { ChartDataSets, ChartOptions, ChartType, ChartData } from 'chart.js';
+import 'chartjs-plugin-zoom';
+import 'hammerjs';
 
 @Component({
   selector: 'app-scaffold-positioning',
@@ -40,6 +41,25 @@ export class ScaffoldPositioningComponent implements OnInit {
         animationDuration: 0,
       },
       responsiveAnimationDuration: 0,
+      tooltips: {
+        callbacks: {
+          title: function(item: Chart.ChartTooltipItem[], data: ChartData) {
+            return data.datasets[item[0].datasetIndex-1].label;
+          }
+        }
+      },
+      plugins: {
+        zoom: {
+          pan: {
+            enabled: true,
+            mode: 'xy'
+          },
+          zoom: {
+            enabled: true,
+            mode: 'xy'
+          }
+        }
+      }, 
     }
     this.defaultChartDataSet = {
       backgroundColor: "transparent",
@@ -125,6 +145,7 @@ export class ScaffoldPositioningComponent implements OnInit {
       this.updateColors(set, scaff);
       set.pointRadius = 0;
       set.borderWidth = 2;
+      set.label = scaffold.name;
       set.data = [];
       for (let angle = 0; angle <= 360; angle += 22.5) {
         let point: any = {x: this.calculatePointOnCircleX(x, radius, angle), y: this.calculatePointOnCircleY(y, radius, angle)};
@@ -137,6 +158,7 @@ export class ScaffoldPositioningComponent implements OnInit {
       let center: ChartDataSets = this.copyDefaultChartDataSet();
       this.updateColors(center, scaff);
       set.borderWidth = 2;
+      set.label = scaffold.name;
       center.data = [
         {x: x, y: y},
       ]

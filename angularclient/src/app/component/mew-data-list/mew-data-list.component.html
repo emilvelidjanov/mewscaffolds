@@ -16,8 +16,8 @@
                         {{token.path}}
                     </div>
                     {{token.name}}
-                    <span *ngIf="token.color" class="oi oi-aperture" [ngStyle]="{'color': token.color}"></span>
-                    <span *ngIf="!token.color" class="oi oi-aperture" [ngStyle]="{'color': token.parent?.color}"></span>
+                    <span *ngIf="token.color" class="oi oi-aperture ml-2" [ngStyle]="{'color': token.color}"></span>
+                    <span *ngIf="!token.color" class="oi oi-aperture ml-2" [ngStyle]="{'color': token.parent?.color}"></span>
                 </div>
             </div>
             <div class="btn-group w-100 mt-1">
