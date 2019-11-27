@@ -136,8 +136,11 @@ export class MewDataService {
         newChild = newChild as Scaffold;
         newChild = new Scaffold(id, name, parent);
         this.settingsConfig.recalculatePositionSlots(); // WHY???
-        newChild["position"]["x"] = this.settingsConfig.positionSlots[this.print.children.length].x;
-        newChild["position"]["y"] = this.settingsConfig.positionSlots[this.print.children.length].y;
+        let posIndex: number = this.print.children.length;
+        let position: Vector = this.settingsConfig.positionSlots[posIndex];
+        if (!position) position = new Vector(this.settingsConfig.defaultScaffoldPositionX, this.settingsConfig.defaultScaffoldPositionY);
+        newChild["position"]["x"] = position.x;
+        newChild["position"]["y"] = position.y;
         newChild["color"] = this.calculateScaffoldColor(newChild as Scaffold);
       }
       else if (parent instanceof Scaffold) {

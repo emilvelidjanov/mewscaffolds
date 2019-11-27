@@ -44,7 +44,12 @@ export class ScaffoldPositioningComponent implements OnInit {
       tooltips: {
         callbacks: {
           title: function(item: Chart.ChartTooltipItem[], data: ChartData) {
-            return data.datasets[item[0].datasetIndex-1].label;
+            let result: string[] = [];
+            item.forEach((value: Chart.ChartTooltipItem) => {
+              const label: string = data.datasets[value.datasetIndex-1].label;
+              if (label) result.push(label);
+            });
+            return result;
           }
         }
       },
@@ -86,7 +91,7 @@ export class ScaffoldPositioningComponent implements OnInit {
   }
 
   ngOnChanges() {
-    this.chartDataSets.splice(0, this.chartDataSets.length);
+    this.chartDataSets = [];
     this.setPrintArea();
     this.setSlides();
     this.setScaffoldData();
