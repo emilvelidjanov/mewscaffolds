@@ -1,5 +1,6 @@
 # mewscaffolds
 A web application for designing MEW scaffolds.
+[mewscaffolds.herokuapp.com](http://mewscaffolds.herokuapp.com)
 
 # Local setup front end
 REQUIRES: Node.js, npm
